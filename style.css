@@ -19,9 +19,7 @@
     }
 
 body {
-    padding: 5em;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 10%;
 }
 
 h1 {
@@ -50,5 +48,5 @@ h2 {
     justify-content: center;
     align-items: left;
     text-align: left;
-    min-height: 83vh;
+    min-height: 98vh;
   }
