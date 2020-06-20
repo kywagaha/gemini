@@ -20,6 +20,11 @@
 
 body {
     margin-left: 10%;
+    background-color: black;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
 h1 {
@@ -30,6 +35,8 @@ h1 {
     line-height: 1.2em;
     margin-bottom:0px;
     margin-top:0px;
+    color: white;
+    text-shadow: 0px 0px 500px rgba(0,0,0,1);
 }
 
 h2 {
@@ -40,6 +47,8 @@ h2 {
     line-height: 1.2em;
     margin-bottom:0px;
     margin-top:0px;
+    color: white;
+    text-shadow: 0px 0px 100px rgba(0,0,0,1);
 }
 
 .center {
@@ -49,4 +58,5 @@ h2 {
     align-items: left;
     text-align: left;
     min-height: 98vh;
+    color: white;
   }
