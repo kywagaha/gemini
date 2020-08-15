@@ -3,11 +3,14 @@ from urllib.parse import urlparse
 import json
 import os
 import time
+import threading
+import webbrowser
 from constants import *
 
+#create a spotify app and get the client ID and SECRET, and paste 'http://localhost' without quotes as a redirect URI
 
-SPOTIFY_CLIENT_ID = '665ad66fad2a4c39b34676f257e1db5c'
-SPOTIFY_CLIENT_SECRET = 'f40928693f684f62be34222184b4a967'
+SPOTIFY_CLIENT_ID = 'YOUR-CLIENT-ID'
+SPOTIFY_CLIENT_SECRET = 'YOUR-CLIENT-SECRET'
 
 def authorize(auth_code=None):
 
@@ -18,7 +21,8 @@ def authorize(auth_code=None):
         scopes = ["user-modify-playback-state", "user-read-playback-state", "playlist-read-private", "playlist-read-collaborative", "streaming"]
 
         print("\n\nGo to the following url, and after clicking ok, copy and paste the link you are redirected to from your browser starting with 'localhost'\n")
-        print("https://accounts.spotify.com/authorize/?client_id=" + SPOTIFY_CLIENT_ID + "&response_type=code&redirect_uri=http://localhost&scope=" + "%20".join(scopes))
+        url = ("https://accounts.spotify.com/authorize/?client_id=" + SPOTIFY_CLIENT_ID + "&response_type=code&redirect_uri=http://localhost&scope=" + "%20".join(scopes))
+        threading.Timer(1.25, lambda: webbrowser.open(url) ).start()
 
         url = input("\nPaste localhost url: ")
         parsed_url = urlparse(url)
@@ -51,7 +55,7 @@ def get_valid_auth_header():
         auth = json.load(infile)
     if time.time() > auth["expires_at"]:
         auth = authorize(auth)
-    return {"Authorization": "Bearer " + auth["access_token"]}
+    return {auth["access_token"]}
 
 
 #returns a list of devices that have spotify connect linked to this device that can be controlled
@@ -162,3 +166,4 @@ if not os.path.isfile('auth.json'):
 #play_active_music()
 #print('')
 # print(get_devices())
+

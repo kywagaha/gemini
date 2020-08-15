@@ -1,9 +1,8 @@
 var SpotifyWebApi = require('spotify-web-api-js');
-const { app, globalShortcut } = require('electron')
 var spotifyApi = new SpotifyWebApi();
 
-spotifyApi.setAccessToken('BQDhf4i97R1niuDk7ZvlKkr7c3DovqyKdl3D2DrAc5ieSA0UBDbJVBYpNnQc1B32ZfaWbNJSsCg8hKN3LegdWoXgF1hV1PjXU4VH6CHmQi12NVQ34eM6aVKvXtNXYHnN5Vn5VdXY0DsxClKYopNSfzmBTZR9wTrguuP_jBQ0yjisv3tqPYdrtqJdEz1u73M');
-spotifyApi.getMyCurrentPlayingTrack('title')
+spotifyApi.setAccessToken('YOUR-TOKEN-HERE');
+spotifyApi.getMyCurrentPlayingTrack()
 .then(function(data) {
   console.log('Now playing', data)
   document.getElementById("song").innerHTML = data.item.name
@@ -12,7 +11,7 @@ spotifyApi.getMyCurrentPlayingTrack('title')
   
   const interval = setInterval(function(){
 
-    spotifyApi.getMyCurrentPlayingTrack('title')
+    spotifyApi.getMyCurrentPlayingTrack()
     .then(function(data) {
       console.log('Now playing', data)
       document.getElementById("song").innerHTML = data.item.name
@@ -47,4 +46,5 @@ window.onclick = function toggle_playback() {
   
   })
 }
+clearInterval(interval);
 

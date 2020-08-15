@@ -24,32 +24,32 @@ body {
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
-    background-size: cover;
-    background-position-y: 48px
+    background-size: 800px 800px;
+    background-position-y: 48px;
 }
 
 h1 {
     font-family: 'FormaDJRBanner';
     font-style: italic; 
     font-weight: bold; 
-    font-size: 128px; 
+    font-size: 80px; 
     line-height: 1.2em;
     margin-bottom:0px;
     margin-top:10px;
     color: white;
-    text-shadow: 10px 10px 30px rgba(0,0,0,100);
+    text-shadow: 5px 5px 30px rgba(0,0,0,100);
 }
 
 h2 {
     font-family: 'FormaDJRDisplay';
     font-style: normal; 
     font-weight: normal; 
-    font-size: 48px; 
+    font-size: 32px; 
     line-height: 1.2em;
     margin-bottom:0px;
     margin-top:0px;
     color: white;
-    text-shadow: 10px 10px 25px rgba(0,0,0,100);
+    text-shadow: 5px 5px 25px rgba(0,0,0,100);
 }
 
 .center {
@@ -65,8 +65,9 @@ h2 {
 .footer {
   font-family: 'FormaDJRDisplay';
   font-style: normal; 
-  font-weight: normal;
+  font-weight: bold;
   font-size: 40px;
+  letter-spacing: 2px;
   position: fixed;
   right: 0;
   top: 0;
