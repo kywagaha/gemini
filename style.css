@@ -25,6 +25,7 @@ body {
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+    background-position-y: 48px
 }
 
 h1 {
@@ -34,9 +35,9 @@ h1 {
     font-size: 128px; 
     line-height: 1.2em;
     margin-bottom:0px;
-    margin-top:0px;
+    margin-top:10px;
     color: white;
-    text-shadow: 0px 0px 500px rgba(0,0,0,1);
+    text-shadow: 10px 10px 30px rgba(0,0,0,100);
 }
 
 h2 {
@@ -48,7 +49,7 @@ h2 {
     margin-bottom:0px;
     margin-top:0px;
     color: white;
-    text-shadow: 0px 0px 100px rgba(0,0,0,1);
+    text-shadow: 10px 10px 25px rgba(0,0,0,100);
 }
 
 .center {
@@ -59,4 +60,28 @@ h2 {
     text-align: left;
     min-height: 98vh;
     color: white;
-  }
+}
+
+.footer {
+  font-family: 'FormaDJRDisplay';
+  font-style: normal; 
+  font-weight: normal;
+  font-size: 40px;
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 100%;
+  background-color: slategray;
+  color: white;
+  text-align: center;
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+  z-index: 100;
+}
+
+.album {
+    display: flex;
+    width: 100%;
+    height: auto;
+    z-index: 2;
+}

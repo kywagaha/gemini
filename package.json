@@ -13,6 +13,7 @@
     "electron": "^9.0.4"
   },
   "dependencies": {
+    "constants": "0.0.2",
     "spotify-web-api-js": "^1.4.0"
   }
 }
