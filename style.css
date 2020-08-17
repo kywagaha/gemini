@@ -27,6 +27,8 @@ body {
     -o-background-size: cover;
     background-size: 800px 800px;
     background-position-y: 48px;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 h1 {
