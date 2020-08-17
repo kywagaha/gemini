@@ -14,6 +14,8 @@
   },
   "dependencies": {
     "constants": "0.0.2",
+    "jquery": "^3.5.1",
+    "node-static": "^0.7.11",
     "spotify-web-api-js": "^1.4.0"
   }
 }

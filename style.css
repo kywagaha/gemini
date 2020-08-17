@@ -20,6 +20,7 @@
 
 body {
     margin-left: 10%;
+    margin-right: 5%;
     background-color: black;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -38,6 +39,7 @@ h1 {
     margin-top:10px;
     color: white;
     text-shadow: 5px 5px 30px rgba(0,0,0,100);
+    -webkit-user-select: none;
 }
 
 h2 {
@@ -50,6 +52,7 @@ h2 {
     margin-top:0px;
     color: white;
     text-shadow: 5px 5px 25px rgba(0,0,0,100);
+    -webkit-user-select: none;
 }
 
 .center {
