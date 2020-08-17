@@ -1,13 +1,11 @@
 var SpotifyWebApi = require('spotify-web-api-js');
 var $ = require('jquery');
-const { fork } = require('child_process');
 const fs = require('fs')
-const ps = fork(`./server.js`);
 const path = './file.txt'
 var spotifyApi = new SpotifyWebApi();
 
-var CLIENT_ID = '69a68365eba84036af391794e50dfd62';
-var CLIENT_SECRET = '324db7b9ef51403a849a636f7818e43c';
+var CLIENT_ID = 'CLIENT_ID';
+var CLIENT_SECRET = 'CLIENT_SECRET';
 
 var URI = 'http://localhost:8080/callback'
 var scopes = ["user-modify-playback-state", "user-read-playback-state"];
@@ -38,7 +36,6 @@ if (fs.existsSync(path)) {
         },
       success: function(data){
         myToken = data['access_token'];
-        console.log(myToken);
     }
     });
     return myToken;

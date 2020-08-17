@@ -1,4 +1,6 @@
 const { app, BrowserWindow } = require('electron')
+const { shutdown } = require('./server.js')
+
 function createWindow () {
   // Create the browser window.
   let win = new BrowserWindow({
@@ -11,13 +13,12 @@ function createWindow () {
     resizable: true
   })
 
+  win.on('close', function(e){
+    console.log(typeof shutdown.shutdown);
+    });
+
   // and load the index.html of the app.
   win.loadFile('index.html')
 }
 
 app.whenReady().then(createWindow)
-
-app.on ("before-quit", (event) => {
-  exec ("mongodb/bin/mongo admin --eval 'db.shutdownServer()'");
-  process.exit (); // really let the app exit now
-});
