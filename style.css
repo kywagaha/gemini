@@ -20,41 +20,35 @@
 
 body {
     margin-left: 10%;
-    margin-right: 5%;
     background-color: black;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
-    background-size: 800px 800px;
-    background-position-y: 48px;
-    overflow-x: hidden;
-    overflow-y: hidden;
+    background-size: cover;
 }
 
 h1 {
     font-family: 'FormaDJRBanner';
     font-style: italic; 
     font-weight: bold; 
-    font-size: 80px; 
+    font-size: 128px; 
     line-height: 1.2em;
     margin-bottom:0px;
-    margin-top:10px;
+    margin-top:0px;
     color: white;
-    text-shadow: 5px 5px 30px rgba(0,0,0,100);
-    -webkit-user-select: none;
+    text-shadow: 0px 0px 500px rgba(0,0,0,1);
 }
 
 h2 {
     font-family: 'FormaDJRDisplay';
     font-style: normal; 
     font-weight: normal; 
-    font-size: 32px; 
+    font-size: 48px; 
     line-height: 1.2em;
     margin-bottom:0px;
     margin-top:0px;
     color: white;
-    text-shadow: 5px 5px 25px rgba(0,0,0,100);
-    -webkit-user-select: none;
+    text-shadow: 0px 0px 100px rgba(0,0,0,1);
 }
 
 .center {
@@ -65,29 +59,4 @@ h2 {
     text-align: left;
     min-height: 98vh;
     color: white;
-}
-
-.footer {
-  font-family: 'FormaDJRDisplay';
-  font-style: normal; 
-  font-weight: bold;
-  font-size: 40px;
-  letter-spacing: 2px;
-  position: fixed;
-  right: 0;
-  top: 0;
-  width: 100%;
-  background-color: slategray;
-  color: white;
-  text-align: center;
-  -webkit-user-select: none;
-  -webkit-app-region: drag;
-  z-index: 100;
-}
-
-.album {
-    display: flex;
-    width: 100%;
-    height: auto;
-    z-index: 2;
-}
+  }
