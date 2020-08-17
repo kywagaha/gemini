@@ -1,7 +1,6 @@
 const http = require('http');
 const url = require('url');
 const $ = require('jquery');
-const { Server } = require('tls');
 
 var code = null;
 var server = http.createServer(function(req, res) {
