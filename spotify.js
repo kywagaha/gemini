@@ -1,15 +1,13 @@
 var SpotifyWebApi = require('spotify-web-api-js');
 var $ = require('jquery');
-const { Http2ServerRequest } = require('http2');
 const { fork } = require('child_process');
 const fs = require('fs')
-const ps = fork(`${__dirname}/server.js`);
+const ps = fork(`./server.js`);
 const path = './file.txt'
 var spotifyApi = new SpotifyWebApi();
 
-
-var CLIENT_ID = 'YOUR_CLIENT_ID';
-var CLIENT_SECRET = 'YOUR_CLIENT_SECRET';
+var CLIENT_ID = '69a68365eba84036af391794e50dfd62';
+var CLIENT_SECRET = '324db7b9ef51403a849a636f7818e43c';
 
 var URI = 'http://localhost:8080/callback'
 var scopes = ["user-modify-playback-state", "user-read-playback-state"];

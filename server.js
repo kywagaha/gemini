@@ -1,15 +1,26 @@
-const http = require('http');
-const url = require('url');
-const $ = require('jquery');
+var express = require('express');
+var serverPort = 8080;
+var app = express();
+var server = app.listen(serverPort);
 
-var code = null;
-var server = http.createServer(function(req, res) {
-    code = req.url.split('=')[1]
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end(code);
-    console.log(code);
-    server.close();
-}).listen(8080);
+app.get('/callback', function (req, res) {
+  res.send(req.url.split('=')[1])
+})
 
+// HTTP Keep-Alive to a short time to allow graceful shutdown
+server.on('connection', function (socket) {
+  socket.setTimeout(5 * 1000);
+});
 
-console.log('server running on port 8080');
+// Handle ^C
+process.on('SIGINT', shutdown);
+
+// Do graceful shutdown
+function shutdown() {
+  console.log('graceful shutdown express');
+  server.close(function () {
+    console.log('closed express');
+  });
+}
+
+console.log('waiting for spotify token on port ' + serverPort);

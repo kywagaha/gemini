@@ -16,3 +16,8 @@ function createWindow () {
 }
 
 app.whenReady().then(createWindow)
+
+app.on ("before-quit", (event) => {
+  exec ("mongodb/bin/mongo admin --eval 'db.shutdownServer()'");
+  process.exit (); // really let the app exit now
+});
