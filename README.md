@@ -17,6 +17,7 @@ Then edit the settings for the app on the Spotify developer dashboard, and set t
 The first time you run the app, sign into Spotify in the prompt, then close the windows. When you reload the app it will run as expected.
 
 There are 2 ui types: a clean one and an ugly one. Define it on line 4 of main.js. `1` is the clean version, `2` is the ugly one :)
+
 You can also set how long it takes to refresh the track info. The default is 5s (5000ms), but you can customize that number on line `11` of `spotify.js`. It is highly recommended to keep this value above 1000.
 
 # Usage
