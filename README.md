@@ -1,4 +1,6 @@
 # spotify-now
+aesthetic now playing screen for spotify
+
 ![screenshot](https://i.imgur.com/Edl9qr6.png)
 ![screenshot](https://i.imgur.com/F1Idw41.png)
 ![screenshot](https://i.imgur.com/HnpdBnp.png)
