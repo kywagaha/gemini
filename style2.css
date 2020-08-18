@@ -1,0 +1,65 @@
+@font-face {
+    src: url('fonts/FormaDJRBanner-BoldItalic.eot'); /* IE < 9 */
+    src: url('fonts/FormaDJRBanner-BoldItalic.eot?#') format("embedded-opentype"), /* IE 9 */
+         url('fonts/FormaDJRBanner-BoldItalic.woff2') format("woff2"),
+         url('fonts/FormaDJRBanner-BoldItalic.woff') format("woff");
+    font-family: 'FormaDJRBanner';
+    font-style: italic;
+    font-weight: bold;
+    }
+
+@font-face {
+    src: url('fonts/FormaDJRDisplay-Regular.eot'); /* IE < 9 */
+    src: url('fonts/FormaDJRDisplay-Regular.eot?#') format("embedded-opentype"), /* IE 9 */
+            url('fonts/FormaDJRDisplay-Regular.woff2') format("woff2"),
+            url('fonts/FormaDJRDisplay-Regular.woff') format("woff");
+    font-family: 'FormaDJRDisplay';
+    font-style: normal;
+    font-weight: normal;
+    }
+
+body {
+    margin-left: 10%;
+    background-color: black;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-repeat: no-repeat;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+h1 {
+    font-family: 'FormaDJRBanner';
+    font-style: italic; 
+    font-weight: bold; 
+    font-size: 128px; 
+    line-height: 1.2em;
+    margin-bottom:0px;
+    margin-top:0px;
+    color: white;
+    text-shadow: 0px 0px 500px rgba(0,0,0,1);
+}
+
+h2 {
+    font-family: 'FormaDJRDisplay';
+    font-style: normal; 
+    font-weight: normal; 
+    font-size: 48px; 
+    line-height: 1.2em;
+    margin-bottom:0px;
+    margin-top:0px;
+    color: white;
+    text-shadow: 0px 0px 100px rgba(0,0,0,1);
+}
+
+.center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: left;
+    text-align: left;
+    min-height: 98vh;
+    color: white;
+  }

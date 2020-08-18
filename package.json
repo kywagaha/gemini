@@ -15,6 +15,6 @@
   "dependencies": {
     "express": "^4.17.1",
     "jquery": "^3.5.1",
-    "spotify-web-api-js": "^1.4.0"
+    "spotify-web-api-js": "git+https://github.com/Gabe-H/spotify-web-api-js.git"
   }
 }

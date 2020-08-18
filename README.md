@@ -15,5 +15,7 @@ Then edit the settings for the app on the Spotify developer dashboard, and set t
 
 The first time you run the app, sign into Spotify in the prompt, then close the windows. When you reload the app it will run as expected.
 
+There are 2 ui types: a clean one and an ugly one. Define it on line 4 of main.js. 1 is the clean version, 2 is the ugly one :)
+
 # Usage
 While a track is playing (or paused!), Spotify Now will update to show the current song and artist. It also has the basic functions of Play/Pause on a single click, and Skip Track by double-clicking.

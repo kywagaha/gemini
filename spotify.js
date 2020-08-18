@@ -1,19 +1,19 @@
 var SpotifyWebApi = require('spotify-web-api-js');
 var $ = require('jquery');
-const fs = require('fs')
-const path = './file.txt'
+const fs = require('fs');
+const path = './file.txt';
 var spotifyApi = new SpotifyWebApi();
 
-var CLIENT_ID = 'CLIENT_ID';
-var CLIENT_SECRET = 'CLIENT_SECRET';
+// Set Spotify app client variables here:
+const CLIENT_ID = 'YOUR_CLIENT_ID';
+const CLIENT_SECRET = 'YOU_CLIENT_SECRET';
 
-var URI = 'http://localhost:8080/callback'
+var URI = 'http://localhost:8080/callback';
 var scopes = ["user-modify-playback-state", "user-read-playback-state"];
 var url = "https://accounts.spotify.com/authorize/?client_id=" + CLIENT_ID + "&response_type=code&redirect_uri=" + URI + "&scope=" + scopes;
 
 if (fs.existsSync(path)) {
   console.log(url);
-  //window.open(url)
   var myCode;
   $.ajax({async: false, url, type: 'GET', success: function(data){myCode = data;}});
   console.log(myCode);
@@ -41,81 +41,94 @@ if (fs.existsSync(path)) {
     return myToken;
   }();
   spotifyApi.setAccessToken(token);
-
-  spotifyApi.getMyCurrentPlayingTrack()
-  .then(function(data) {
-    console.log('Now playing', data)
-    document.getElementById("song").innerHTML = data.item.name;
-    document.getElementById("artist").innerHTML = data.item.artists[0].name;
-    document.body.style.backgroundImage = 'url('+data.item.album.images[0].url+')';
-    
-    setInterval(function update(){
-
-      spotifyApi.getMyCurrentPlayingTrack()
-      .then(function(data) {
-        console.log('Now playing', data);
+  function update(){
+    spotifyApi.getMyCurrentPlayingTrack()
+    .then(function(data) {
+      if (data != ""){
         document.getElementById("song").innerHTML = data.item.name;
         document.getElementById("artist").innerHTML = data.item.artists[0].name;
         document.body.style.backgroundImage = 'url('+data.item.album.images[0].url+')';
-        
-      }, function(error) {
-        console.log(error)
-      }); 
-    
-    }, 5000);
+        console.log('Now playing', data);
+      }
+      else {
+        document.getElementById("song").innerHTML = 'No track loaded';
+        document.getElementById("artist").innerHTML = 'please play a track';
+        console.log('No loaded track found');
+      }
+    }, function(error) {
+      console.log(error);
+    }); 
+  
   }
-  ), (function(err) {
-    console.error(err);
-  });
+  update();
+  setInterval(update, 5000);
 
-  window.onload = function() {
-    var timer;
-    var el = document.getElementById('testButton');
+  var timer;
 
-    var firing = false;
-    var singleClick = function(){
-      spotifyApi.getMyCurrentPlayingTrack()
-        .then(function(data) {
-        var isPlaying = data.is_playing;
-        if (isPlaying == true){
-          spotifyApi.pause();
-          console.log('Pausing music');
-        }
-        else if (isPlaying == false){
-          spotifyApi.play();
-          console.log('Playing music');
-        }
-        else {
-          console.log('No track loaded');
-        }
-      })
-    };
+  function xCoords(event) {
+    var x = event.clientX;
+    return x;
+  }
+  function yCoords(event) {
+    var y = event.clientX;
+    return y;
+  }
 
-    var doubleClick = function(){ 
-      spotifyApi.skipToNext();
-    };
+  var firing = false;
+  var singleClick = function(){
+    spotifyApi.getMyCurrentPlayingTrack()
+      .then(function(data) {
+      var isPlaying = data.is_playing;
+      if (isPlaying == true){
+        spotifyApi.pause();
+        console.log('Pausing music');
+      }
+      else if (isPlaying == false){
+        spotifyApi.play();
+        console.log('Playing music');
+      }
+      else {
+        console.log('No track loaded');
+      }
+    })
+  };
 
-    var firingFunc = singleClick;
+  var doubleClickFwd = function(){ 
+    spotifyApi.skipToNext();
+    setTimeout(update, 300); 
+  };
+  var doubleClickBkwd = function(){
+    setTimeout(update, 300); 
+    spotifyApi.skipToPrevious();
+  };
 
-    window.onclick = function() {
-      if(firing) 
-        return;
+  var firingFunc = singleClick;
 
-      firing = true;
-      timer = setTimeout(function() { 
-        firingFunc(); 
+  window.onclick = function() {
+    console.log(xCoords(event));
+    if(firing) 
+      return;
 
-        firingFunc = singleClick;
-        firing = false;
-      }, 300);
+    firing = true;
+    timer = setTimeout(function() { 
+      firingFunc(); 
 
-    }
+      firingFunc = singleClick;
+      firing = false;
+    }, 300);
 
-    window.ondblclick = function() {
-      firingFunc = doubleClick;       
+  }
+
+  window.ondblclick = function() {
+    if (xCoords(event) < 200) {
+      firingFunc = doubleClickBkwd;
+    }      
+    else {
+      firingFunc = doubleClickFwd;
     }
   }
 }
+
 else {
   window.open(url);
   fs.appendFile('file.txt', 'used for init', function (err) {
