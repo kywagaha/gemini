@@ -12,6 +12,8 @@ const update_ms = 5000;
 const URI = 'http://localhost:8080/callback';
 const scopes = ["user-modify-playback-state", "user-read-playback-state"];
 const url = "https://accounts.spotify.com/authorize/?client_id=" + CLIENT_ID + "&response_type=code&redirect_uri=" + URI + "&scope=" + scopes;
+var mySong = '';
+var firstUpdate = true;
 
 if (fs.existsSync(path)) {
   console.log(url);
@@ -46,15 +48,27 @@ if (fs.existsSync(path)) {
     spotifyApi.getMyCurrentPlayingTrack()
     .then(function(data) {
       if (data != ""){
-        document.getElementById("song").innerHTML = data.item.name;
-        document.getElementById("artist").innerHTML = data.item.artists[0].name;
-        document.body.style.backgroundImage = 'url('+data.item.album.images[0].url+')';
+        if (firstUpdate == false) {
+          if (mySong != data.item.name) {
+            document.getElementById("song").innerHTML = data.item.name;
+            document.getElementById("artist").innerHTML = data.item.artists[0].name;
+            document.body.style.backgroundImage = 'url('+data.item.album.images[0].url+')';
+          }
+        }
+        else {
+          document.getElementById("song").innerHTML = data.item.name;
+          document.getElementById("artist").innerHTML = data.item.artists[0].name;
+          document.body.style.backgroundImage = 'url('+data.item.album.images[0].url+')';
+        }
+        
         console.log('Now playing', data);
         var remaining_ms = data.item.duration_ms - data.progress_ms;
         if (remaining_ms < update_ms) {
           setTimeout(update, remaining_ms);
           console.log('Predicting track skip in ' + remaining_ms);
         }
+        firstUpdate = false;
+        mySong = data.item.name;
       }
       else {
         document.getElementById("song").innerHTML = 'No track loaded';
