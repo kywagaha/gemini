@@ -4,14 +4,14 @@ var serverPort = 8080;
 var express = express();
 var server = express.listen(serverPort);
 
-function startserver() {
-  console.log('bruh')
+function startServer() {
+  console.log('starting server');
   express.listen(serverPort);
 }
 
 express.get('/callback', function (req, res) {
-  res.send(req.url.split('=')[1])
-  shutdown()
+  res.send(req.url.split('=')[1]);
+  shutdown();
 })
 
 // HTTP Keep-Alive to a short time to allow graceful shutdown
@@ -42,7 +42,7 @@ const args = {
 
 function createWindow () {
   // Create the browser window.
-  let win = new BrowserWindow(args)
+  let win = new BrowserWindow(args);
 
   // and load the index.html of the app.
   win.loadFile('./index.html');
@@ -50,8 +50,8 @@ function createWindow () {
 
   win.webContents.on('console-message', (event, message, line) => {
     if (line == 'starting server back up') {
-      console.log('ok')
-      startserver()
+      console.log('server restarting');
+      startServer();
     }
   })
 }
