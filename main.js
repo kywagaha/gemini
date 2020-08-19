@@ -24,7 +24,7 @@ process.on('SIGINT', shutdown);
 
 // Do graceful shutdown
 function shutdown() {
-  console.log('graceful shutdown express');
+  console.log('gracefully shutting down express');
   server.close(function () {
     console.log('closed express');
   });
