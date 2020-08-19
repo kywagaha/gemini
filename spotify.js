@@ -5,8 +5,8 @@ const path = './file.txt';
 var spotifyApi = new SpotifyWebApi();
 
 // Set Spotify app client variables here:
-const CLIENT_ID = '2264a1c266e54cb8b9c338ebe4069ba6';
-const CLIENT_SECRET = '0e14ef53590d4eee9e76112fea7b056e';
+const CLIENT_ID = 'g';
+const CLIENT_SECRET = 'g';
 
 const update_ms = 5000;
 const URI = 'http://localhost:8080/callback';
@@ -20,6 +20,10 @@ if (fs.existsSync(path)) {
   //window.open(url)
   var myCode;
   $.ajax({async: false, url, type: 'GET', success: function(data){myCode = data;}});
+  if (myCode == null){
+    console.log('starting server back up')
+    getToken()
+  }
   console.log(myCode);
   var token = function getToken() {
     var myToken = null;
@@ -41,10 +45,6 @@ if (fs.existsSync(path)) {
       success: function(data){
         myToken = data['access_token'];
       },
-      error: function(){
-        console.log('starting server back up')
-        getToken()
-      }
     });
     return myToken;
   }();
