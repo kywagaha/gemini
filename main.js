@@ -1,5 +1,5 @@
-const { app, BrowserWindow } = require('electron');
-const { shutdown } = require('./server.js');
+const { app, BrowserWindow, webContents } = require('electron');
+var server = require('./server');
 const args = {
     width: 800,
     height:848,
@@ -15,6 +15,13 @@ function createWindow () {
   // and load the index.html of the app.
   win.loadFile('./index.html');
   win.menuBarVisible = false;
+
+  win.webContents.on('console-message', (event, message, line) => {
+    if (line == 'starting server back up') {
+      console.log('ok')
+      console.log(typeof server.startserver);
+    }
+  })
 }
 
 app.whenReady().then(createWindow);
