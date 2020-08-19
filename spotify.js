@@ -5,8 +5,8 @@ const path = './file.txt';
 var spotifyApi = new SpotifyWebApi();
 
 // Set Spotify app client variables here:
-const CLIENT_ID = '665ad66fad2a4c39b34676f257e1db5c';
-const CLIENT_SECRET = 'bb814431cc3a4de9802902e0c025e300';
+const CLIENT_ID = 'YOUR_CLIENT_ID';
+const CLIENT_SECRET = 'YOUR_CLIENT_SECRET';
 
 const update_ms = 5000;
 const URI = 'http://localhost:8080/callback';
