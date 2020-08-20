@@ -1,6 +1,6 @@
 const { app, BrowserWindow, webContents } = require('electron');
 var express = require('express');
-var serverPort = 8080;
+var serverPort = 8080; // If changed, also change port on line 14 of spotify.js
 var express = express();
 var server = express.listen(serverPort);
 
@@ -16,7 +16,7 @@ express.get('/callback', function (req, res) {
 
 // HTTP Keep-Alive to a short time to allow graceful shutdown
 server.on('connection', function (socket) {
-  socket.setTimeout(5 * 1000);
+  socket.setTimeout(1000);
 });
 
 // Handle ^C

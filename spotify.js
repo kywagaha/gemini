@@ -30,7 +30,7 @@ if (fs.existsSync(path)) {
       async: false,
       url: 'https://accounts.spotify.com/api/token',
       data: {
-        'redirect_uri':'http://localhost:8080/callback',
+        'redirect_uri': URI,
         'client_id': CLIENT_ID,
         'client_secret': CLIENT_SECRET,
         'grant_type': 'authorization_code',
@@ -162,3 +162,29 @@ else {
     console.log('Saved!');
   }); 
 }
+
+$(document).ready(function() { 
+
+
+  var idleMouseTimer;
+  var forceMouseHide = false;
+
+  $("body").css('cursor', 'none');
+
+  $("body").mousemove(function(ev) {
+          if(!forceMouseHide) {
+                  $("body").css('cursor', '');
+
+                  clearTimeout(idleMouseTimer);
+
+                  idleMouseTimer = setTimeout(function() {
+                          $("body").css('cursor', 'none');
+
+                          forceMouseHide = true;
+                          setTimeout(function() {
+                                  forceMouseHide = false;
+                          }, 200);
+                  }, 1000);
+          }
+  });
+});
