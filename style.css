@@ -21,6 +21,7 @@
 body {
     margin-left: 10%;
     background-color: black;
+    -webkit-user-select: none;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
