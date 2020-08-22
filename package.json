@@ -5,16 +5,24 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron ."
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^9.0.4"
+    "electron": "^9.0.4",
+    "electron-builder": "^22.8.0"
   },
   "dependencies": {
     "express": "^4.17.1",
     "jquery": "^3.5.1",
-    "spotify-web-api-js": "git+https://github.com/Gabe-H/spotify-web-api-js.git"
+    "spotify-web-api-js": "^1.5.0"
+  },
+  "build": {
+    "appId": "com.electron.spotifynow",
+    "productName": "Spotify Now",
+    "copyright": "Copyright © 2020 Gabe and Kyle"
   }
 }
