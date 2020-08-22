@@ -1,4 +1,7 @@
 var SpotifyWebApi = require('spotify-web-api-js');
+
+const CLIENT_SECRET = 'YOUR_CLIENT_SECRET';
+
 var $ = require('jquery');
 var electron = require('electron');
 var remote = electron.remote;
@@ -11,7 +14,7 @@ var firstUpdate = true;
   var myCode;
   $.ajax({
     async: false, 
-    url: 'http://localhost:8080/mycode', 
+    url: 'http://localhost:8080/6RPMa7k8PZa6ym5X/mycode', 
     type: 'GET', 
     success: function(data){
       myCode = data;
@@ -24,14 +27,13 @@ var firstUpdate = true;
       data: {
         'redirect_uri': 'http://localhost:8080/callback',
         'client_id': myCode.client_id,
-        'client_secret': myCode.client_secret,
         'grant_type': 'authorization_code',
         'code': myCode.authorization
       },
       type: 'post',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': 'Basic ' + btoa(myCode.client_id + ':' + myCode.client_secret)
+        'Authorization': 'Basic ' + btoa(myCode.client_id + ':' + CLIENT_SECRET)
         },
       success: function(data){
         myRefresh = data.refresh_token;
@@ -70,7 +72,7 @@ function refreshToken() {
     },
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': 'Basic ' + btoa(myCode.client_id + ':' + myCode.client_secret)
+      'Authorization': 'Basic ' + btoa(myCode.client_id + ':' + CLIENT_SECRET)
     },
     type: 'post',
     success: function (data){

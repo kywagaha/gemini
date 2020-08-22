@@ -7,7 +7,6 @@ var server = express.listen(serverPort);
 
 // Set Spotify app client variables here:
 const CLIENT_ID = 'YOUR_CLIENT_ID';
-const CLIENT_SECRET = 'YOUR_CLIENT_SECRET';
 const URI = 'http://localhost:' + serverPort + '/callback';
 const scopes = ["user-modify-playback-state", "user-read-playback-state", "user-read-recently-played"];
 const url = "https://accounts.spotify.com/authorize/?client_id=" + CLIENT_ID + "&response_type=code&redirect_uri=" + URI + "&scope=" + scopes;
@@ -15,10 +14,10 @@ var myAuth = null;
 let spot;
 var isSpot = false;
 
-function startServer() {
-  console.log('starting server');
-  express.listen(serverPort);
-};
+//function startServer() {
+//  console.log('starting server');
+//  express.listen(serverPort);
+//};
 
 express.get('/callback', function (req, res) {
   if (req.query.error != undefined) {
@@ -36,12 +35,11 @@ express.get('/callback', function (req, res) {
   
 });
 
-express.get('/mycode', function (req, res) {
+express.get('/6RPMa7k8PZa6ym5X/mycode', function (req, res) {
   if (myAuth != null) {
     res.send({
       authorization: myAuth,
       client_id: CLIENT_ID,
-      client_secret: CLIENT_SECRET,
       url: url
     });
   }
@@ -50,12 +48,10 @@ express.get('/mycode', function (req, res) {
   };
 });
 
-
-
 // HTTP Keep-Alive to a short time to allow graceful shutdown
-server.on('connection', function (socket) {
-  socket.setTimeout(1000);
-});
+//server.on('connection', function (socket) {
+//  socket.setTimeout(1000);
+//});
 
 // Handle ^C
 process.on('SIGINT', shutdown);
@@ -74,7 +70,9 @@ const args = {
     width: 800,
     height:848,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      enableRemoteModule: true,
+      devTools: true
     }
   };
 
