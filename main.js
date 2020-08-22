@@ -1,8 +1,7 @@
 const { app, BrowserWindow, webContents } = require('electron');
 var express = require('express');
 var $ = require('jquery');
-var path = require('path');
-var serverPort = 8080; //also used on lines 9 and 16 of spotify.js
+var serverPort = 8080;
 var express = express();
 var server = express.listen(serverPort);
 
@@ -14,6 +13,7 @@ const scopes = ["user-modify-playback-state", "user-read-playback-state", "user-
 const url = "https://accounts.spotify.com/authorize/?client_id=" + CLIENT_ID + "&response_type=code&redirect_uri=" + URI + "&scope=" + scopes;
 var myAuth = null;
 let spot;
+var isSpot = false;
 
 function startServer() {
   console.log('starting server');
@@ -26,9 +26,12 @@ express.get('/callback', function (req, res) {
   }
   else {
   myAuth = req.url.split('=')[1];
-  res.send("Success! Please close this window")
+  res.send("Success! Please close this window");
   mainWindow();
-  spot.close();
+  if (isSpot == true){
+    spot.close();
+  }
+  isSpot = false;
   }
   
 })
@@ -38,7 +41,8 @@ express.get('/mycode', function (req, res) {
     res.send({
       authorization: myAuth,
       client_id: CLIENT_ID,
-      client_secret: CLIENT_SECRET
+      client_secret: CLIENT_SECRET,
+      url: url
     });
   }
   else {
@@ -97,10 +101,10 @@ function mainWindow () {
 function signIn () {
   // Create the browser window.
   spot = new BrowserWindow(args);
-
   // and load the index.html of the app.
   spot.loadURL(url);
   spot.menuBarVisible = false;
+  isSpot = true;
 }
 
 app.whenReady().then(signIn);

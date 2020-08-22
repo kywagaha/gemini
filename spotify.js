@@ -1,13 +1,24 @@
 var SpotifyWebApi = require('spotify-web-api-js');
 var $ = require('jquery');
+var electron = require('electron');
+var remote = electron.remote;
 var spotifyApi = new SpotifyWebApi();
 const update_ms = 5000;
+var myRefresh;
 var mySong;
 var firstUpdate = true;
 
   var myCode;
-  $.ajax({async: false, url: 'http://localhost:8080/mycode', type: 'GET', success: function(data){myCode = data;}});
-  var token = function getToken() {
+  $.ajax({
+    async: false, 
+    url: 'http://localhost:8080/mycode', 
+    type: 'GET', 
+    success: function(data){
+      myCode = data;
+    }
+  });
+  console.log(myCode)
+  var token =function getToken() {
     return $.ajax({
       async: false,
       url: 'https://accounts.spotify.com/api/token',
@@ -20,14 +31,58 @@ var firstUpdate = true;
       },
       type: 'post',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Basic ' + btoa(myCode.client_id + ':' + myCode.client_secret)
         },
       success: function(data){
+        myRefresh = data.refresh_token;
+        spotifyApi.setAccessToken(data.access_token);
+        update();
+        setInterval(update, update_ms);
+        setInterval(refreshToken, data.expires_in * 1000)
         return data;
       },
+      error: function (request, error) {
+        console.log(arguments);
+        getAuth();
+
+      }
     });
   }();
-  spotifyApi.setAccessToken(token.responseJSON.access_token);
+
+function getAuth() {
+  $.ajax({
+    url: myCode.url,
+    type: 'get',
+    success: function(){
+      win = remote.getCurrentWindow();
+      win.close()
+      token;
+    }
+  })
+}
+
+function refreshToken() {
+  $.ajax({
+    url: 'https://accounts.spotify.com/api/token',
+    data: {
+      'grant_type': 'refresh_token',
+      'refresh_token': myRefresh
+    },
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization': 'Basic ' + btoa(myCode.client_id + ':' + myCode.client_secret)
+    },
+    type: 'post',
+    success: function (data){
+      win = remote.getCurrentWindow();
+      win.close();
+      spotifyApi.setAccessToken(data.access_token)
+      console.log(data);
+    }
+  })
+}
+
 
   function update(){
     spotifyApi.getMyCurrentPlayingTrack()
@@ -70,11 +125,6 @@ var firstUpdate = true;
     }); 
   
   };
-  update();
-  setInterval(update, update_ms);
-
-  var timer;
-
   function xCoords(event) {
     var x = event.clientX;
     return x;
