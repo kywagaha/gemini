@@ -1,7 +1,7 @@
 const { app, BrowserWindow, webContents } = require('electron');
 var express = require('express');
 var $ = require('jquery');
-var serverPort = 8080;
+var serverPort = 8080; //also on lines 14 and 25
 var express = express();
 var server = express.listen(serverPort);
 
@@ -18,7 +18,7 @@ var isSpot = false;
 function startServer() {
   console.log('starting server');
   express.listen(serverPort);
-}
+};
 
 express.get('/callback', function (req, res) {
   if (req.query.error != undefined) {
@@ -30,11 +30,11 @@ express.get('/callback', function (req, res) {
   mainWindow();
   if (isSpot == true){
     spot.close();
-  }
+  };
   isSpot = false;
-  }
+  };
   
-})
+});
 
 express.get('/mycode', function (req, res) {
   if (myAuth != null) {
@@ -46,9 +46,9 @@ express.get('/mycode', function (req, res) {
     });
   }
   else {
-    res.send('Error, please check all info')
+    res.send('Error, please check all info');
   };
-})
+});
 
 
 
@@ -66,7 +66,7 @@ function shutdown() {
   server.close(function () {
     console.log('closed express');
   });
-}
+};
 
 console.log('waiting for spotify token on port ' + serverPort);
 
@@ -90,13 +90,13 @@ function mainWindow () {
     if (line == 'starting server back up') {
       console.log('server restarting');
       startServer();
-    }
+    };
     if (line == 'reload window') {
       console.log('reloading');
       main.reload();
-    }
-  })
-}
+    };
+  });
+};
 
 function signIn () {
   // Create the browser window.
@@ -105,6 +105,6 @@ function signIn () {
   spot.loadURL(url);
   spot.menuBarVisible = false;
   isSpot = true;
-}
+};
 
 app.whenReady().then(signIn);

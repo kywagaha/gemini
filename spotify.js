@@ -17,8 +17,7 @@ var firstUpdate = true;
       myCode = data;
     }
   });
-  console.log(myCode)
-  var token =function getToken() {
+  var token = function getToken() {
     return $.ajax({
       async: false,
       url: 'https://accounts.spotify.com/api/token',
@@ -59,8 +58,8 @@ function getAuth() {
       win.close()
       token;
     }
-  })
-}
+  });
+};
 
 function refreshToken() {
   $.ajax({
@@ -77,11 +76,10 @@ function refreshToken() {
     success: function (data){
       win = remote.getCurrentWindow();
       win.close();
-      spotifyApi.setAccessToken(data.access_token)
-      console.log(data);
+      spotifyApi.setAccessToken(data.access_token);
     }
-  })
-}
+  });
+};
 
 
   function update(){
@@ -101,7 +99,6 @@ function refreshToken() {
           document.body.style.backgroundImage = 'url('+data.item.album.images[0].url+')';
         };
         
-        console.log('Now playing', data);
         var remaining_ms = data.item.duration_ms - data.progress_ms;
         if (remaining_ms < update_ms) {
           setTimeout(update, remaining_ms);
@@ -163,7 +160,7 @@ function refreshToken() {
   var firingFunc = singleClick;
 
   window.onclick = function() {
-    if(firing) 
+    if(firing)
       return;
 
     firing = true;
