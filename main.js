@@ -1,8 +1,19 @@
 const { app, BrowserWindow, webContents } = require('electron');
 var express = require('express');
-var serverPort = 8080; // If changed, also change port on line 14 of spotify.js
+var $ = require('jquery');
+var path = require('path');
+var serverPort = 8080; //also used on lines 9 and 16 of spotify.js
 var express = express();
 var server = express.listen(serverPort);
+
+// Set Spotify app client variables here:
+const CLIENT_ID = 'YOUR_CLIENT_ID';
+const CLIENT_SECRET = 'YOUR_CLIENT_SECRET';
+const URI = 'http://localhost:' + serverPort + '/callback';
+const scopes = ["user-modify-playback-state", "user-read-playback-state", "user-read-recently-played"];
+const url = "https://accounts.spotify.com/authorize/?client_id=" + CLIENT_ID + "&response_type=code&redirect_uri=" + URI + "&scope=" + scopes;
+var myAuth = null;
+let spot;
 
 function startServer() {
   console.log('starting server');
@@ -10,9 +21,32 @@ function startServer() {
 }
 
 express.get('/callback', function (req, res) {
-  res.send(req.url.split('=')[1]);
-  shutdown();
+  if (req.query.error != undefined) {
+    res.send(req.query.error, req.query.state);
+  }
+  else {
+  myAuth = req.url.split('=')[1];
+  res.send("Success! Please close this window")
+  mainWindow();
+  spot.close();
+  }
+  
 })
+
+express.get('/mycode', function (req, res) {
+  if (myAuth != null) {
+    res.send({
+      authorization: myAuth,
+      client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRET
+    });
+  }
+  else {
+    res.send('Error, please check all info')
+  };
+})
+
+
 
 // HTTP Keep-Alive to a short time to allow graceful shutdown
 server.on('connection', function (socket) {
@@ -40,20 +74,33 @@ const args = {
     }
   };
 
-function createWindow () {
+function mainWindow () {
   // Create the browser window.
-  let win = new BrowserWindow(args);
+  let main = new BrowserWindow(args);
 
   // and load the index.html of the app.
-  win.loadFile('./index.html');
-  win.menuBarVisible = false;
+  main.loadFile('./index.html');
+  main.menuBarVisible = false;
 
-  win.webContents.on('console-message', (event, message, line) => {
+  main.webContents.on('console-message', (event, message, line) => {
     if (line == 'starting server back up') {
       console.log('server restarting');
       startServer();
     }
+    if (line == 'reload window') {
+      console.log('reloading');
+      main.reload();
+    }
   })
 }
 
-app.whenReady().then(createWindow);
+function signIn () {
+  // Create the browser window.
+  spot = new BrowserWindow(args);
+
+  // and load the index.html of the app.
+  spot.loadURL(url);
+  spot.menuBarVisible = false;
+}
+
+app.whenReady().then(signIn);
