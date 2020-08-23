@@ -1,5 +1,4 @@
 node_modules/
-links.txt
-share/
+.vscode/
 .DS_Store
-file.txt
+dist/
