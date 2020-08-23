@@ -16,7 +16,6 @@ function createSign () {
    signin = new BrowserWindow({
     width: 800,
     height: 800,
-    icon: './icon.png',
     webPreferences: {
       nodeIntegration: true,
       devTools: false
@@ -25,7 +24,8 @@ function createSign () {
   });
 
   // and load the index.html of the app.
-  signin.loadURL('http://localhost:8888/auth/spotify');
+    signin.menuBarVisible = false;
+    signin.loadURL('http://localhost:8888/auth/spotify');
 };
 
 var mainWindow 
@@ -33,13 +33,13 @@ function createMain() {
     mainWindow = new BrowserWindow({
         width: 800,
         height: 800,
-        icon: './icon.png',
         webPreferences: {
           nodeIntegration: true,
           devTools: false
         }
       });
-  mainWindow.loadFile('./index.html');
+    mainWindow.menuBarVisible = false;
+    mainWindow.loadFile('./index.html');
 };
 
 var access_token;
@@ -65,7 +65,7 @@ passport.use(
 express.get(
     '/auth/spotify',
     passport.authenticate('spotify', {
-        scope: ["user-modify-playback-state", "user-read-playback-state", "user-top-read"]
+        scope: ["user-modify-playback-state", "user-read-playback-state"]
     }),
     function(req, res) {
         // The request will be redirected to spotify for authentication, so this

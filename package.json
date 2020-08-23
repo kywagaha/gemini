@@ -5,12 +5,15 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^9.2.1"
+    "electron": "^9.2.1",
+    "electron-builder": "^22.8.0"
   },
   "dependencies": {
     "express": "^4.17.1",
@@ -20,5 +23,19 @@
     "request": "^2.88.2",
     "spotify-web-api-js": "^1.5.0",
     "url": "^0.11.0"
+  },
+  "build": {
+    "appId": "com.electron.gemini",
+    "productName": "Gemini",
+    "copyright": "Copyright © 2020 Gabe and Kyle",
+    "directories": {
+      "output": "build"
+    },
+    "mac": {
+      "category": "your.app.category.type"
+    },
+    "win": {
+      "icon": "./icon.ico"
+    }
   }
 }
