@@ -15,7 +15,6 @@ $.ajax({
     url: 'http://localhost:8888/auth/tokens',
     type: 'GET',
     success: function(data) {
-        console.log(data.access_token)
         spotifyApi.setAccessToken(data.access_token);
         getOnce();
         setInterval(refresh, ((data.expires_in_sec - 10) * 1000))
@@ -41,11 +40,17 @@ function getOnce(){
             document.getElementById("artist").innerHTML = data.item.artists[0].name;
             document.body.style.backgroundImage = 'url('+data.item.album.images[0].url+')';
             setInterval(update, 5000);
+        }
+        else {
+            document.getElementById("song").innerHTML = 'No track loaded';
+            document.getElementById("artist").innerHTML = 'please play a track';
+            document.body.style.backgroundImage = '';
+            mySong = null;
+            setInterval(update, 5000);
         };
     });
 };
 
-var firstUpdate = true;
 var mySong;
 function update(){
     spotifyApi.getMyCurrentPlayingTrack().then(function(data) {
