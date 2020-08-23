@@ -1,0 +1,24 @@
+{
+  "name": "gemini",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^9.2.1"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "jquery": "^3.5.1",
+    "passport": "^0.4.1",
+    "passport-spotify": "^1.1.0",
+    "request": "^2.88.2",
+    "spotify-web-api-js": "^1.5.0",
+    "url": "^0.11.0"
+  }
+}
