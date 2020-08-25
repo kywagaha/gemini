@@ -1,3 +1,4 @@
+require('dotenv').config()
 var { app, BrowserWindow } = require('electron');
 var passport = require('passport');
 var url = require('url');
@@ -6,9 +7,8 @@ var express = require('express');
 express = express();
 express.listen(8888);
 
-var CLIENT_ID = 'YOUR_CLIENT_ID';
-var CLIENT_SECRET = 'YOUR_CLIENT_SECRET';
-
+var CLIENT_ID = process.env.clientID;
+var CLIENT_SECRET = process.env.clientSecret;
 
 var signin;
 function createSign () {
