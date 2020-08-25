@@ -100,6 +100,11 @@ function xCoords(event) {
     var x = event.clientX;
     return x;
 };
+// Get mouse y position
+function yCoords(event) {
+    var y = event.clientY;
+    return y;
+};
 // skip to next song in queue
 var doubleClickFwd = function(){
     console.log('Skipping forward');
@@ -112,6 +117,38 @@ var doubleClickBkwd = function(){
     setTimeout(update, 400); 
     control('backward');
 };
+var fullScreen = function() {
+    var elem = document.documentElement;
+
+    /* Function to open fullscreen mode */
+    function openFullscreen() {
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.mozRequestFullScreen) { /* Firefox */
+        elem.mozRequestFullScreen();
+      } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+        elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) { /* IE/Edge */
+        elem = window.top.document.body; //To break out of frame in IE
+        elem.msRequestFullscreen();
+      };
+    };
+    
+    /* Function to close fullscreen mode */
+    function closeFullscreen() {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) {
+        window.top.document.msExitFullscreen();
+      };
+    };
+    openFullscreen();
+    closeFullscreen();
+}
 // Single click function
 var firing = false;
 var firingFunc = singleClick;
@@ -129,12 +166,17 @@ window.onclick = function() {
 
 // Double click function. Will go to previous track if mouse is on left 200 pixels of screen.
 window.ondblclick = function() {
-    if (xCoords(event) < 200) {
-        firingFunc = doubleClickBkwd;
-    }      
-     else {
-        firingFunc = doubleClickFwd;
-    };
+    if (yCoords(event) < 100) {
+        firingFunc = fullScreen;
+    }
+    else {
+        if (xCoords(event) < 200) {
+            firingFunc = doubleClickBkwd;
+        }      
+         else {
+            firingFunc = doubleClickFwd;
+        };
+    }
 };
 
 // Hide mouse function
@@ -155,4 +197,40 @@ $(document).ready(function() {
             }, 1000);
         };
     });
+});
+
+var elem = document.documentElement;
+function openFullscreen() {
+    if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+    } else if (elem.mozRequestFullScreen) { /* Firefox */
+        elem.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+        elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) { /* IE/Edge */
+        elem = window.top.document.body; //To break out of frame in IE
+        elem.msRequestFullscreen();
+    }
+};
+
+/* Function to close fullscreen mode */
+function closeFullscreen() {
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+        window.top.document.msExitFullscreen();
+    }
+};
+
+document.addEventListener("fullscreenchange", function() {
+});
+document.addEventListener("mozfullscreenchange", function() {
+});
+document.addEventListener("webkitfullscreenchange", function() {
+});
+document.addEventListener("msfullscreenchange", function() {
 });
