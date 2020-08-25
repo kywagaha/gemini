@@ -2,7 +2,7 @@
 Aesthetic now playing screen for Spotify
 
 ![screenshot](https://i.imgur.com/NSturBc.png)
-![screenshot](https://i.imgur.com/7hNEnM1.png)
+![screenshot](https://i.imgur.com/F1Idw41.png)
 ![screenshot](https://i.imgur.com/tkMjXyq.png)
 
 # Installation
@@ -19,5 +19,5 @@ While a track is playing, Gemini will update to show the current song and artist
 It also has the basic functions of Play/Pause on a single click, Skip Track by double-clicking in the center or right, and Previous Track by double-clicking on the left side of the screen.
 
 ![screenshot](https://i.imgur.com/Edl9qr6.png)
-![screenshot](https://i.imgur.com/F1Idw41.png)
+![screenshot](https://i.imgur.com/7hNEnM1.png)
 ![screenshot](https://i.imgur.com/HnpdBnp.png)
