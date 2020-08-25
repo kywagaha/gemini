@@ -18,7 +18,7 @@ function createSign () {
     height: 800,
     webPreferences: {
       nodeIntegration: true,
-      devTools: false
+      devTools: true
     }
     
   });
@@ -28,18 +28,8 @@ function createSign () {
     signin.loadURL('http://localhost:8888/auth/spotify');
 };
 
-var mainWindow 
 function createMain() {
-    mainWindow = new BrowserWindow({
-        width: 800,
-        height: 800,
-        webPreferences: {
-          nodeIntegration: true,
-          devTools: false
-        }
-      });
-    mainWindow.menuBarVisible = false;
-    mainWindow.loadFile('./index.html');
+    signin.loadFile('./index.html');
 };
 
 var access_token;
@@ -54,7 +44,6 @@ passport.use(
       },
       function(accessToken, refreshToken, expires_in, profile, done) {
         createMain();
-        signin.close();
         // main process
         access_token = accessToken;
         refresh_token = refreshToken;
@@ -65,7 +54,8 @@ passport.use(
 express.get(
     '/auth/spotify',
     passport.authenticate('spotify', {
-        scope: ["user-modify-playback-state", "user-read-playback-state"]
+        scope: ["user-modify-playback-state", "user-read-playback-state"],
+        //showDialog: true          //queues sign in/authorize every startup
     }),
     function(req, res) {
         // The request will be redirected to spotify for authentication, so this
@@ -75,14 +65,11 @@ express.get(
 
 express.get(
     '/auth/spotify/callback',
-    passport.authenticate('spotify', { failureRedirect: '/login' }),
+    passport.authenticate('spotify', { failureRedirect: '/auth/spotify' }),
     function(req, res) {
         res.redirect('/');
     }
 );
-express.get('/login', function(req, res) {
-    signin.close();
-});
 
 var isEnabled = false;
 express.get('/auth/enable', function (req, res){ //allows one call of the authorization code from /mycode
@@ -143,4 +130,7 @@ express.get('/auth/refresh', function (req, res) {
         });
         
 });
+
+
+
 app.whenReady().then(createSign);
