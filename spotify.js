@@ -20,7 +20,7 @@ function start(){
             if (data.statusCode == 200){
                 document.getElementById("song").innerHTML = data.body.item.name;
                 document.getElementById("artist").innerHTML = data.body.item.artists[0].name;
-                document.body.style.backgroundImage = 'url('+data.body.item.album.images[0].url+')';
+                document.getElementById("bg").innerHTML = `<img src="${data.item.album.images[0].url}">`;
                 setInterval(update, 2500);
             }
             else {
@@ -46,7 +46,7 @@ function update(){
                 if (mySong != data.body.item.name) {
                     document.getElementById("song").innerHTML = data.body.item.name;
                     document.getElementById("artist").innerHTML = data.body.item.artists[0].name;
-                    document.body.style.backgroundImage = 'url('+data.body.item.album.images[0].url+')';
+                    document.getElementById("bg").innerHTML = `<img src="${data.item.album.images[0].url}">`;
                 };
                 var remaining_ms = data.body.item.duration_ms - data.body.progress_ms;
                 if (remaining_ms < 5000) {
