@@ -1,4 +1,4 @@
-# spotify-now
+# spotify-now is now depreciated. it is now being maintained as "[Gemini](https://github.com/Gabe-H/Gemini)"
 Aesthetic now playing screen for Spotify
 
 ![screenshot](https://i.imgur.com/Edl9qr6.png)
