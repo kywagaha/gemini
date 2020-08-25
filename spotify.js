@@ -21,14 +21,14 @@ function start(){
                 document.getElementById("song").innerHTML = data.body.item.name;
                 document.getElementById("artist").innerHTML = data.body.item.artists[0].name;
                 document.body.style.backgroundImage = 'url('+data.body.item.album.images[0].url+')';
-                setInterval(update, 5000);
+                setInterval(update, 2500);
             }
             else {
                 document.getElementById("song").innerHTML = 'No track loaded';
                 document.getElementById("artist").innerHTML = 'please play a track';
                 document.body.style.backgroundImage = '';
                 mySong = null;
-                setInterval(update, 5000);
+                setInterval(update, 2500);
             };
         }
     });

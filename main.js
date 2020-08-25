@@ -29,7 +29,7 @@ function createWindow () {
     title: 'Gemini',
     webPreferences: {
         nodeIntegration: true,
-        devTools: false
+        devTools: true
     }
   });
 
