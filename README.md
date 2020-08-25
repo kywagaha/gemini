@@ -5,10 +5,10 @@ Aesthetic now playing screen for Spotify
 ![screenshot](https://i.imgur.com/F1Idw41.png)
 ![screenshot](https://i.imgur.com/HnpdBnp.png)
 
+
 # Installation
 Requires Node.js
 `npm install`
-`npm start`
 
 # Setup
 First you need to make a Spotify application. Be sure to copy the `Client Id` and `Client Secret` into a new file called `.env`.
