@@ -18,11 +18,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "jquery": "^3.5.1",
-    "passport": "^0.4.1",
-    "passport-spotify": "^1.1.0",
-    "request": "^2.88.2",
-    "spotify-web-api-js": "^1.5.0",
-    "url": "^0.11.0"
+    "spotify-web-api-node": "^4.0.0"
   },
   "build": {
     "appId": "com.electron.gemini",
@@ -30,12 +26,6 @@
     "copyright": "Copyright © 2020 Gabe and Kyle",
     "directories": {
       "output": "build"
-    },
-    "mac": {
-      "category": "your.app.category.type"
-    },
-    "win": {
-      "icon": "./icon.ico"
     }
   }
 }

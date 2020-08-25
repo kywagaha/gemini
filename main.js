@@ -1,136 +1,99 @@
-var { app, BrowserWindow } = require('electron');
-var passport = require('passport');
-var url = require('url');
-var SpotifyStrategy = require('passport-spotify').Strategy;
+const { app, BrowserWindow } = require('electron');
 var express = require('express');
-express = express();
-express.listen(8888);
+var express = express();
+var SpotifyWebApi = require('spotify-web-api-node');
+var spotifyApi = new SpotifyWebApi({
+  clientId: 'YOUR_CLIENT_ID',
+  clientSecret: 'YOUR_CLIENT_SECRET',
+  redirectUri: 'http://localhost:8080/callback'
+});
 
-var CLIENT_ID = 'YOUR_CLIENT_ID';
-var CLIENT_SECRET = 'YOUR_CLIENT_SECRET';
+express.listen(8080);
 
 
-var signin;
-function createSign () {
+var scopes = ['user-read-private', 'user-read-email', 'user-read-currently-playing', 'user-modify-playback-state'],
+  state = '';
+var authorizeURL = spotifyApi.createAuthorizeURL(scopes, state);
+
+var win;
+function createWindow () {
   // Create the browser window.
-   signin = new BrowserWindow({
+  win = new BrowserWindow({
     width: 800,
-    height: 800,
+    height: 840,
     webPreferences: {
-      nodeIntegration: true,
-      devTools: true
+        nodeIntegration: true,
+        devTools: false
     }
-    
   });
 
   // and load the index.html of the app.
-    signin.menuBarVisible = false;
-    signin.loadURL('http://localhost:8888/auth/spotify');
+  win.menuBarVisible = false;
+  win.loadURL(authorizeURL);
 };
-
-function createMain() {
-    signin.loadFile('./index.html');
-};
-
-var access_token;
-var refresh_token;
-var expires_in_sec;
-passport.use(
-    new SpotifyStrategy(
-      {
-        clientID: CLIENT_ID,
-        clientSecret: CLIENT_SECRET,
-        callbackURL: 'http://localhost:8888/auth/spotify/callback'
-      },
-      function(accessToken, refreshToken, expires_in, profile, done) {
-        createMain();
-        // main process
-        access_token = accessToken;
-        refresh_token = refreshToken;
-        expires_in_sec = expires_in;
-      }
-    )
-  );
-express.get(
-    '/auth/spotify',
-    passport.authenticate('spotify', {
-        scope: ["user-modify-playback-state", "user-read-playback-state"],
-        //showDialog: true          //queues sign in/authorize every startup
-    }),
-    function(req, res) {
-        // The request will be redirected to spotify for authentication, so this
-        // function will not be called.
-    }
-);
-
-express.get(
-    '/auth/spotify/callback',
-    passport.authenticate('spotify', { failureRedirect: '/auth/spotify' }),
-    function(req, res) {
-        res.redirect('/');
-    }
-);
 
 var isEnabled = false;
-express.get('/auth/enable', function (req, res){ //allows one call of the authorization code from /mycode
-    var userAgent = req.get('User-Agent');
-        if (userAgent.includes('Electron') == true) { //only Electron User-Agent can /enable
-            res.send('Now enabled');
-            isEnabled = true;
-        }
-        else {
-            res.send('Invalid browser');
-        };
+// Callback path after Spotify auth
+express.get('/callback', function (req, res) {
+  if (isEnabled == false) {
+    isEnabled = true;
+    var myCode = req.query.code;
+    spotifyApi.authorizationCodeGrant(myCode).then(
+      function(data) {
+        // Set the access token on the API object to use it in later calls
+        spotifyApi.setAccessToken(data.body['access_token']);
+        spotifyApi.setRefreshToken(data.body['refresh_token']);
+        win.loadFile('./index.html');
+        setInterval(refresh, (data.body['expires_in'] - 10) * 1000);
+      },
+      function(err) {
+        console.log(err);
+      }
+    );
+  }
+  else {
+    res.send('Session has expired');
+  };
 });
 
-express.get('/auth/tokens', function (req, res) {
-    if (isEnabled == true) {
-        res.send({
-            access_token,
-            expires_in_sec
-        });
-        isEnabled = false;
+// Token refresh function
+function refresh() {
+  spotifyApi.refreshAccessToken().then(
+    function(data) {
+      // Save the access token so that it's used in future calls
+      spotifyApi.setAccessToken(data.body['access_token']);
+    },
+    function(err) {
+      console.log('Refresh error: ', err);
     }
-    else {
-        res.send('GET not enabled');
-    };
+  );
+};
+express.get('/currently-playing', function(req, res) {
+  spotifyApi.getMyCurrentPlayingTrack().then(
+    function(data) {
+      res.send(data);
+    },
+    function(err) {
+      console.log(err);
+    }
+  );
+});
+express.get('/control', function (req, res) {
+  switch (req.query.type) {
+    case 'play':
+      spotifyApi.play();
+      break;
+    case 'pause':
+      spotifyApi.pause();
+      break;
+    case 'forward':
+      spotifyApi.skipToNext();
+      break;
+    case 'backward':
+      spotifyApi.skipToPrevious();
+      break;
+  };
+  res.send();
 });
 
-express.get('/auth/refresh', function (req, res) {
-    const requestUrl = url.parse(url.format({
-        protocol: 'https',
-        hostname: 'accounts.spotify.com',
-        pathname: '/api/token',
-        query: {
-            grant_type : 'refresh_token',
-            refresh_token: refresh_token
-        }
-
-    }));
-    var encodedClientVars = 'Basic ' + Buffer.from(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64');
-    var request = require('request');
-        request.post({
-            headers: {
-                'Content-Type' : 'application/x-www-form-urlencoded',
-                'Authorization' : encodedClientVars
-            },
-            url: requestUrl
-        }, function(error, response, body){
-                var body = JSON.parse(body);
-                access_token = body.access_token;
-                if (isEnabled == true) {
-                    res.send({
-                        body
-                    });
-                    isEnabled = false;
-                }
-                else {
-                    res.send('GET not enabled');
-                };
-        });
-        
-});
-
-
-
-app.whenReady().then(createSign);
+app.whenReady().then(createWindow);
