@@ -2,18 +2,23 @@ const { app, BrowserWindow } = require('electron');
 var express = require('express');
 var express = express();
 var SpotifyWebApi = require('spotify-web-api-node');
+require('dotenv').config();
+
+var CLIENT_ID = process.env.CLIENT_ID;
+var CLIENT_SECRET = process.env.CLIENT_SECRET;
+
 var spotifyApi = new SpotifyWebApi({
-  clientId: 'YOUR_CLIENT_ID',
-  clientSecret: 'YOUR_CLIENT_SECRET',
+  clientId: CLIENT_ID,
+  clientSecret: CLIENT_SECRET,
   redirectUri: 'http://localhost:8080/callback'
 });
 
 express.listen(8080);
 
 
-var scopes = ['user-read-private', 'user-read-email', 'user-read-currently-playing', 'user-modify-playback-state'],
+var scopes = ['user-read-currently-playing', 'user-modify-playback-state'],
   state = '';
-var authorizeURL = spotifyApi.createAuthorizeURL(scopes, state);
+var authorizeURL = spotifyApi.createAuthorizeURL(scopes, state);  // spotifyApi.createAuthorizeURL(scopes, state, true); for login/auth everytime
 
 var win;
 function createWindow () {
@@ -21,6 +26,7 @@ function createWindow () {
   win = new BrowserWindow({
     width: 800,
     height: 840,
+    title: 'Gemini',
     webPreferences: {
         nodeIntegration: true,
         devTools: false
@@ -36,6 +42,7 @@ var isEnabled = false;
 // Callback path after Spotify auth
 express.get('/callback', function (req, res) {
   if (isEnabled == false) {
+    res.send()
     isEnabled = true;
     var myCode = req.query.code;
     spotifyApi.authorizationCodeGrant(myCode).then(
