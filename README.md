@@ -11,7 +11,7 @@ Requires Node.js
 `npm install`
 
 # Setup
-First you need to make a Spotify application. Once you have your client ID and client secret, make an .env file in the root directory (the file name is just .env). Fill in the .env file like this:
+First you need to make a Spotify application. Once you have your client ID and client secret, make an .env file in the root directory (the file name is just `.env`). Fill in the .env file like this:
 
 `CLIENT_ID=123456789`
 `CLIENT_SECRET=987654321`
