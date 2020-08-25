@@ -71,7 +71,6 @@ function update(){
         
             document.getElementById("song").innerHTML = 'No track loaded';
             document.getElementById("artist").innerHTML = 'please play a track';
-            document.body.style.backgroundImage = '';
             console.log('No loaded track found');
             mySong = null;
         };
