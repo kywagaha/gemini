@@ -11,7 +11,11 @@ Requires Node.js
 `npm install`
 
 # Setup
-First you need to make a Spotify application. Be sure to copy the `Client Id` and `Client Secret` into a new file called `.env`.
+First you need to make a Spotify application. Once you have your client ID and client secret, make an .env file in the root directory (the file name is just .env). Fill in the .env file like this:
+
+`CLIENT_ID=123456789`
+`CLIENT_SECRET=987654321`
+
 Then edit the settings for the app on the Spotify developer dashboard, and set the `Redirect Uri` to `http://localhost:8888/auth/spotify/callback`.
 
 # Usage
