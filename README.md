@@ -11,8 +11,13 @@ Requires Node.js
 `npm start`
 
 # Setup
-First you need to make a Spotify application. Be sure to copy the `Client Id` and `Client Secret` into the respective fields in `main.js`.
-Then edit the settings for the app on the Spotify developer dashboard, and set the `Redirect Uri` to `http://localhost:8888/auth/spotify/callback`.
+First you need to make a Spotify application. Then edit the settings for the app on the Spotify developer dashboard, and set the `Redirect Uri` to `http://localhost:8888/auth/spotify/callback`.
+
+Once you have your client ID and client secret, make an `.env` file in the root directory (the file name is just `.env`). Fill in the `.env` file like this:
+```
+clientID=123456789
+clientSecret=987654321
+```
 
 # Usage
 While a track is playing, Gemini will update to show the current song and artist. 
