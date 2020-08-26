@@ -238,7 +238,13 @@ document.addEventListener("msfullscreenchange", function() {
 
 
 $(function fadein(){
-    $('body').fadeIn(1000);
+    $('#bg').fadeIn(1000);
+    setTimeout(function(){
+        $('h1').fadeIn(1000);
+    }, 300)
+    setTimeout(function(){
+        $('h2').fadeIn(1000);
+    }, 300)
 })
 
 function fadeout(){

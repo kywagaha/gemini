@@ -30,7 +30,6 @@ body {
     background-repeat: no-repeat;
     overflow-x: hidden;
     overflow-y: hidden;
-    display: none;
 }
 
 h1 {
@@ -43,6 +42,7 @@ h1 {
     margin-top:0px;
     color: white;
     text-shadow: 5px 5px 80px rgba(0,0,0,50);
+    display: none;
 }
 
 h2 {
@@ -55,6 +55,7 @@ h2 {
     margin-top:0px;
     color: white;
     text-shadow: 5px 5px 50px rgba(0,0,0,50);
+    display: none;
 }
 
 .center {
@@ -69,11 +70,12 @@ h2 {
 
 #bg {
     position: fixed; 
-    top: -50%; 
+    top: -20%; 
     left: -50%; 
     width: 200%; 
     height: 200%;
     z-index: -1;
+    display: none;
   }
 
 #bg img {
@@ -86,12 +88,3 @@ h2 {
     min-width: 50%;
     min-height: 50%;
 }
-
-@keyframes fadeInAnimation { 
-    0% { 
-        opacity: 0; 
-    } 
-    100% { 
-        opacity: 1; 
-        } 
-} 
