@@ -24,8 +24,8 @@ var win;
 function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 800,
-    height: 840,
+    width: 1024,
+    height: 728,
     title: 'Gemini',
     backgroundColor: '#000000',
     webPreferences: {
@@ -39,12 +39,8 @@ function createWindow () {
   win.loadURL(authorizeURL);
 };
 
-var isEnabled = false;
 // Callback path after Spotify auth
 express.get('/callback', function (req, res) {
-  if (isEnabled == false) {
-    res.send()
-    isEnabled = true;
     var myCode = req.query.code;
     spotifyApi.authorizationCodeGrant(myCode).then(
       function(data) {
@@ -52,16 +48,25 @@ express.get('/callback', function (req, res) {
         spotifyApi.setAccessToken(data.body['access_token']);
         spotifyApi.setRefreshToken(data.body['refresh_token']);
         win.loadFile('./index.html');
+        res.send();
         setInterval(refresh, (data.body['expires_in'] - 10) * 1000);
       },
       function(err) {
+        res.send('Authorization failed, redirecting');
+        setTimeout(function() {
+          var fURL = spotifyApi.createAuthorizeURL(scopes, state, true);
+          win.loadURL(fURL);
+        }, 300);
         console.log(err);
       }
     );
-  }
-  else {
-    res.send('Session has expired');
-  };
+});
+
+// Optional sign in after the fact
+express.get('/sign-in', function(req, res) {
+  var fURL = spotifyApi.createAuthorizeURL(scopes, state, true);
+  res.send('redirecting');
+  win.loadURL(fURL);
 });
 
 // Token refresh function
@@ -88,17 +93,13 @@ express.get('/currently-playing', function(req, res) {
 });
 express.get('/control', function (req, res) {
   switch (req.query.type) {
-    case 'play':
-      spotifyApi.play();
+    case 'play': spotifyApi.play();
       break;
-    case 'pause':
-      spotifyApi.pause();
+    case 'pause': spotifyApi.pause();
       break;
-    case 'forward':
-      spotifyApi.skipToNext();
+    case 'forward': spotifyApi.skipToNext();
       break;
-    case 'backward':
-      spotifyApi.skipToPrevious();
+    case 'backward': spotifyApi.skipToPrevious();
       break;
   };
   res.send();

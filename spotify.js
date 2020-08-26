@@ -1,4 +1,6 @@
 var $ = require('jquery');
+var fadeTime = 500;
+var updateMs = 2000;
 
 function control(type){
     $.ajax({
@@ -11,31 +13,40 @@ function control(type){
     });
 };
 
+var mySong;
+var myArtist;
+var myAlbum;
+// Fades first text, only called once
 function start(){
     $.ajax({
         async: false,
         url: 'http://localhost:8080/currently-playing',
         type: 'GET',
         success: function(data) {
+            console.log(data);
             if (data.statusCode == 200){
                 document.getElementById("song").innerHTML = data.body.item.name;
                 document.getElementById("artist").innerHTML = data.body.item.artists[0].name;
                 document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
-                setInterval(update, 2500);
+                fadeIn();
+                setInterval(update, updateMs);
             }
             else {
                 document.getElementById("song").innerHTML = 'No track loaded';
                 document.getElementById("artist").innerHTML = 'please play a track';
                 document.body.style.backgroundImage = '';
                 mySong = null;
-                setInterval(update, 2500);
+                setInterval(update, updateMs);
             };
+            mySong = data.body.item.name;
+            myArtist = data.body.item.artists[0].name;
+            myAlbum = data.body.item.album.name;
         }
     });
 };
 start();
 
-var mySong;
+// Updates front-end only if data is different
 function update(){
     $.ajax({
         async: true,
@@ -43,18 +54,25 @@ function update(){
         type: 'GET',
         success: function(data) {
             if (data.statusCode == 200){
-                if (mySong != data.body.item.name) {
-                    document.getElementById("song").innerHTML = data.body.item.name;
-                    document.getElementById("artist").innerHTML = data.body.item.artists[0].name;
-                    document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
-                };
                 var remaining_ms = data.body.item.duration_ms - data.body.progress_ms;
-                if (remaining_ms < 5000) {
-                    setTimeout(update, remaining_ms);
-                    setTimeout(fadeout, remaining_ms-1000);
+                // Get precise end of song within the last update
+                if (remaining_ms < updateMs && remaining_ms != 0) {
                     console.log('Predicting track skip in ' + remaining_ms);
+                    setTimeout(update, remaining_ms);
+                };
+                // Only change data if it's different from what's onscreen
+                if (mySong != data.body.item.name || myArtist != data.body.item.artists[0].name || myAlbum != data.body.item.album.name) {
+                    fadeOut();
+                    setTimeout(function() {
+                        document.getElementById("song").innerHTML = data.body.item.name;
+                        document.getElementById("artist").innerHTML = data.body.item.artists[0].name;
+                        document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
+                        fadeIn();
+                    }, fadeTime);
                 };
                 mySong = data.body.item.name;
+                myArtist = data.body.item.artists[0].name;
+                myAlbum = data.body.item.album.name;
             }
             else if (data.statusCode == 204) {
                 document.getElementById("song").innerHTML = 'No track loaded';
@@ -106,45 +124,34 @@ function yCoords(event) {
     var y = event.clientY;
     return y;
 };
-// skip to next song in queue
+// Skip to next song in queue
 var doubleClickFwd = function(){
     console.log('Skipping forward');
     control('forward');
-    setTimeout(update, 400);
+    fadeOut();
+    setTimeout(update, 300);
 };
-// skip back to previous song
+// Skip back to previous song
 var doubleClickBkwd = function(){
     console.log('Skipping backward');
-    setTimeout(update, 400); 
     control('backward');
+    fadeOut();
+    setTimeout(update, 300);
 };
 var fullScreen = function() {
     var elem = document.documentElement;
 
-    /* Function to open fullscreen mode */
+    // Function to open fullscreen mode
     function openFullscreen() {
       if (elem.requestFullscreen) {
         elem.requestFullscreen();
-      } else if (elem.mozRequestFullScreen) { /* Firefox */
-        elem.mozRequestFullScreen();
-      } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
-        elem.webkitRequestFullscreen();
-      } else if (elem.msRequestFullscreen) { /* IE/Edge */
-        elem = window.top.document.body; //To break out of frame in IE
-        elem.msRequestFullscreen();
-      };
+      }
     };
     
-    /* Function to close fullscreen mode */
+    // Function to close fullscreen mode
     function closeFullscreen() {
       if (document.exitFullscreen) {
         document.exitFullscreen();
-      } else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen();
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-      } else if (document.msExitFullscreen) {
-        window.top.document.msExitFullscreen();
       };
     };
     openFullscreen();
@@ -173,11 +180,11 @@ window.ondblclick = function() {
     else {
         if (xCoords(event) < 200) {
             firingFunc = doubleClickBkwd;
-        }      
+        }
          else {
             firingFunc = doubleClickFwd;
         };
-    }
+    };
 };
 
 // Hide mouse function
@@ -200,55 +207,17 @@ $(document).ready(function() {
     });
 });
 
-var elem = document.documentElement;
-function openFullscreen() {
-    if (elem.requestFullscreen) {
-        elem.requestFullscreen();
-    } else if (elem.mozRequestFullScreen) { /* Firefox */
-        elem.mozRequestFullScreen();
-    } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
-        elem.webkitRequestFullscreen();
-    } else if (elem.msRequestFullscreen) { /* IE/Edge */
-        elem = window.top.document.body; //To break out of frame in IE
-        elem.msRequestFullscreen();
-    }
+// Fading functions
+function fadeIn(){
+    $('#bg').fadeIn(fadeTime);
+    setTimeout(function(){
+        $('h1').fadeIn(fadeTime);
+        $('h2').fadeIn(fadeTime);
+    }, 300);
 };
 
-/* Function to close fullscreen mode */
-function closeFullscreen() {
-    if (document.exitFullscreen) {
-        document.exitFullscreen();
-    } else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen();
-    } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) {
-        window.top.document.msExitFullscreen();
-    }
+function fadeOut(){
+    $('h1').fadeOut(fadeTime);
+    $('h2').fadeOut(fadeTime);
+    $('#bg').fadeOut(fadeTime);
 };
-
-document.addEventListener("fullscreenchange", function() {
-});
-document.addEventListener("mozfullscreenchange", function() {
-});
-document.addEventListener("webkitfullscreenchange", function() {
-});
-document.addEventListener("msfullscreenchange", function() {
-});
-
-
-$(function fadein(){
-    $('#bg').fadeIn(1000);
-    setTimeout(function(){
-        $('h1').fadeIn(1000);
-    }, 300)
-    setTimeout(function(){
-        $('h2').fadeIn(1000);
-    }, 300)
-})
-
-function fadeout(){
-    $('body').fadeOut(1000, function(){
-        location.reload(true);
-    });
-}
