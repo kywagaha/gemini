@@ -70,7 +70,7 @@ h2 {
 
 #bg {
     position: fixed; 
-    top: -20%; 
+    top: -10%; 
     left: -50%; 
     width: 200%; 
     height: 200%;
@@ -86,5 +86,5 @@ h2 {
     bottom: 0; 
     margin: auto; 
     min-width: 50%;
-    min-height: 50%;
+    min-height: 100%;
 }
