@@ -61,7 +61,7 @@ function update(){
                     setTimeout(update, remaining_ms);
                 };
                 // Only change data if it's different from what's onscreen
-                if (mySong != data.body.item.name || myArtist != data.body.item.artists[0].name || myAlbum != data.body.item.album.name) {
+                if (mySong != data.body.item.name || myArtist != data.body.item.artists[0].name) {
                     fadeOut();
                     setTimeout(function() {
                         document.getElementById("song").innerHTML = data.body.item.name;
