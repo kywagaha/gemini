@@ -61,13 +61,20 @@ function update(){
                     setTimeout(update, remaining_ms);
                 };
                 // Only change data if it's different from what's onscreen
-                if (mySong != data.body.item.name || myArtist != data.body.item.artists[0].name || myAlbum != data.body.item.album.name) {
+                if (mySong != data.body.item.name || myArtist != data.body.item.artists[0].name) {
                     fadeOut();
                     setTimeout(function() {
                         document.getElementById("song").innerHTML = data.body.item.name;
                         document.getElementById("artist").innerHTML = data.body.item.artists[0].name;
                         document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
                         fadeIn();
+                    }, fadeTime);
+                };
+                if (myAlbum != data.body.item.album.name) {
+                    fadeOutAlbum();
+                    setTimeout(function() {
+                        document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
+                        fadeInAlbum()
                     }, fadeTime);
                 };
                 mySong = data.body.item.name;
@@ -219,5 +226,8 @@ function fadeIn(){
 function fadeOut(){
     $('h1').fadeOut(fadeTime);
     $('h2').fadeOut(fadeTime);
-    $('#bg').fadeOut(fadeTime);
 };
+
+function fadeOutAlbum(){
+    $('#bg').fadeOut(fadeTime);
+}
