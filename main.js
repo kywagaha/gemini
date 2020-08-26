@@ -27,6 +27,7 @@ function createWindow () {
     width: 800,
     height: 840,
     title: 'Gemini',
+    backgroundColor: '#000000',
     webPreferences: {
         nodeIntegration: true,
         devTools: true
