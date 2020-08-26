@@ -42,6 +42,7 @@ h1 {
     margin-top:0px;
     color: white;
     text-shadow: 5px 5px 80px rgba(0,0,0,50);
+    display: none;
 }
 
 h2 {
@@ -54,6 +55,7 @@ h2 {
     margin-top:0px;
     color: white;
     text-shadow: 5px 5px 50px rgba(0,0,0,50);
+    display: none;
 }
 
 .center {
@@ -65,3 +67,24 @@ h2 {
     min-height: 98vh;
     color: white;
   }
+
+#bg {
+    position: fixed; 
+    top: -10%; 
+    left: -50%; 
+    width: 200%; 
+    height: 200%;
+    z-index: -1;
+    display: none;
+  }
+
+#bg img {
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0; 
+    margin: auto; 
+    min-width: 50%;
+    min-height: 100%;
+}
