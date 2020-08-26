@@ -70,6 +70,13 @@ function update(){
                         fadeIn();
                     }, fadeTime);
                 };
+                if (myAlbum != data.body.item.album.name) {
+                    fadeOutAlbum();
+                    setTimeout(function() {
+                        document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
+                        fadeInAlbum()
+                    }, fadeTime);
+                };
                 mySong = data.body.item.name;
                 myArtist = data.body.item.artists[0].name;
                 myAlbum = data.body.item.album.name;
@@ -219,5 +226,8 @@ function fadeIn(){
 function fadeOut(){
     $('h1').fadeOut(fadeTime);
     $('h2').fadeOut(fadeTime);
-    $('#bg').fadeOut(fadeTime);
 };
+
+function fadeOutAlbum(){
+    $('#bg').fadeOut(fadeTime);
+}
