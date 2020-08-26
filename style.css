@@ -30,6 +30,7 @@ body {
     background-repeat: no-repeat;
     overflow-x: hidden;
     overflow-y: hidden;
+    display: none;
 }
 
 h1 {
