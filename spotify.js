@@ -1,6 +1,7 @@
 var $ = require('jquery');
 var fadeTime = 500;
-var updateMs = 2000;
+var updateMs = 2500;
+var changeMs = 150;
 
 function control(type){
     $.ajax({
@@ -23,20 +24,20 @@ function start(){
         url: 'http://localhost:8080/currently-playing',
         type: 'GET',
         success: function(data) {
-            console.log(data);
             if (data.statusCode == 200){
                 document.getElementById("song").innerHTML = data.body.item.name;
                 document.getElementById("artist").innerHTML = data.body.item.artists[0].name;
                 document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
                 fadeIn();
-                setInterval(update, updateMs);
+                var updateInt = setInterval(update, updateMs);
             }
             else {
                 document.getElementById("song").innerHTML = 'No track loaded';
                 document.getElementById("artist").innerHTML = 'please play a track';
                 document.body.style.backgroundImage = '';
+                fadeIn();
                 mySong = null;
-                setInterval(update, updateMs);
+                var updateInt = setInterval(update, updateMs);
             };
             mySong = data.body.item.name;
             myArtist = data.body.item.artists[0].name;
@@ -87,6 +88,14 @@ function update(){
                 console.log('No loaded track found');
                 mySong = null;
             }
+            else if (data.statusCode == 429) {
+                document.getElementById("song").innerHTML = 'Rate Limiting Applied';
+                document.getElementById("artist").innerHTML = 'please try again later';
+                console.log('429 error');
+                console.log(data)
+                mySong = null;
+                clearInterval(updateInt);
+            }
             else {
                 document.getElementById("song").innerHTML = 'Error';
                 document.getElementById("artist").innerHTML = 'check console logs';
@@ -103,7 +112,6 @@ var singleClick = function(){
         url: 'http://localhost:8080/currently-playing',
         type: 'GET',
         success: function(data) {
-            console.log(data.body);
             var isPlaying = data.body.is_playing;
             // Play if paused; pause if playing
             if (isPlaying == true){
@@ -136,14 +144,16 @@ var doubleClickFwd = function(){
     console.log('Skipping forward');
     control('forward');
     fadeOut();
-    setTimeout(update, 300);
+    fadeOutAlbum();
+    setTimeout(update, changeMs);
 };
 // Skip back to previous song
 var doubleClickBkwd = function(){
     console.log('Skipping backward');
     control('backward');
     fadeOut();
-    setTimeout(update, 300);
+    fadeOutAlbum();
+    setTimeout(update, changeMs);
 };
 var fullScreen = function() {
     var elem = document.documentElement;
@@ -152,7 +162,7 @@ var fullScreen = function() {
     function openFullscreen() {
       if (elem.requestFullscreen) {
         elem.requestFullscreen();
-      }
+      };
     };
     
     // Function to close fullscreen mode
@@ -163,10 +173,10 @@ var fullScreen = function() {
     };
     openFullscreen();
     closeFullscreen();
-}
-// Single click function
+};
 var firing = false;
 var firingFunc = singleClick;
+// Single click function
 window.onclick = function() {
     if(firing)
         return;
@@ -175,7 +185,7 @@ window.onclick = function() {
         firingFunc(); 
         firingFunc = singleClick;
         firing = false;
-  }, 300);
+  }, changeMs);
 
 };
 
@@ -230,4 +240,8 @@ function fadeOut(){
 
 function fadeOutAlbum(){
     $('#bg').fadeOut(fadeTime);
-}
+};
+
+function fadeInAlbum(){
+    $('#bg').fadeIn(fadeTime);
+};
