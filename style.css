@@ -1,22 +1,6 @@
-@font-face {
-    src: url('fonts/FormaDJRBanner-BoldItalic.eot'); /* IE < 9 */
-    src: url('fonts/FormaDJRBanner-BoldItalic.eot?#') format("embedded-opentype"), /* IE 9 */
-         url('fonts/FormaDJRBanner-BoldItalic.woff2') format("woff2"),
-         url('fonts/FormaDJRBanner-BoldItalic.woff') format("woff");
-    font-family: 'FormaDJRBanner';
-    font-style: italic;
-    font-weight: bold;
-    }
-
-@font-face {
-    src: url('fonts/FormaDJRDisplay-Regular.eot'); /* IE < 9 */
-    src: url('fonts/FormaDJRDisplay-Regular.eot?#') format("embedded-opentype"), /* IE 9 */
-            url('fonts/FormaDJRDisplay-Regular.woff2') format("woff2"),
-            url('fonts/FormaDJRDisplay-Regular.woff') format("woff");
-    font-family: 'FormaDJRDisplay';
-    font-style: normal;
-    font-weight: normal;
-    }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  }
 
 body {
     margin-left: 10%;
@@ -33,7 +17,6 @@ body {
 }
 
 h1 {
-    font-family: 'FormaDJRBanner';
     font-style: italic; 
     font-weight: bold; 
     font-size: 100px; 
@@ -46,7 +29,6 @@ h1 {
 }
 
 h2 {
-    font-family: 'FormaDJRDisplay';
     font-style: normal; 
     font-weight: normal; 
     font-size: 48px; 
