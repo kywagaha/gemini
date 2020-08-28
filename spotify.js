@@ -1,9 +1,10 @@
 var $ = require('jquery');
 var fadeTime = 500;
 var updateMs = 2500;
-var changeMs = 150;
+var changeMs = 200;
 
 function control(type){
+    isControl = true;
     $.ajax({
         async: true,
         url: 'http://localhost:8080/control',
@@ -14,6 +15,8 @@ function control(type){
     });
 };
 
+var updateInt;
+var isControl = false;
 var mySong;
 var myArtist;
 var myAlbum;
@@ -25,11 +28,23 @@ function start(){
         type: 'GET',
         success: function(data) {
             if (data.statusCode == 200){
-                document.getElementById("song").innerHTML = data.body.item.name;
-                document.getElementById("artist").innerHTML = data.body.item.artists[0].name;
-                document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
-                fadeIn();
-                var updateInt = setInterval(update, updateMs);
+                if (data.body.currently_playing_type == "track") {
+                    document.getElementById("song").innerHTML = data.body.item.name;
+                    document.getElementById("artist").innerHTML = data.body.item.artists[0].name;
+                    document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
+                    fadeIn();
+                    updateInt = setInterval(update, updateMs);
+                    mySong = data.body.item.name;
+                    myArtist = data.body.item.artists[0].name;
+                    myAlbum = data.body.item.album.name;
+                }
+                if (data.body.currently_playing_type == "episode") {
+                    document.getElementById("song").innerHTML = "Now playing a podcast";
+                    document.getElementById("artist").innerHTML = "Podcast data is not currently supported in Spotify's API";
+                    document.getElementById("bg").innerHTML = "";
+                    fadeIn();
+                    updateInt = setInterval(update, updateMs);
+                }
             }
             else {
                 document.getElementById("song").innerHTML = 'No track loaded';
@@ -37,11 +52,8 @@ function start(){
                 document.body.style.backgroundImage = '';
                 fadeIn();
                 mySong = null;
-                var updateInt = setInterval(update, updateMs);
+                updateInt = setInterval(update, updateMs);
             };
-            mySong = data.body.item.name;
-            myArtist = data.body.item.artists[0].name;
-            myAlbum = data.body.item.album.name;
         }
     });
 };
@@ -55,32 +67,54 @@ function update(){
         type: 'GET',
         success: function(data) {
             if (data.statusCode == 200){
-                var remaining_ms = data.body.item.duration_ms - data.body.progress_ms;
-                // Get precise end of song within the last update
-                if (remaining_ms < updateMs && remaining_ms != 0) {
-                    console.log('Predicting track skip in ' + remaining_ms);
-                    setTimeout(update, remaining_ms);
-                };
-                // Only change data if it's different from what's onscreen
-                if (mySong != data.body.item.name || myArtist != data.body.item.artists[0].name) {
-                    fadeOut();
+                // Only change data if it's different from what's onscreen 
+                if (data.body.currently_playing_type == "track") {
+                    if (mySong != data.body.item.name || myArtist != data.body.item.artists[0].name) {
+                        if (!isControl) {
+                            fadeOut();
+                            fadeOutAlbum();
+                            setTimeout(function() {
+                                document.getElementById("song").innerHTML = data.body.item.name;
+                                document.getElementById("artist").innerHTML = data.body.item.artists[0].name;
+                                document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
+                                fadeIn();
+                            }, fadeTime);
+                        }
+                        else if (isControl) {
+                            setTimeout(function () {
+                                document.getElementById("song").innerHTML = data.body.item.name;
+                                document.getElementById("artist").innerHTML = data.body.item.artists[0].name;
+                                document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
+                                fadeIn();
+                                isControl = false;
+                            }, 10) // For lag
+                        };
+                        var remaining_ms = data.body.item.duration_ms - data.body.progress_ms;
+                        // Get precise end of song within the last update
+                        if (remaining_ms < updateMs && remaining_ms != 0) {
+                            console.log('Predicting track skip in ' + remaining_ms);
+                            setTimeout(update, remaining_ms);
+                        };
+                        mySong = data.body.item.name;
+                        myArtist = data.body.item.artists[0].name;
+                        myAlbum = data.body.item.album.name;
+                    }
+                    if (myAlbum != data.body.item.album.name) {
+                        fadeOutAlbum();
+                        setTimeout(function() {
+                            document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
+                            fadeInAlbum()
+                        }, fadeTime);
+                    };
+                }
+                else if (data.body.currently_playing_type = "episode") {
                     setTimeout(function() {
-                        document.getElementById("song").innerHTML = data.body.item.name;
-                        document.getElementById("artist").innerHTML = data.body.item.artists[0].name;
-                        document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
+                        document.getElementById("song").innerHTML = "Now playing a podcast";
+                        document.getElementById("artist").innerHTML = "Podcast data is not currently supported in Spotify's API";
+                        document.getElementById("bg").innerHTML = "";
                         fadeIn();
-                    }, fadeTime);
+                    });
                 };
-                if (myAlbum != data.body.item.album.name) {
-                    fadeOutAlbum();
-                    setTimeout(function() {
-                        document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
-                        fadeInAlbum()
-                    }, fadeTime);
-                };
-                mySong = data.body.item.name;
-                myArtist = data.body.item.artists[0].name;
-                myAlbum = data.body.item.album.name;
             }
             else if (data.statusCode == 204) {
                 document.getElementById("song").innerHTML = 'No track loaded';
@@ -177,20 +211,20 @@ var fullScreen = function() {
 var firing = false;
 var firingFunc = singleClick;
 // Single click function
-window.onclick = function() {
+$(window).click(function() {
     if(firing)
         return;
     firing = true;
-    timer = setTimeout(function() { 
+    timer = setTimeout(function() {
         firingFunc(); 
         firingFunc = singleClick;
         firing = false;
   }, changeMs);
 
-};
+});
 
 // Double click function. Will go to previous track if mouse is on left 200 pixels of screen.
-window.ondblclick = function() {
+$(window).dblclick(function() {
     if (yCoords(event) < 100) {
         firingFunc = fullScreen;
     }
@@ -202,14 +236,14 @@ window.ondblclick = function() {
             firingFunc = doubleClickFwd;
         };
     };
-};
+});
 
 // Hide mouse function
 $(document).ready(function() {
     var idleMouseTimer;
     var forceMouseHide = false;
     $("body").css('cursor', 'none');
-    $("body").mousemove(function(ev) {
+    $("body").mousemove(function() {
         if(!forceMouseHide) {
             $("body").css('cursor', '');
             clearTimeout(idleMouseTimer);
@@ -245,3 +279,10 @@ function fadeOutAlbum(){
 function fadeInAlbum(){
     $('#bg').fadeIn(fadeTime);
 };
+// Ctrl+s function for re-signin
+function doc_keyUp(e) {
+    if (e.ctrlKey && e.keyCode == 83) {
+        window.location.replace('http://localhost:8080/sign-in');
+    }
+};
+document.addEventListener('keyup', doc_keyUp, false);
