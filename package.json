@@ -1,7 +1,7 @@
 {
   "name": "gemini",
-  "version": "3.1.0",
-  "description": "",
+  "version": "3.1.1",
+  "description": "Aesthetic now playing screen for Spotify",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -9,7 +9,7 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder"
   },
-  "author": "",
+  "author": "Gabe Haarberg and Kyle Awayan",
   "license": "ISC",
   "devDependencies": {
     "electron": "^9.2.1",
@@ -28,5 +28,13 @@
     "directories": {
       "output": "build"
     }
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gabe-H/Gemini.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Gabe-H/Gemini/issues"
+  },
+  "homepage": "https://github.com/Gabe-H/Gemini#readme"
 }
