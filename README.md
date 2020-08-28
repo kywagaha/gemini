@@ -16,7 +16,7 @@ First you need to make a Spotify application. Once you have your client ID and c
 CLIENT_ID=123456789
 CLIENT_SECRET=987654321
 ```
-Then edit the settings for the app on the Spotify developer dashboard, and set the `Redirect Uri` to `http://localhost:8888/auth/spotify/callback`.
+Then edit the settings for the app on the Spotify developer dashboard, and set the `Redirect Uri` to `http://localhost:8080/callback`.
 
 # Usage
 While a track is playing, Gemini will update to show the current song and artist. 
