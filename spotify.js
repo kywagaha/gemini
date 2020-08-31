@@ -20,6 +20,7 @@ var isControl = false;
 var mySong;
 var myArtist;
 var myAlbum;
+var isPlaying;
 // Fades first text, only called once
 function start(){
     $.ajax({
@@ -28,6 +29,13 @@ function start(){
         type: 'GET',
         success: function(data) {
             if (data.statusCode == 200){
+                isPlaying = data.body.is_playing;
+                if (isPlaying == true) {
+                    $('#toggle').removeClass().addClass('fa fa-pause');
+                }
+                else if (isPlaying == false) {
+                    $('#toggle').removeClass().addClass('fa fa-play');
+                };
                 if (data.body.currently_playing_type == "track") {
                     document.getElementById("song").innerHTML = data.body.item.name;
                     document.getElementById("artist").innerHTML = data.body.item.artists[0].name;
@@ -37,6 +45,7 @@ function start(){
                     mySong = data.body.item.name;
                     myArtist = data.body.item.artists[0].name;
                     myAlbum = data.body.item.album.name;
+
                 }
                 if (data.body.currently_playing_type == "episode") {
                     document.getElementById("song").innerHTML = "Now playing a podcast";
@@ -67,6 +76,13 @@ function update(){
         type: 'GET',
         success: function(data) {
             if (data.statusCode == 200){
+                isPlaying = data.body.is_playing;
+                if (isPlaying == true) {
+                    $('#toggle').removeClass().addClass('fa fa-pause');
+                }
+                else if (isPlaying == false) {
+                    $('#toggle').removeClass().addClass('fa fa-play');
+                };
                 // Only change data if it's different from what's onscreen 
                 if (data.body.currently_playing_type == "track") {
                     if (mySong != data.body.item.name || myArtist != data.body.item.artists[0].name) {
@@ -87,24 +103,31 @@ function update(){
                                 document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
                                 fadeIn();
                                 isControl = false;
-                            }, 10) // For lag
-                        };
-                        var remaining_ms = data.body.item.duration_ms - data.body.progress_ms;
-                        // Get precise end of song within the last update
-                        if (remaining_ms < updateMs && remaining_ms != 0) {
-                            console.log('Predicting track skip in ' + remaining_ms);
-                            setTimeout(update, remaining_ms);
+                                var runCount = 0;    
+                                function timerMethod() {
+                                    runCount++;
+                                    if(runCount > 1) clearInterval(timerId);
+                                    update();
+                                };
+                                var timerId = setInterval(timerMethod, 100);
+                            }, fadeTime - 200) // For lag
                         };
                         mySong = data.body.item.name;
                         myArtist = data.body.item.artists[0].name;
                         myAlbum = data.body.item.album.name;
-                    }
+                    };
                     if (myAlbum != data.body.item.album.name) {
                         fadeOutAlbum();
                         setTimeout(function() {
                             document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
-                            fadeInAlbum()
+                            fadeInAlbum();
                         }, fadeTime);
+                    };
+                    var remaining_ms = data.body.item.duration_ms - data.body.progress_ms;
+                    // Get precise end of song within the last update
+                    if (remaining_ms < updateMs && remaining_ms != 0) {
+                        console.log('Predicting track skip in ' + remaining_ms);
+                        setTimeout(update, remaining_ms);
                     };
                 }
                 else if (data.body.currently_playing_type = "episode") {
@@ -146,14 +169,16 @@ var singleClick = function(){
         url: 'http://localhost:8080/currently-playing',
         type: 'GET',
         success: function(data) {
-            var isPlaying = data.body.is_playing;
+            isPlaying = data.body.is_playing;
             // Play if paused; pause if playing
             if (isPlaying == true){
                 control('pause');
+                $('#toggle').removeClass().addClass('fa fa-play');
                 console.log('Pausing music');
             }
             else if (isPlaying == false){
                 control('play');
+                $('#toggle').removeClass().addClass('fa fa-pause');
                 console.log('Playing music');
             }
             else {
@@ -189,77 +214,112 @@ var doubleClickBkwd = function(){
     fadeOutAlbum();
     setTimeout(update, changeMs);
 };
-var fullScreen = function() {
-    var elem = document.documentElement;
-
-    // Function to open fullscreen mode
-    function openFullscreen() {
-      if (elem.requestFullscreen) {
-        elem.requestFullscreen();
-      };
-    };
-    
-    // Function to close fullscreen mode
-    function closeFullscreen() {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      };
-    };
-    openFullscreen();
-    closeFullscreen();
-};
+function fullScreen(elem) {
+    // ## The below if statement seems to work better ## if ((document.fullScreenElement && document.fullScreenElement !== null) || (document.msfullscreenElement && document.msfullscreenElement !== null) || (!document.mozFullScreen && !document.webkitIsFullScreen)) {
+    if ((document.fullScreenElement !== undefined && document.fullScreenElement === null) || (document.msFullscreenElement !== undefined && document.msFullscreenElement === null) || (document.mozFullScreen !== undefined && !document.mozFullScreen) || (document.webkitIsFullScreen !== undefined && !document.webkitIsFullScreen)) {
+        if (elem.requestFullScreen) {
+            elem.requestFullScreen();
+        } else if (elem.mozRequestFullScreen) {
+            elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullScreen) {
+            elem.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+        } else if (elem.msRequestFullscreen) {
+            elem.msRequestFullscreen();
+        }
+    } else {
+        if (document.cancelFullScreen) {
+            document.cancelFullScreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.webkitCancelFullScreen) {
+            document.webkitCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
+    }
+}
 var firing = false;
-var firingFunc = singleClick;
+//var firingFunc = singleClick;
 // Single click function
-$(window).click(function() {
+//$(window).click(function() {
+//    if(firing)
+//        return;
+//    firing = true;
+//    timer = setTimeout(function() {
+//        firingFunc(); 
+//        //firingFunc = singleClick;
+//        firing = false;
+//  }, changeMs);
+
+//});
+$("#toggle").click(function() {
     if(firing)
         return;
-    firing = true;
-    timer = setTimeout(function() {
-        firingFunc(); 
-        firingFunc = singleClick;
-        firing = false;
-  }, changeMs);
-
+        singleClick();
+    firing = false;
 });
+
+$("#seek").click(function () {
+    if(firing)
+        return;
+    doubleClickFwd();
+    firing = false;
+});
+
+$("#previous").click(function () {
+    if(firing)
+        return;
+    doubleClickBkwd();
+    firing = false;
+});
+
+$("#full").click(function () {
+    if(firing)
+        return;
+    var elem = document.body;
+    fullScreen(elem);
+})
 
 // Double click function. Will go to previous track if mouse is on left 200 pixels of screen.
-$(window).dblclick(function() {
-    if (yCoords(event) < 100) {
-        firingFunc = fullScreen;
-    }
-    else {
-        if (xCoords(event) < 200) {
-            firingFunc = doubleClickBkwd;
-        }
-         else {
-            firingFunc = doubleClickFwd;
-        };
-    };
-});
+//$(window).dblclick(function() {
+//    if (yCoords(event) < 100) {
+//        firingFunc = fullScreen;
+//    }
+//    else {
+//        if (xCoords(event) < 200) {
+//            firingFunc = doubleClickBkwd;
+//        }
+//         else {
+//            firingFunc = doubleClickFwd;
+//        };
+//    };
+//});
 
 // Hide mouse function
 $(document).ready(function() {
     var idleMouseTimer;
     var forceMouseHide = false;
     $("body").css('cursor', 'none');
+    hideHeader();
     $("body").mousemove(function() {
         if(!forceMouseHide) {
             $("body").css('cursor', '');
+            showHeader();
             clearTimeout(idleMouseTimer);
             idleMouseTimer = setTimeout(function() {
                 $("body").css('cursor', 'none');
+                hideHeader();
                 forceMouseHide = true;
                 setTimeout(function() {
                     forceMouseHide = false;
                 }, 200);
-            }, 1000);
+            }, 3000);
         };
     });
 });
 
 // Fading functions
-function fadeIn(){
+function fadeIn() {
     $('#bg').fadeIn(fadeTime);
     setTimeout(function(){
         $('h1').fadeIn(fadeTime);
@@ -267,18 +327,27 @@ function fadeIn(){
     }, 300);
 };
 
-function fadeOut(){
+function fadeOut() {
     $('h1').fadeOut(fadeTime);
     $('h2').fadeOut(fadeTime);
 };
 
-function fadeOutAlbum(){
+function fadeOutAlbum() {
     $('#bg').fadeOut(fadeTime);
 };
 
-function fadeInAlbum(){
+function fadeInAlbum() {
     $('#bg').fadeIn(fadeTime);
 };
+
+function hideHeader() {
+    $("header").css('visibility', 'hidden');
+    
+}
+function showHeader() {
+    $("header").css('visibility', 'visible');
+    
+}
 // Ctrl+s function for re-signin
 function doc_keyUp(e) {
     if (e.ctrlKey && e.keyCode == 83) {

@@ -19,8 +19,6 @@
   }
 
 body {
-  margin-left: 10%;
-  margin-right: 10%;
   background-color: black;
   -webkit-user-select: none;
   -webkit-background-size: cover;
@@ -36,7 +34,9 @@ h1 {
   font-family: 'FormaDJRBanner';
   font-style: italic; 
   font-weight: bold; 
-  font-size: 100px; 
+  font-size: 100px;
+  margin-left: 10%;
+  margin-right: 10%;
   line-height: 1.2em;
   margin-bottom:0px;
   margin-top:0px;
@@ -50,6 +50,8 @@ h2 {
   font-style: normal; 
   font-weight: normal; 
   font-size: 48px; 
+  margin-left: 10%;
+  margin-right: 10%;
   line-height: 1.2em;
   margin-bottom:0px;
   margin-top:0px;
@@ -66,25 +68,62 @@ h2 {
   text-align: left;
   min-height: 98vh;
   color: white;
+
+}
+
+.header {
+  position: relative;
+  visibility: hidden;
 }
 
 #bg {
-  position: fixed; 
-  top: -10%; 
-  left: -50%; 
-  width: 200%; 
-  height: 200%;
+  position: fixed;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
   z-index: -1;
-  display: none;
 }
 
 #bg img {
-  position: absolute; 
-  top: 0; 
-  left: 0; 
-  right: 0; 
-  bottom: 0; 
-  margin: auto; 
-  min-width: 50%;
+  position: absolute;
+  top: auto;
+  left: 0;
+  min-width: 100%;
   min-height: 100%;
+}
+
+.album {
+  object-fit: cover;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+#full {
+  padding: 10px;
+  float: right;
+  color: white;
+}
+
+#seek {
+  padding: 10px;
+  color: white;
+  position: absolute;
+  left: 55%;
+}
+
+#toggle {
+  padding: 10px;
+  color: white;
+  position: absolute;
+  left: 50%;
+}
+
+#previous {
+  padding: 10px;
+  color: white;
+  position: absolute;
+  left: 45%;
 }

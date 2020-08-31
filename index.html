@@ -2,11 +2,18 @@
 <html>
   <head>
     <meta charset="UTF-8">
+    <script src="https://use.fontawesome.com/3824d944cf.js"></script>
     <title>Gemini</title>
     <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
     <link rel="stylesheet" href="style.css">
   </head>
+  <header>
+      <i id="toggle"></i>
+      <i id="seek" class="fa fa-fast-forward"></i>
+      <i id="previous" class="fa fa-fast-backward"></i>
+      <i id="full" class="fa fa-expand"></i>
+  </header>
   <body>
       <div class=center id=overlay>
         <h1 id="song"></h1>
