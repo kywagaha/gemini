@@ -30,8 +30,9 @@ function createWindow () {
     backgroundColor: '#000000',
     webPreferences: {
         nodeIntegration: true,
-        devTools: true
-    }
+        devTools: false
+    },
+    frame: false
   });
 
   // and load the index.html of the app.

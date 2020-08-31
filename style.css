@@ -30,6 +30,13 @@ body {
   overflow-y: hidden;
 }
 
+header {
+  margin: -50px;
+  padding: 50px;
+  text-align: center;
+  background: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));
+}
+
 h1 {
   font-family: 'FormaDJRBanner';
   font-style: italic; 
@@ -71,11 +78,6 @@ h2 {
 
 }
 
-.header {
-  position: relative;
-  visibility: hidden;
-}
-
 #bg {
   position: fixed;
   top: 0%;
@@ -98,32 +100,31 @@ h2 {
   user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
-  user-select: none;
 }
 
 #full {
-  padding: 10px;
   float: right;
   color: white;
+  margin: 5px;
 }
 
 #seek {
-  padding: 10px;
   color: white;
   position: absolute;
   left: 55%;
+  margin: 5px;
 }
 
 #toggle {
-  padding: 10px;
   color: white;
   position: absolute;
   left: 50%;
+  margin: 5px;
 }
 
 #previous {
-  padding: 10px;
   color: white;
   position: absolute;
   left: 45%;
+  margin: 5px;
 }

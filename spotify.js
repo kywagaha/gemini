@@ -85,10 +85,16 @@ function update(){
                 };
                 // Only change data if it's different from what's onscreen 
                 if (data.body.currently_playing_type == "track") {
+                    if (myAlbum != data.body.item.album.name) {
+                        fadeOutAlbum();
+                        setTimeout(function() {
+                            document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
+                            fadeInAlbum();
+                        }, fadeTime);
+                    };
                     if (mySong != data.body.item.name || myArtist != data.body.item.artists[0].name) {
                         if (!isControl) {
                             fadeOut();
-                            fadeOutAlbum();
                             setTimeout(function() {
                                 document.getElementById("song").innerHTML = data.body.item.name;
                                 document.getElementById("artist").innerHTML = data.body.item.artists[0].name;
@@ -114,14 +120,9 @@ function update(){
                         };
                         mySong = data.body.item.name;
                         myArtist = data.body.item.artists[0].name;
+                        console.log(myAlbum)
                         myAlbum = data.body.item.album.name;
-                    };
-                    if (myAlbum != data.body.item.album.name) {
-                        fadeOutAlbum();
-                        setTimeout(function() {
-                            document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
-                            fadeInAlbum();
-                        }, fadeTime);
+                        console.log(myAlbum)
                     };
                     var remaining_ms = data.body.item.duration_ms - data.body.progress_ms;
                     // Get precise end of song within the last update
@@ -219,6 +220,7 @@ function fullScreen(elem) {
     if ((document.fullScreenElement !== undefined && document.fullScreenElement === null) || (document.msFullscreenElement !== undefined && document.msFullscreenElement === null) || (document.mozFullScreen !== undefined && !document.mozFullScreen) || (document.webkitIsFullScreen !== undefined && !document.webkitIsFullScreen)) {
         if (elem.requestFullScreen) {
             elem.requestFullScreen();
+            $("#seek").css('margin', '10px');
         } else if (elem.mozRequestFullScreen) {
             elem.mozRequestFullScreen();
         } else if (elem.webkitRequestFullScreen) {
@@ -229,6 +231,7 @@ function fullScreen(elem) {
     } else {
         if (document.cancelFullScreen) {
             document.cancelFullScreen();
+            $("#seek").css('margin', '5px');
         } else if (document.mozCancelFullScreen) {
             document.mozCancelFullScreen();
         } else if (document.webkitCancelFullScreen) {
@@ -341,10 +344,12 @@ function fadeInAlbum() {
 };
 
 function hideHeader() {
+    console.log('hide')
     $("header").css('visibility', 'hidden');
     
 }
 function showHeader() {
+    console.log('show')
     $("header").css('visibility', 'visible');
     
 }
