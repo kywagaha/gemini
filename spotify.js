@@ -99,7 +99,11 @@ function update(){
                             setTimeout(function() {
                                 document.getElementById("song").innerHTML = data.body.item.name;
                                 document.getElementById("artist").innerHTML = data.body.item.artists[0].name;
-                                document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
+                                if (data.body.item.name == "Lose" && data.body.item.artists[0].name == "NIKI") {
+                                    document.getElementById("bg").innerHTML = `<video autoplay muted loop><source src="https://kyle.awayan.com/lose.mov" type="video/mp4"></video>`
+                                } else {
+                                    document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
+                                }
                                 fadeIn();
                             }, fadeTime);
                         }
