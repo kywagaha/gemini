@@ -31,12 +31,13 @@ body {
 }
 
 header {
-  margin: -50px;
+  margin: -40px;
   padding: 50px;
   text-align: center;
   letter-spacing: 5px;
   color: white;
   background: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));
+  -webkit-app-region: drag;
 }
 
 h1 {
