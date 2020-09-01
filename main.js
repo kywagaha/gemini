@@ -24,14 +24,15 @@ var win;
 function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 1024,
+    width: 728,
     height: 728,
     title: 'Gemini',
     backgroundColor: '#000000',
     webPreferences: {
         nodeIntegration: true,
         devTools: true
-    }
+    },
+    frame: false
   });
 
   // and load the index.html of the app.
