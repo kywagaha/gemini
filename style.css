@@ -34,7 +34,17 @@ header {
   margin: -50px;
   padding: 50px;
   text-align: center;
+  letter-spacing: 5px;
+  color: white;
   background: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));
+}
+
+.fullscreen {
+  margin: -50px;
+  padding: 50px;
+  text-align: right;
+  letter-spacing: 5px;
+  color: white;
 }
 
 h1 {
@@ -100,31 +110,4 @@ h2 {
   user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
-}
-
-#full {
-  float: right;
-  color: white;
-  margin: 5px;
-}
-
-#seek {
-  color: white;
-  position: absolute;
-  left: 55%;
-  margin: 5px;
-}
-
-#toggle {
-  color: white;
-  position: absolute;
-  left: 50%;
-  margin: 5px;
-}
-
-#previous {
-  color: white;
-  position: absolute;
-  left: 45%;
-  margin: 5px;
 }
