@@ -342,7 +342,7 @@ $(document).ready(function() {
                 setTimeout(function() {
                     forceMouseHide = false;
                 }, 200);
-            }, 3000);
+            }, 1000);
         };
     });
 });
@@ -371,12 +371,12 @@ function fadeInAlbum() {
 
 function hideHeader() {
     console.log('hide')
-    $("header").css('visibility', 'hidden');
+    $("header").fadeOut(fadeTime/2);
     
 }
 function showHeader() {
     console.log('show')
-    $("header").css('visibility', 'visible');
+    $("header").fadeIn(fadeTime/2);
     
 }
 // Ctrl+s function for re-signin
