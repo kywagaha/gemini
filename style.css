@@ -39,14 +39,6 @@ header {
   background: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));
 }
 
-.fullscreen {
-  margin: -50px;
-  padding: 50px;
-  text-align: right;
-  letter-spacing: 5px;
-  color: white;
-}
-
 h1 {
   font-family: 'FormaDJRBanner';
   font-style: italic; 

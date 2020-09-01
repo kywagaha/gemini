@@ -1,4 +1,5 @@
 var $ = require('jquery');
+const remote = require('electron').remote;
 var fadeTime = 500;
 var updateMs = 2500;
 var changeMs = 200;
@@ -281,6 +282,31 @@ $("#full").click(function () {
         return;
     var elem = document.body;
     fullScreen(elem);
+})
+
+$("#x").click(function () {
+    if(firing)
+        return;
+    var window = remote.getCurrentWindow();
+    window.close();
+})
+
+$("#square").click(function () {
+    if(firing)
+        return;
+    var window = remote.getCurrentWindow();
+    if (!window.isMaximized()) {
+        window.maximize();          
+    } else {
+        window.unmaximize();
+    }
+})
+
+$("#minimize").click(function () {
+    if(firing)
+        return;
+    var window = remote.getCurrentWindow();
+    window.minimize(); 
 })
 
 // Double click function. Will go to previous track if mouse is on left 200 pixels of screen.
