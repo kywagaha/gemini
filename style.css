@@ -38,6 +38,8 @@ header {
   color: white;
   background: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));
   -webkit-app-region: drag;
+  position: fixed;
+  width: calc(100% - 35px);
 }
 
 h1 {
@@ -78,7 +80,6 @@ h2 {
   text-align: left;
   min-height: 98vh;
   color: white;
-
 }
 
 #bg {
