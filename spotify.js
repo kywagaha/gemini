@@ -376,12 +376,13 @@ function fadeInAlbum() {
 function hideHeader() {
     console.log('hide')
     $("header").fadeOut(fadeTime/2);
+    $("footer").fadeOut(fadeTime/2);
     
 }
 function showHeader() {
     console.log('show')
     $("header").fadeIn(fadeTime/2);
-    
+    $("footer").fadeIn(fadeTime/2);
 }
 // Ctrl+s function for re-signin
 function doc_keyUp(e) {
