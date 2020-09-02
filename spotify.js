@@ -5,14 +5,22 @@ var updateMs = 2500;
 var changeMs = 200;
 
 function control(type){
-    isControl = true;
     $.ajax({
         async: true,
         url: 'http://localhost:8080/control',
         data: {
             type: type
         },
-        type: 'GET'
+        type: 'GET',
+        success: function() {
+            update(true);
+            setTimeout(function() {
+                update(true);
+            }, 100);
+            setTimeout(function() {
+                update(true);
+            }, 200);
+        }
     });
 };
 
@@ -40,9 +48,16 @@ function start(){
                 if (data.body.currently_playing_type == "track") {
                     document.getElementById("song").innerHTML = data.body.item.name;
                     document.getElementById("artist").innerHTML = data.body.item.artists[0].name;
-                    document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
+                    if (data.body.item.name == "Lose" && data.body.item.artists[0].name == "NIKI") {
+                        document.getElementById("bg").innerHTML = `<video autoplay muted loop><source src="https://kyle.awayan.com/lose.mov" type="video/mp4"></video>`
+                    }
+                    else {
+                        document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
+                    }
                     fadeIn();
-                    updateInt = setInterval(update, updateMs);
+                    updateInt = setInterval(function() {
+                        update(false);
+                    }, updateMs);
                     mySong = data.body.item.name;
                     myArtist = data.body.item.artists[0].name;
                     myAlbum = data.body.item.album.name;
@@ -53,7 +68,9 @@ function start(){
                     document.getElementById("artist").innerHTML = "Podcast data is not currently supported in Spotify's API";
                     document.getElementById("bg").innerHTML = "";
                     fadeIn();
-                    updateInt = setInterval(update, updateMs);
+                    updateInt = setInterval(function() {
+                        update(false);
+                    }, updateMs);
                 }
             }
             else {
@@ -62,7 +79,9 @@ function start(){
                 document.body.style.backgroundImage = '';
                 fadeIn();
                 mySong = null;
-                updateInt = setInterval(update, updateMs);
+                updateInt = setInterval(function() {
+                    update(false);
+                }, updateMs);
             };
         }
     });
@@ -70,23 +89,26 @@ function start(){
 start();
 
 // Updates front-end only if data is different
-function update(){
+function update(CONTROL){
     $.ajax({
         async: true,
         url: 'http://localhost:8080/currently-playing',
         type: 'GET',
         success: function(data) {
-            if (data.statusCode == 200){
-                isPlaying = data.body.is_playing;
+            isPlaying = data.body.is_playing;
+            console.log(CONTROL)
+            if (!CONTROL) {
                 if (isPlaying == true) {
                     $('#toggle').removeClass().addClass('fa fa-pause');
                 }
                 else if (isPlaying == false) {
                     $('#toggle').removeClass().addClass('fa fa-play');
                 };
+            }
+            if (data.statusCode == 200){
                 // Only change data if it's different from what's onscreen 
                 if (data.body.currently_playing_type == "track") {
-                    if (myAlbum != data.body.item.album.name) {
+                    if (myAlbum != data.body.item.album.name && data.body.item.name != "Lose" && data.body.item.artists[0].name != "NIKI") {
                         fadeOutAlbum();
                         setTimeout(function() {
                             document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
@@ -94,31 +116,31 @@ function update(){
                         }, fadeTime);
                     };
                     if (mySong != data.body.item.name || myArtist != data.body.item.artists[0].name) {
-                        if (!isControl) {
+                        if (data.body.item.name == "Lose" && data.body.item.artists[0].name == "NIKI") {
+                            document.getElementById("bg").innerHTML = `<video autoplay muted loop><source src="https://kyle.awayan.com/lose.mov" type="video/mp4"></video>`
+                        }
+                        if (!CONTROL) {
                             fadeOut();
                             setTimeout(function() {
                                 document.getElementById("song").innerHTML = data.body.item.name;
                                 document.getElementById("artist").innerHTML = data.body.item.artists[0].name;
-                                if (data.body.item.name == "Lose" && data.body.item.artists[0].name == "NIKI") {
-                                    document.getElementById("bg").innerHTML = `<video autoplay muted loop><source src="https://kyle.awayan.com/lose.mov" type="video/mp4"></video>`
-                                } else {
-                                    document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
-                                }
                                 fadeIn();
                             }, fadeTime);
                         }
-                        else if (isControl) {
+                        else if (CONTROL) {
                             setTimeout(function () {
                                 document.getElementById("song").innerHTML = data.body.item.name;
                                 document.getElementById("artist").innerHTML = data.body.item.artists[0].name;
-                                document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
-                                fadeIn();
-                                isControl = false;
-                                var runCount = 0;    
+                                if (mySong != "Lose" && data.body.item.artists[0].name == "NIKI") {
+                                   document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
+                                }
+                                else {
+                                    document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
+                                }
+                                fadeIn();  
                                 function timerMethod() {
-                                    runCount++;
                                     if(runCount > 1) clearInterval(timerId);
-                                    update();
+                                    update(false);
                                 };
                                 var timerId = setInterval(timerMethod, 100);
                             }, fadeTime - 200) // For lag
@@ -133,7 +155,9 @@ function update(){
                     // Get precise end of song within the last update
                     if (remaining_ms < updateMs && remaining_ms != 0) {
                         console.log('Predicting track skip in ' + remaining_ms);
-                        setTimeout(update, remaining_ms);
+                        setTimeout(function() {
+                            update(false);
+                        }, remaining_ms);
                     };
                 }
                 else if (data.body.currently_playing_type = "episode") {
@@ -209,57 +233,40 @@ var doubleClickFwd = function(){
     console.log('Skipping forward');
     control('forward');
     fadeOut();
-    fadeOutAlbum();
-    setTimeout(update, changeMs);
+    setTimeout(function() {
+        update(false);
+    }, changeMs);
 };
 // Skip back to previous song
 var doubleClickBkwd = function(){
     console.log('Skipping backward');
     control('backward');
     fadeOut();
-    fadeOutAlbum();
-    setTimeout(update, changeMs);
+    setTimeout(function() {
+        update(false);
+    }, changeMs);
 };
+
+var isFullscreen = false;
+
+document.addEventListener('webkitfullscreenchange', function () {
+    console.log('full change')
+    isFullscreen = !!document.webkitIsFullScreen;
+}, false);
+
 function fullScreen(elem) {
     // ## The below if statement seems to work better ## if ((document.fullScreenElement && document.fullScreenElement !== null) || (document.msfullscreenElement && document.msfullscreenElement !== null) || (!document.mozFullScreen && !document.webkitIsFullScreen)) {
-    if ((document.fullScreenElement !== undefined && document.fullScreenElement === null) || (document.msFullscreenElement !== undefined && document.msFullscreenElement === null) || (document.mozFullScreen !== undefined && !document.mozFullScreen) || (document.webkitIsFullScreen !== undefined && !document.webkitIsFullScreen)) {
-        if (elem.requestFullScreen) {
-            elem.requestFullScreen();
-            $("#seek").css('margin', '10px');
-        } else if (elem.mozRequestFullScreen) {
-            elem.mozRequestFullScreen();
-        } else if (elem.webkitRequestFullScreen) {
+    if (!isFullscreen) {
+        if (elem.webkitRequestFullScreen) {
             elem.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
-        } else if (elem.msRequestFullscreen) {
-            elem.msRequestFullscreen();
         }
     } else {
-        if (document.cancelFullScreen) {
-            document.cancelFullScreen();
-            $("#seek").css('margin', '5px');
-        } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
-        } else if (document.webkitCancelFullScreen) {
+        if (document.webkitCancelFullScreen) {
             document.webkitCancelFullScreen();
-        } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
         }
-    }
-}
+    };
+};
 var firing = false;
-//var firingFunc = singleClick;
-// Single click function
-//$(window).click(function() {
-//    if(firing)
-//        return;
-//    firing = true;
-//    timer = setTimeout(function() {
-//        firingFunc(); 
-//        //firingFunc = singleClick;
-//        firing = false;
-//  }, changeMs);
-
-//});
 $("#toggle").click(function() {
     if(firing)
         return;
@@ -313,21 +320,6 @@ $("#minimize").click(function () {
     window.minimize(); 
 })
 
-// Double click function. Will go to previous track if mouse is on left 200 pixels of screen.
-//$(window).dblclick(function() {
-//    if (yCoords(event) < 100) {
-//        firingFunc = fullScreen;
-//    }
-//    else {
-//        if (xCoords(event) < 200) {
-//            firingFunc = doubleClickBkwd;
-//        }
-//         else {
-//            firingFunc = doubleClickFwd;
-//        };
-//    };
-//});
-
 // Hide mouse function
 $(document).ready(function() {
     var idleMouseTimer;
@@ -346,7 +338,7 @@ $(document).ready(function() {
                 setTimeout(function() {
                     forceMouseHide = false;
                 }, 200);
-            }, 1000);
+            }, 2500);
         };
     });
 });
@@ -374,13 +366,11 @@ function fadeInAlbum() {
 };
 
 function hideHeader() {
-    console.log('hide')
     $("header").fadeOut(fadeTime/2);
     $("footer").fadeOut(fadeTime/2);
     
 }
 function showHeader() {
-    console.log('show')
     $("header").fadeIn(fadeTime/2);
     $("footer").fadeIn(fadeTime/2);
 }
