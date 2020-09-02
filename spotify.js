@@ -1,8 +1,14 @@
 var $ = require('jquery');
+var ProgressBar = require('progressbar.js');
 const remote = require('electron').remote;
 var fadeTime = 500;
 var updateMs = 2500;
 var changeMs = 200;
+
+var bar = new ProgressBar.Line('header', {
+    easing: 'easeInOut',
+    color: '#FFFFFF'
+});
 
 function control(type){
     $.ajax({
@@ -25,7 +31,6 @@ function control(type){
 };
 
 var updateInt;
-var isControl = false;
 var mySong;
 var myArtist;
 var myAlbum;
@@ -38,6 +43,7 @@ function start(){
         type: 'GET',
         success: function(data) {
             if (data.statusCode == 200){
+                //bar.animate(data.body.device.volume_percent / 100);   // Coming soon
                 isPlaying = data.body.is_playing;
                 if (isPlaying == true) {
                     $('#toggle').removeClass().addClass('fa fa-pause');
@@ -96,7 +102,6 @@ function update(CONTROL){
         type: 'GET',
         success: function(data) {
             isPlaying = data.body.is_playing;
-            console.log(CONTROL)
             if (!CONTROL) {
                 if (isPlaying == true) {
                     $('#toggle').removeClass().addClass('fa fa-pause');
@@ -104,9 +109,11 @@ function update(CONTROL){
                 else if (isPlaying == false) {
                     $('#toggle').removeClass().addClass('fa fa-play');
                 };
-            }
+            };
             if (data.statusCode == 200){
+                //bar.animate(data.body.device.volume_percent / 100);   // Coming soon
                 // Only change data if it's different from what's onscreen 
+                console.log(data.body.device.volume_percent)
                 if (data.body.currently_playing_type == "track") {
                     if (myAlbum != data.body.item.album.name && data.body.item.name != "Lose" && data.body.item.artists[0].name != "NIKI") {
                         fadeOutAlbum();
@@ -147,9 +154,7 @@ function update(CONTROL){
                         };
                         mySong = data.body.item.name;
                         myArtist = data.body.item.artists[0].name;
-                        console.log(myAlbum)
                         myAlbum = data.body.item.album.name;
-                        console.log(myAlbum)
                     };
                     var remaining_ms = data.body.item.duration_ms - data.body.progress_ms;
                     // Get precise end of song within the last update
@@ -157,7 +162,7 @@ function update(CONTROL){
                         console.log('Predicting track skip in ' + remaining_ms);
                         setTimeout(function() {
                             update(false);
-                        }, remaining_ms);
+                        }, remaining_ms + 30); // Allow API update
                     };
                 }
                 else if (data.body.currently_playing_type = "episode") {
@@ -172,6 +177,7 @@ function update(CONTROL){
             else if (data.statusCode == 204) {
                 document.getElementById("song").innerHTML = 'No track loaded';
                 document.getElementById("artist").innerHTML = 'please play a track';
+                $('#toggle').removeClass();
                 console.log('No loaded track found');
                 mySong = null;
             }
