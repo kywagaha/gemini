@@ -30,7 +30,7 @@ function createWindow () {
     backgroundColor: '#000000',
     webPreferences: {
         nodeIntegration: true,
-        devTools: true
+        devTools: false
     },
     frame: false
   });
@@ -92,6 +92,7 @@ express.get('/currently-playing', function(req, res) {
     }
   );
 });
+
 express.get('/control', function (req, res) {
   switch (req.query.type) {
     case 'play': spotifyApi.play();
@@ -103,6 +104,11 @@ express.get('/control', function (req, res) {
     case 'backward': spotifyApi.skipToPrevious();
       break;
   };
+  res.send();
+});
+
+express.get('/volume', function (req, res) {
+  spotifyApi.setVolume(req.query.value);
   res.send();
 });
 

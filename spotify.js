@@ -6,7 +6,8 @@ var changeMs = 200;
 var isControl = false;
 var timerId;
 
-function control(type){
+function control(type) {
+    isControl = true;
     $.ajax({
         async: true,
         url: 'http://localhost:8080/control',
@@ -67,6 +68,7 @@ function start(){
         type: 'GET',
         success: function(data) {
             if (data.statusCode == 200){
+                document.getElementById('myRange').value = data.body.device.volume_percent;
                 isPlaying = data.body.is_playing;
                 if (isPlaying == true) {
                     $('#toggle').removeClass().addClass('fa fa-pause');
@@ -126,6 +128,7 @@ function update(CONTROL){
         success: function(data) {
             isPlaying = data.body.is_playing;
             if (!CONTROL && isControl == false) {
+                document.getElementById('myRange').value = data.body.device.volume_percent;
                 if (isPlaying == true) {
                     $('#toggle').removeClass().addClass('fa fa-pause');
                 }
