@@ -19,7 +19,6 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jquery": "^3.5.1",
-    "progressbar.js": "^1.1.0",
     "spotify-web-api-node": "^4.0.0"
   },
   "build": {

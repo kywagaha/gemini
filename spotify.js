@@ -1,16 +1,13 @@
 var $ = require('jquery');
-var ProgressBar = require('progressbar.js');
 const remote = require('electron').remote;
 var fadeTime = 500;
-var updateMs = 2500;
+var updateMs = 1000;
 var changeMs = 200;
+var isControl = false;
+var timerId;
 
-//var bar = new ProgressBar.Line('#volbar', {
-//    easing: 'easeInOut',
-//    color: '#FFFFFF'
-//});
-
-function control(type){
+function control(type) {
+    isControl = true;
     $.ajax({
         async: true,
         url: 'http://localhost:8080/control',
@@ -26,10 +23,38 @@ function control(type){
             setTimeout(function() {
                 update(true);
             }, 200);
+            setTimeout(function() {
+                isControl = false;
+            }, 300);
         }
     });
 };
 
+
+
+function volume_control(value) {
+    var  throttleFunction  =  function (func, delay) {
+        if (timerId) {
+            return;
+        }
+        timerId  =  setTimeout(function () {
+            func();
+            timerId  =  undefined;
+        }, delay)
+    };
+    throttleFunction(function() {
+        $.ajax({
+            url: 'http://localhost:8080/volume',
+            type: 'GET',
+            data: {
+                value: value
+            },
+            success: function() {
+                console.log('volume set to ', value)
+            }
+        });
+    }, 200);
+};
 var updateInt;
 var mySong;
 var myArtist;
@@ -38,11 +63,12 @@ var isPlaying;
 // Fades first text, only called once
 function start(){
     $.ajax({
-        async: false,
+        async: true,
         url: 'http://localhost:8080/currently-playing',
         type: 'GET',
         success: function(data) {
             if (data.statusCode == 200){
+                document.getElementById('myRange').value = data.body.device.volume_percent;
                 isPlaying = data.body.is_playing;
                 if (isPlaying == true) {
                     $('#toggle').removeClass().addClass('fa fa-pause');
@@ -101,7 +127,8 @@ function update(CONTROL){
         type: 'GET',
         success: function(data) {
             isPlaying = data.body.is_playing;
-            if (!CONTROL) {
+            if (!CONTROL && isControl == false) {
+                document.getElementById('myRange').value = data.body.device.volume_percent;
                 if (isPlaying == true) {
                     $('#toggle').removeClass().addClass('fa fa-pause');
                 }
@@ -384,3 +411,8 @@ function doc_keyUp(e) {
     }
 };
 document.addEventListener('keyup', doc_keyUp, false);
+
+
+$(document).on('input', '#myRange', function() {
+    volume_control($(this).val())
+});
