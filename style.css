@@ -19,8 +19,6 @@
   }
 
 body {
-  margin-left: 10%;
-  margin-right: 10%;
   background-color: black;
   -webkit-user-select: none;
   -webkit-background-size: cover;
@@ -32,11 +30,37 @@ body {
   overflow-y: hidden;
 }
 
+header {
+  margin: -40px;
+  padding: 50px;
+  letter-spacing: 5px;
+  color: white;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0));
+  -webkit-app-region: drag;
+  position: fixed;
+  width: calc(100% - 35px);
+  height: 25%
+}
+
+footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  color: white;
+  text-align: center;
+  background: linear-gradient(to top, rgba(0,0,0,0.5), rgba(0,0,0,0));
+  height: 25%;
+  letter-spacing: 5px;
+}
+
 h1 {
   font-family: 'FormaDJRBanner';
   font-style: italic; 
   font-weight: bold; 
-  font-size: 100px; 
+  font-size: 100px;
+  margin-left: 10%;
+  margin-right: 10%;
   line-height: 1.2em;
   margin-bottom:0px;
   margin-top:0px;
@@ -50,6 +74,8 @@ h2 {
   font-style: normal; 
   font-weight: normal; 
   font-size: 48px; 
+  margin-left: 10%;
+  margin-right: 10%;
   line-height: 1.2em;
   margin-bottom:0px;
   margin-top:0px;
@@ -70,10 +96,10 @@ h2 {
 
 #bg {
   position: fixed; 
-  top: -10%; 
+  top: 0%; 
   left: -50%; 
   width: 200%; 
-  height: 200%;
+  height: 100%;
   z-index: -1;
   display: none;
 }
@@ -87,4 +113,17 @@ h2 {
   margin: auto; 
   min-width: 50%;
   min-height: 100%;
+}
+
+#bg video {
+  position: absolute;
+  top: 0%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  min-width: 50%;
+  min-height: 100%;
+  object-position: top;
+  padding-top: 40%;
 }

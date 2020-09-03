@@ -23,8 +23,6 @@ Once it's all ready, `npm start`.
 # Usage
 While a track is playing, Gemini will update to show the current song and artist. 
 
-It also has the basic functions of Play/Pause on a single click, Skip Track by double-clicking in the center or right, and Previous Track by double-clicking on the left side of the screen.
-
 Should you need to sign in again, pressing `ctrl+s` will take you back to that screen.
 
 # Font License

@@ -16,7 +16,7 @@ var spotifyApi = new SpotifyWebApi({
 express.listen(8080);
 
 
-var scopes = ['user-read-currently-playing', 'user-modify-playback-state'],
+var scopes = ['user-modify-playback-state', 'user-read-playback-state'],
   state = '';
 var authorizeURL = spotifyApi.createAuthorizeURL(scopes, state);  // spotifyApi.createAuthorizeURL(scopes, state, true); for login/auth everytime
 
@@ -24,14 +24,15 @@ var win;
 function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 1024,
+    width: 728,
     height: 728,
     title: 'Gemini',
     backgroundColor: '#000000',
     webPreferences: {
         nodeIntegration: true,
-        devTools: false
-    }
+        devTools: true
+    },
+    frame: false
   });
 
   // and load the index.html of the app.
@@ -82,7 +83,7 @@ function refresh() {
   );
 };
 express.get('/currently-playing', function(req, res) {
-  spotifyApi.getMyCurrentPlayingTrack().then(
+  spotifyApi.getMyCurrentPlaybackState().then(
     function(data) {
       res.send(data);
     },
