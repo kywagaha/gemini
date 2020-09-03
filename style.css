@@ -39,7 +39,8 @@ header {
   -webkit-app-region: drag;
   position: fixed;
   width: calc(100% - 35px);
-  height: 25%
+  height: 25%;
+  z-index: 1;
 }
 
 footer {
@@ -67,6 +68,7 @@ h1 {
   color: white;
   text-shadow: 5px 5px 80px rgba(0,0,0,50);
   display: none;
+  z-index: 10;
 }
 
 h2 {
@@ -82,6 +84,7 @@ h2 {
   color: white;
   text-shadow: 5px 5px 50px rgba(0,0,0,50);
   display: none;
+  z-index: 10;
 }
 
 .center {

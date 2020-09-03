@@ -5,10 +5,10 @@ var fadeTime = 500;
 var updateMs = 2500;
 var changeMs = 200;
 
-var bar = new ProgressBar.Line('header', {
-    easing: 'easeInOut',
-    color: '#FFFFFF'
-});
+//var bar = new ProgressBar.Line('#volbar', {
+//    easing: 'easeInOut',
+//    color: '#FFFFFF'
+//});
 
 function control(type){
     $.ajax({
@@ -43,7 +43,6 @@ function start(){
         type: 'GET',
         success: function(data) {
             if (data.statusCode == 200){
-                //bar.animate(data.body.device.volume_percent / 100);   // Coming soon
                 isPlaying = data.body.is_playing;
                 if (isPlaying == true) {
                     $('#toggle').removeClass().addClass('fa fa-pause');
@@ -111,9 +110,7 @@ function update(CONTROL){
                 };
             };
             if (data.statusCode == 200){
-                //bar.animate(data.body.device.volume_percent / 100);   // Coming soon
                 // Only change data if it's different from what's onscreen 
-                console.log(data.body.device.volume_percent)
                 if (data.body.currently_playing_type == "track") {
                     if (myAlbum != data.body.item.album.name && data.body.item.name != "Lose" && data.body.item.artists[0].name != "NIKI") {
                         fadeOutAlbum();
