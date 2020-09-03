@@ -1,14 +1,8 @@
 var $ = require('jquery');
-var ProgressBar = require('progressbar.js');
 const remote = require('electron').remote;
 var fadeTime = 500;
 var updateMs = 2500;
 var changeMs = 200;
-
-var bar = new ProgressBar.Line('header', {
-    easing: 'easeInOut',
-    color: '#FFFFFF'
-});
 
 function control(type){
     $.ajax({
