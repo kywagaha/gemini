@@ -3,7 +3,6 @@ var $ = require('jquery');
 var mySong;
 var myArtist;
 var myAlbum;
-var myVolume = 0;
 var myBg;
 
 var isSpecial = false;
@@ -52,8 +51,6 @@ $.ajax({
                         mySong = data.body.item.id;
                         myArtist = data.body.item.artists[0].id;
                         myAlbum = data.body.item.album.id;
-                        myVolume = data.body.device.volume_percent;
-                        set_volume();
                         set_toggle(data.body.is_playing);
                     break;
                     case 'episode':
@@ -123,17 +120,11 @@ function show_data(data) {
             fadeInAlbum();
         }, fadeTime);
     }
-    set_volume();
     set_toggle(data.body.is_playing);
 
-    myVolume = data.body.device.volume_percent;
     mySong = data.body.item.id;
     myArtist = data.body.item.artists[0].id;
     myAlbum = data.body.item.album.id;
-};
-
-function set_volume() {
-    document.getElementById('myRange').value = myVolume;
 };
 
 function set_toggle(data) {

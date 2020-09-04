@@ -23,30 +23,6 @@ function control(type) {
     });
 };
 
-function volume_control(value) {
-    var  throttleFunction  =  function (func, delay) {
-        if (timerId) {
-            return;
-        }
-        timerId  =  setTimeout(() => {
-            func();
-            timerId  =  undefined;
-        }, delay)
-    };
-    throttleFunction(() => {
-        $.ajax({
-            url: 'http://localhost:8080/volume',
-            type: 'GET',
-            data: {
-                value: value
-            },
-            success: () => {
-                console.log('volume set to ', value)
-            }
-        });
-    }, 200);
-};
-
 // Toggle playback
 var singleClick = function(){
     $.ajax({
@@ -149,14 +125,3 @@ $("#minimize").click(() => {
     var window = remote.getCurrentWindow();
     window.minimize(); 
 })
-
-$("#volume").click(() => {
-    if(firing)
-        return;
-    $(".slider").fadeOut(fadeTime/2); 
-})
-
-$(document).on('input', '#myRange', () => {
-    myVolume = $('#myRange').val();
-    volume_control(myVolume);
-});
