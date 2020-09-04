@@ -43,6 +43,10 @@ header {
   z-index: 1;
 }
 
+i:hover {
+  color: lightgrey;
+}
+
 footer {
   position: fixed;
   left: 0;
