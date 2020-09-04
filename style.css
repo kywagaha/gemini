@@ -45,15 +45,15 @@ header {
 
 i {
   opacity: 50%;
+  transition: 0.1s;
 }
 
 i:hover {
-  transition: 0.2s;
   opacity: 100%;
 }
 
 i:active {
-  font-size: 90%;
+  font-size: 95%;
 }
 
 footer {
