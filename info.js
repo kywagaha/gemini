@@ -34,7 +34,6 @@ $.ajax({
     success: function(data) {
         switch(data.statusCode) {
             case 200:
-                isPlaying = data.body.is_playing;
                 switch(data.body.currently_playing_type) {
                     case 'track':
                         sel_songs(data.body.item.id);
@@ -77,7 +76,6 @@ function new_update() {
         success: function(data) {
             switch(data.statusCode) {
                 case 200:
-                isPlaying = data.body.is_playing;
                 switch(data.body.currently_playing_type) {
                     case 'track':
                         show_data(data);
@@ -95,6 +93,7 @@ function new_update() {
     });
 };
 
+var hasToggled = false;
 function show_data(data) {
     if (mySong != data.body.item.id) {
         isSpecial = false;
@@ -119,8 +118,11 @@ function show_data(data) {
             document.getElementById("bg").innerHTML = myBg;
             fadeInAlbum();
         }, fadeTime);
-    }
-    set_toggle(data.body.is_playing);
+    };
+    console.log(hasToggled)
+    if (!hasToggled) {
+        set_toggle(data.body.is_playing);
+    };
 
     mySong = data.body.item.id;
     myArtist = data.body.item.artists[0].id;

@@ -95,16 +95,34 @@ express.get('/currently-playing', function(req, res) {
 
 express.get('/control', function (req, res) {
   switch (req.query.type) {
-    case 'play': spotifyApi.play();
+    case 'play': spotifyApi.play()
+    .catch((err) => {
+      catch_error(err);
+    });
       break;
-    case 'pause': spotifyApi.pause();
+    case 'pause': spotifyApi.pause()
+    .catch((err) => {
+      catch_error(err);
+    });
       break;
-    case 'forward': spotifyApi.skipToNext();
+    case 'forward': spotifyApi.skipToNext()
+    .catch((err) => {
+      catch_error(err);
+    });
       break;
-    case 'backward': spotifyApi.skipToPrevious();
+    case 'backward': spotifyApi.skipToPrevious()
+    .catch((err) => {
+      catch_error(err);
+    });
       break;
   };
   res.send();
 });
 
+function catch_error(error) {
+  console.log(error);
+  if (error.statusCode == 403) {
+    win.reload();
+  };
+};
 app.whenReady().then(createWindow);

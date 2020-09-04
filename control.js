@@ -1,8 +1,6 @@
 const remote = require('electron').remote;
 var $ = require('jquery');
 var changeMs = 200;
-var timerId;
-var isPlaying;
 
 function control(type) {
     $.ajax({
@@ -11,35 +9,34 @@ function control(type) {
         data: {
             type: type
         },
-        type: 'GET',
-        success: () => {
-            setTimeout(() => {
-                new_update(true);
-            }, 100);
-            setTimeout(() => {
-                new_update(true);
-            }, 200);
-        }
+        type: 'GET'
     });
 };
 
 // Toggle playback
-var singleClick = function(){
+var togglePlay = function(){
+    hasToggled = true;
+    clearInterval(resetTime);
+    var resetTime = setTimeout(() => {
+        hasToggled = false;
+    }, 1000);
     $.ajax({
         async: true,
         url: 'http://localhost:8080/currently-playing',
         type: 'GET',
         success: function(data) {
-            isPlaying = data.body.is_playing;
+            var isPlaying = data.body.is_playing;
             // Play if paused; pause if playing
             if (isPlaying == true){
-                control('pause');
+                console.log('from control')
                 $('#toggle').removeClass().addClass('fa fa-play');
+                control('pause');
                 console.log('Pausing music');
             }
             else if (isPlaying == false){
-                control('play');
                 $('#toggle').removeClass().addClass('fa fa-pause');
+                console.log('from control')
+                control('play');
                 console.log('Playing music');
             }
             else {
@@ -50,7 +47,7 @@ var singleClick = function(){
 };
 
 // Skip to next song in queue
-var doubleClickFwd = function(){
+var seek = function(){
     console.log('Skipping forward');
     control('forward');
     fadeOut();
@@ -59,7 +56,7 @@ var doubleClickFwd = function(){
     }, changeMs);
 };
 // Skip back to previous song
-var doubleClickBkwd = function(){
+var track = function(){
     console.log('Skipping backward');
     control('backward');
     fadeOut();
@@ -72,21 +69,21 @@ var firing = false;
 $("#toggle").click(() => {
     if(firing)
         return;
-        singleClick();
+        togglePlay();
     firing = false;
 });
 
 $("#seek").click(() => {
     if(firing)
         return;
-    doubleClickFwd();
+    seek();
     firing = false;
 });
 
 $("#previous").click(() => {
     if(firing)
         return;
-    doubleClickBkwd();
+    track();
     firing = false;
 });
 
