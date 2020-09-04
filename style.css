@@ -43,8 +43,17 @@ header {
   z-index: 1;
 }
 
+i {
+  opacity: 50%;
+}
+
 i:hover {
-  color: lightgrey;
+  transition: 0.2s;
+  opacity: 100%;
+}
+
+i:active {
+  font-size: 90%;
 }
 
 footer {
