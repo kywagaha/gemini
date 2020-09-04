@@ -123,7 +123,6 @@ express.get('/control', function (req, res) {
 function catch_error(error) {
   console.log(error);
   if (error.statusCode == 403) {
-    win.reload();
   };
 };
 app.whenReady().then(createWindow);

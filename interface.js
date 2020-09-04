@@ -59,5 +59,9 @@ function doc_keyUp(e) {
     if (e.ctrlKey && e.keyCode == 83) {
         window.location.replace('http://localhost:8080/sign-in');
     }
+    else if (e.keyCode == 27) {
+    var window = remote.getCurrentWindow();
+    window.setFullScreen(false);
+    }
 };
 document.addEventListener('keyup', doc_keyUp, false);
