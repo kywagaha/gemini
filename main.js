@@ -26,6 +26,8 @@ function createWindow () {
   win = new BrowserWindow({
     width: 728,
     height: 728,
+    minWidth: 400,
+    minHeight: 400,
     title: 'Gemini',
     backgroundColor: '#000000',
     webPreferences: {
@@ -33,6 +35,7 @@ function createWindow () {
         devTools: true,
         enableRemoteModule: true,
     },
+    titleBarStyle: 'hidden',
     frame: false
   });
 

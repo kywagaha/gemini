@@ -1,6 +1,10 @@
 var $ = require('jquery');
 var fadeTime = 500;
 
+if (navigator.appVersion.indexOf("Mac") > -1) {
+    $('.header').hide();
+}
+
 // Hide mouse function
 $(document).ready(function() {
     var idleMouseTimer;
