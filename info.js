@@ -39,11 +39,9 @@ $.ajax({
                         sel_songs(data.body.item.id);
                         document.getElementById('song').innerHTML = data.body.item.name;
                         document.getElementById('artist').innerHTML = data.body.item.artists[0].name;
-                        if (isSpecial == false) {
-                            myBg = `<img src="${data.body.item.album.images[0].url}">`;
-                            sel_songs(data.body.item.id);
-                            document.getElementById("bg").innerHTML = myBg;
-                        }
+                        myBg = `<img src="${data.body.item.album.images[0].url}">`;
+                        sel_songs(data.body.item.id);
+                        document.getElementById("bg").innerHTML = myBg;
                         fadeIn();
                         fadeInAlbum();
                         setInterval(new_update, update_ms);
@@ -94,9 +92,57 @@ function new_update() {
 };
 
 var hasToggled = false;
+var sameAlbum = false
 function show_data(data) {
+    if (myAlbum != data.body.item.album.id) {
+        sameAlbum = false
+    } else {
+        sameAlbum = true
+    }
     if (mySong != data.body.item.id) {
-        isSpecial = false;
+        sel_songs(data.body.item.id);
+        if (isSpecial == false && sameAlbum == false) {
+            console.log('changing album art')
+            fadeOutAlbum();
+            setTimeout(() => {
+                document.getElementById("bg").innerHTML = myBg;
+                fadeInAlbum();
+            }, fadeTime);
+            myBg = `<img src="${data.body.item.album.images[0].url}">`;
+        }
+        if (isSpecial == false && sameAlbum == true) {
+            if (document.getElementById("bg").innerHTML.substring(1, 4) == 'vid') {
+                console.log('changing album art')
+                fadeOutAlbum();
+                setTimeout(() => {
+                    document.getElementById("bg").innerHTML = myBg;
+                    fadeInAlbum();
+                }, fadeTime);
+                myBg = `<img src="${data.body.item.album.images[0].url}">`;
+            }
+        }
+        if (isSpecial == true && sameAlbum == false) {
+            console.log('changing album art (video)')
+            fadeOutAlbum();
+            setTimeout(() => {
+                document.getElementById("bg").innerHTML = myBg;
+                fadeInAlbum();
+            }, fadeTime);
+            myBg = `<img src="${data.body.item.album.images[0].url}">`;
+            sel_songs(data.body.item.id);
+            isSpecial = false;
+        }
+        if (isSpecial == true && sameAlbum == true) {
+            console.log('changing album art (video)')
+            fadeOutAlbum();
+            setTimeout(() => {
+                document.getElementById("bg").innerHTML = myBg;
+                fadeInAlbum();
+            }, fadeTime);
+            myBg = `<img src="${data.body.item.album.images[0].url}">`;
+            sel_songs(data.body.item.id);
+            isSpecial = false;
+        }
         fadeOut();
         setTimeout(() => {
             document.getElementById('song').innerHTML = data.body.item.name;
@@ -110,15 +156,6 @@ function show_data(data) {
             fadeIn();
         }, fadeTime)
     }
-    if (myAlbum != data.body.item.album.id) {
-        myBg = `<img src="${data.body.item.album.images[0].url}">`;
-        sel_songs(data.body.item.id);
-        fadeOutAlbum();
-        setTimeout(() => {
-            document.getElementById("bg").innerHTML = myBg;
-            fadeInAlbum();
-        }, fadeTime);
-    };
     console.log(hasToggled)
     if (!hasToggled) {
         set_toggle(data.body.is_playing);
@@ -142,9 +179,11 @@ function sel_songs(data) {
     switch(data) {
         case '7rgjkzZBhBjObaYsvq8Ej0':
             myBg = `<video autoplay muted loop><source src="https://kyle.awayan.com/lose.mov" type="video/mp4"></video>`;
+            isSpecial = true;
         break;
-        case 'SONG ID':
-            myBg = '';
+        case '6Ve2gwTaMxTgKMuAcHbwcH':
+            myBg = `<video autoplay muted loop><source src="https://kyle.awayan.com/switchblade.mov" type="video/mp4"></video>`;
+            isSpecial = true;
         break;
     };
 };
