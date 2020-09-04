@@ -141,14 +141,6 @@ function show_data(data) {
             isSpecial = false;
         }
         if (isSpecial == true && sameAlbum == true) {
-            fadeOutAlbum();
-            setTimeout(() => {
-                document.getElementById("bg").innerHTML = myBg;
-                fadeInAlbum();
-            }, fadeTime);
-            myBg = `<img src="${data.body.item.album.images[0].url}">`;
-            sel_songs(data.body.item.id);
-            isSpecial = false;
         }
         fadeOut();
         setTimeout(() => {
