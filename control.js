@@ -40,7 +40,7 @@ var togglePlay = function(){
                 console.log('Playing music');
             }
             else {
-                console.log('No track loaded');
+                console.log('Nothing playign');
             };
         }
     });
@@ -50,7 +50,6 @@ var togglePlay = function(){
 var seek = function(){
     console.log('Skipping forward');
     control('forward');
-    fadeOut();
     setTimeout(() => {
         new_update(false);
     }, changeMs);
@@ -59,7 +58,6 @@ var seek = function(){
 var track = function(){
     console.log('Skipping backward');
     control('backward');
-    fadeOut();
     setTimeout(() => {
         new_update(false);
     }, changeMs);
