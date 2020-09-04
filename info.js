@@ -171,16 +171,3 @@ function set_toggle(data) {
         $('#toggle').removeClass().addClass('fa fa-play');
     }
 };
-
-function sel_songs(data) {
-    switch(data) {
-        case '7rgjkzZBhBjObaYsvq8Ej0':
-            myBg = `<video autoplay muted loop><source src="https://kyle.awayan.com/lose.mov" type="video/mp4"></video>`;
-            isSpecial = true;
-        break;
-        case '6Ve2gwTaMxTgKMuAcHbwcH':
-            myBg = `<video autoplay muted loop><source src="https://kyle.awayan.com/switchblade.mov" type="video/mp4"></video>`;
-            isSpecial = true;
-        break;
-    };
-};
