@@ -35,7 +35,6 @@ var togglePlay = function(){
             }
             else if (isPlaying == false){
                 $('#toggle').removeClass().addClass('fa fa-pause');
-                console.log('from control')
                 control('play');
                 console.log('Playing music');
             }
