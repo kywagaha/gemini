@@ -40,7 +40,7 @@ var togglePlay = function(){
                 console.log('Playing music');
             }
             else {
-                console.log('Nothing playign');
+                console.log('Nothing playing');
             };
         }
     });

@@ -10,22 +10,26 @@ var isSpecial = false;
 const update_ms = 1000;
 const nothing_playing_json = {
     body: {
+        is_playing: false,
         item: {
             name: 'Nothing playing',
+            id: null,
             artists: {
                 0: {
-                    name: ''
-    }   }   }   }
-
-};
-const podcast_json = {
-    body: {
-        item: {
-            name: 'Playing podcast',
-            artist: {
-                0: {
-                    name: 'No podcast data available yet'
-    }   }   }   }
+                    name: '',
+                    id: null
+                }
+            },
+            album: {
+                id: null,
+                images: {
+                    0: {
+                        url: ''
+                    }
+                }
+            }
+        }
+    }
 };
     // Initial setup
 $.ajax({
@@ -36,7 +40,6 @@ $.ajax({
             case 200:
                 switch(data.body.currently_playing_type) {
                     case 'track':
-                        sel_songs(data.body.item.id);
                         document.getElementById('song').innerHTML = data.body.item.name;
                         document.getElementById('artist').innerHTML = data.body.item.artists[0].name;
                         myBg = `<img src="${data.body.item.album.images[0].url}">`;
@@ -51,12 +54,18 @@ $.ajax({
                         set_toggle(data.body.is_playing);
                     break;
                     case 'episode':
-                        show_data(podcast_json);
+                        set_podcast(data);
+                        setInterval(new_update, update_ms);
                     break;
                 };
             break;
             case 204:
-                show_data(no_play);
+                data = nothing_playing_json;
+                sel_songs(data.body.item.id);
+                document.getElementById('song').innerHTML = data.body.item.name;
+                document.getElementById('artist').innerHTML = data.body.item.artists[0].name;
+                fadeIn();
+                setInterval(new_update, update_ms);
             break;
         };
     },
@@ -81,13 +90,13 @@ function new_update() {
                         show_data(data);
                     break;
                     case 'episode':
-                        show_data(podcast_json);
+                        set_podcast(data);
                     break;
                 };
-            break;
-            case 204:
-                show_data(no_play);
-            break;
+                break;
+                case 204:
+                    show_data(nothing_playing_json);
+                break;
             };
         },
         error: function(err) {
@@ -102,7 +111,8 @@ function new_update() {
 };
 
 var hasToggled = false;
-var sameAlbum = false
+var sameAlbum = false;
+var wasSpecial = false;
 function show_data(data) {
     if (myAlbum != data.body.item.album.id) {
         sameAlbum = false
@@ -138,15 +148,24 @@ function show_data(data) {
             }, fadeTime);
             myBg = `<img src="${data.body.item.album.images[0].url}">`;
             sel_songs(data.body.item.id);
-            isSpecial = false;
         }
         if (isSpecial == true && sameAlbum == true) {
+            if (!wasSpecial) {
+                fadeOutAlbum();
+                setTimeout(() => {
+                    document.getElementById("bg").innerHTML = myBg;
+                    fadeInAlbum();
+                }, fadeTime);
+                myBg = `<img src="${data.body.item.album.images[0].url}">`;
+                sel_songs(data.body.item.id);
+            }
         }
         fadeOut();
         setTimeout(() => {
             document.getElementById('song').innerHTML = data.body.item.name;
             fadeIn();
         }, fadeTime)
+        wasSpecial = isSpecial;
     }
     if (myArtist != data.body.item.artists[0].id) {
         fadeOut();
@@ -155,7 +174,6 @@ function show_data(data) {
             fadeIn();
         }, fadeTime)
     }
-    console.log(hasToggled)
     if (!hasToggled) {
         set_toggle(data.body.is_playing);
     };
@@ -173,3 +191,11 @@ function set_toggle(data) {
         $('#toggle').removeClass().addClass('fa fa-play');
     }
 };
+
+function set_podcast(data) {
+    document.getElementById('song').innerHTML = 'Playing podcast';
+    document.getElementById('artist').innerHTML = 'No podcast data available yet';
+    document.getElementById('bg').innerHTML = '';
+    fadeIn();
+    set_toggle(data.body.is_playing);
+}

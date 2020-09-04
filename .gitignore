@@ -4,3 +4,4 @@ dist/
 .env
 .DS_Store
 yarn.lock
+videos.js
