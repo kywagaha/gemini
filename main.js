@@ -108,8 +108,16 @@ express.get('/control', function (req, res) {
 });
 
 express.get('/volume', function (req, res) {
-  spotifyApi.setVolume(req.query.value);
-  res.send();
+  spotifyApi.setVolume(req.query.value)
+  .then(() => {
+    res.send();
+  })
+    .catch((error) => {
+      if (error.statusCode) {
+        console.log('Device does not allow volume control');
+      }
+      res.send();
+    });
 });
 
 app.whenReady().then(createWindow);

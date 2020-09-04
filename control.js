@@ -3,10 +3,8 @@ var $ = require('jquery');
 var changeMs = 200;
 var timerId;
 var isPlaying;
-var isControl = false;
 
 function control(type) {
-    isControl = true;
     $.ajax({
         async: true,
         url: 'http://localhost:8080/control',
@@ -14,17 +12,13 @@ function control(type) {
             type: type
         },
         type: 'GET',
-        success: function() {
-            update(true);
-            setTimeout(function() {
-                update(true);
+        success: () => {
+            setTimeout(() => {
+                new_update(true);
             }, 100);
-            setTimeout(function() {
-                update(true);
+            setTimeout(() => {
+                new_update(true);
             }, 200);
-            setTimeout(function() {
-                isControl = false;
-            }, 300);
         }
     });
 };
@@ -34,19 +28,19 @@ function volume_control(value) {
         if (timerId) {
             return;
         }
-        timerId  =  setTimeout(function () {
+        timerId  =  setTimeout(() => {
             func();
             timerId  =  undefined;
         }, delay)
     };
-    throttleFunction(function() {
+    throttleFunction(() => {
         $.ajax({
             url: 'http://localhost:8080/volume',
             type: 'GET',
             data: {
                 value: value
             },
-            success: function() {
+            success: () => {
                 console.log('volume set to ', value)
             }
         });
@@ -84,8 +78,8 @@ var doubleClickFwd = function(){
     console.log('Skipping forward');
     control('forward');
     fadeOut();
-    setTimeout(function() {
-        update(false);
+    setTimeout(() => {
+        new_update(false);
     }, changeMs);
 };
 // Skip back to previous song
@@ -93,34 +87,34 @@ var doubleClickBkwd = function(){
     console.log('Skipping backward');
     control('backward');
     fadeOut();
-    setTimeout(function() {
-        update(false);
+    setTimeout(() => {
+        new_update(false);
     }, changeMs);
 };
 
 var firing = false;
-$("#toggle").click(function() {
+$("#toggle").click(() => {
     if(firing)
         return;
         singleClick();
     firing = false;
 });
 
-$("#seek").click(function () {
+$("#seek").click(() => {
     if(firing)
         return;
     doubleClickFwd();
     firing = false;
 });
 
-$("#previous").click(function () {
+$("#previous").click(() => {
     if(firing)
         return;
     doubleClickBkwd();
     firing = false;
 });
 
-$("#full").click(function () {
+$("#full").click(() => {
     if(firing)
         return;
     var window = remote.getCurrentWindow();
@@ -131,14 +125,14 @@ $("#full").click(function () {
     }
 })
 
-$("#x").click(function () {
+$("#x").click(() => {
     if(firing)
         return;
     var window = remote.getCurrentWindow();
     window.close();
 })
 
-$("#square").click(function () {
+$("#square").click(() => {
     if(firing)
         return;
     var window = remote.getCurrentWindow();
@@ -149,19 +143,20 @@ $("#square").click(function () {
     }
 })
 
-$("#minimize").click(function () {
+$("#minimize").click(() => {
     if(firing)
         return;
     var window = remote.getCurrentWindow();
     window.minimize(); 
 })
 
-$("#volume").click(function () {
+$("#volume").click(() => {
     if(firing)
         return;
     $(".slider").fadeOut(fadeTime/2); 
 })
 
-$(document).on('input', '#myRange', function() {
-    volume_control($(this).val())
+$(document).on('input', '#myRange', () => {
+    myVolume = $('#myRange').val();
+    volume_control(myVolume);
 });

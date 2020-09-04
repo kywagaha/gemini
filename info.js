@@ -1,164 +1,157 @@
 var $ = require('jquery');
-var updateInt;
-var updateMs = 1000;
+
 var mySong;
 var myArtist;
 var myAlbum;
+var myVolume = 0;
+var myBg;
 
-// Fades first text, only called once
-function start(){
+var isSpecial = false;
+
+const update_ms = 1000;
+const nothing_playing_json = {
+    body: {
+        item: {
+            name: 'Nothing playing',
+            artists: {
+                0: {
+                    name: ''
+    }   }   }   }
+
+};
+const podcast_json = {
+    body: {
+        item: {
+            name: 'Playing podcast',
+            artist: {
+                0: {
+                    name: 'No podcast data available yet'
+    }   }   }   }
+};
+    // Initial setup
+$.ajax({
+    url: 'http://localhost:8080/currently-playing',
+    type: 'GET',
+    success: function(data) {
+        switch(data.statusCode) {
+            case 200:
+                isPlaying = data.body.is_playing;
+                switch(data.body.currently_playing_type) {
+                    case 'track':
+                        sel_songs(data.body.item.id);
+                        document.getElementById('song').innerHTML = data.body.item.name;
+                        document.getElementById('artist').innerHTML = data.body.item.artists[0].name;
+                        if (isSpecial == false) {
+                            myBg = `<img src="${data.body.item.album.images[0].url}">`;
+                            sel_songs(data.body.item.id);
+                            document.getElementById("bg").innerHTML = myBg;
+                        }
+                        fadeIn();
+                        fadeInAlbum();
+                        setInterval(new_update, update_ms);
+                        mySong = data.body.item.id;
+                        myArtist = data.body.item.artists[0].id;
+                        myAlbum = data.body.item.album.id;
+                        myVolume = data.body.device.volume_percent;
+                        set_volume();
+                        set_toggle(data.body.is_playing);
+                    break;
+                    case 'episode':
+                        show_data(podcast_json);
+                    break;
+                };
+            break;
+            case 204:
+                show_data(no_play);
+            break;
+        };
+    },
+    error: function(err) {
+        document.getElementById('song').innerHTML = 'Error';
+        document.getElementById('artist').innerHTML = 'check console logs';
+        console.log(err);
+    }
+});
+
+function new_update() {
     $.ajax({
-        async: true,
         url: 'http://localhost:8080/currently-playing',
         type: 'GET',
         success: function(data) {
-            if (data.statusCode == 200){
-                document.getElementById('myRange').value = data.body.device.volume_percent;
+            switch(data.statusCode) {
+                case 200:
                 isPlaying = data.body.is_playing;
-                if (isPlaying == true) {
-                    $('#toggle').removeClass().addClass('fa fa-pause');
-                }
-                else if (isPlaying == false) {
-                    $('#toggle').removeClass().addClass('fa fa-play');
+                switch(data.body.currently_playing_type) {
+                    case 'track':
+                        show_data(data);
+                    break;
+                    case 'episode':
+                        show_data(podcast_json);
+                    break;
                 };
-                if (data.body.currently_playing_type == "track") {
-                    document.getElementById("song").innerHTML = data.body.item.name;
-                    document.getElementById("artist").innerHTML = data.body.item.artists[0].name;
-                    if (data.body.item.name == "Lose" && data.body.item.artists[0].name == "NIKI") {
-                        document.getElementById("bg").innerHTML = `<video autoplay muted loop><source src="https://kyle.awayan.com/lose.mov" type="video/mp4"></video>`
-                    }
-                    else {
-                        document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
-                    }
-                    fadeIn();
-                    updateInt = setInterval(function() {
-                        update(false);
-                    }, updateMs);
-                    mySong = data.body.item.name;
-                    myArtist = data.body.item.artists[0].name;
-                    myAlbum = data.body.item.album.name;
-
-                }
-                if (data.body.currently_playing_type == "episode") {
-                    document.getElementById("song").innerHTML = "Now playing a podcast";
-                    document.getElementById("artist").innerHTML = "Podcast data is not currently supported in Spotify's API";
-                    document.getElementById("bg").innerHTML = "";
-                    fadeIn();
-                    updateInt = setInterval(function() {
-                        update(false);
-                    }, updateMs);
-                }
-            }
-            else {
-                document.getElementById("song").innerHTML = 'No track loaded';
-                document.getElementById("artist").innerHTML = 'please play a track';
-                document.body.style.backgroundImage = '';
-                fadeIn();
-                mySong = null;
-                updateInt = setInterval(function() {
-                    update(false);
-                }, updateMs);
+            break;
+            case 204:
+                show_data(no_play);
+            break;
             };
         }
     });
 };
-start();
 
-// Updates front-end only if data is different
-function update(CONTROL){
-    $.ajax({
-        async: true,
-        url: 'http://localhost:8080/currently-playing',
-        type: 'GET',
-        success: function(data) {
-            isPlaying = data.body.is_playing;
-            if (!CONTROL && isControl == false) {
-                document.getElementById('myRange').value = data.body.device.volume_percent;
-                if (isPlaying == true) {
-                    $('#toggle').removeClass().addClass('fa fa-pause');
-                }
-                else if (isPlaying == false) {
-                    $('#toggle').removeClass().addClass('fa fa-play');
-                };
-            };
-            if (data.statusCode == 200){
-                // Only change data if it's different from what's onscreen 
-                if (data.body.currently_playing_type == "track") {
-                    if (myAlbum != data.body.item.album.name && data.body.item.name != "Lose" && data.body.item.artists[0].name != "NIKI") {
-                        fadeOutAlbum();
-                        setTimeout(function() {
-                            document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
-                            fadeInAlbum();
-                        }, fadeTime);
-                    };
-                    if (mySong != data.body.item.name || myArtist != data.body.item.artists[0].name) {
-                        if (data.body.item.name == "Lose" && data.body.item.artists[0].name == "NIKI") {
-                            document.getElementById("bg").innerHTML = `<video autoplay muted loop><source src="https://kyle.awayan.com/lose.mov" type="video/mp4"></video>`
-                        }
-                        if (!CONTROL) {
-                            fadeOut();
-                            setTimeout(function() {
-                                document.getElementById("song").innerHTML = data.body.item.name;
-                                document.getElementById("artist").innerHTML = data.body.item.artists[0].name;
-                                fadeIn();
-                            }, fadeTime);
-                        }
-                        else if (CONTROL) {
-                            setTimeout(function () {
-                                document.getElementById("song").innerHTML = data.body.item.name;
-                                document.getElementById("artist").innerHTML = data.body.item.artists[0].name;
-                                if (mySong != "Lose" && data.body.item.artists[0].name == "NIKI") {
-                                   document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
-                                }
-                                else {
-                                    document.getElementById("bg").innerHTML = `<img src="${data.body.item.album.images[0].url}">`;
-                                }
-                                fadeIn();
-                                setTimeout(update, 200);
-                            }, fadeTime - 200) // For lag
-                        };
-                        mySong = data.body.item.name;
-                        myArtist = data.body.item.artists[0].name;
-                        myAlbum = data.body.item.album.name;
-                    };
-                    var remaining_ms = data.body.item.duration_ms - data.body.progress_ms;
-                    // Get precise end of song within the last update
-                    if (remaining_ms < updateMs && remaining_ms != 0) {
-                        console.log('Predicting track skip in ' + remaining_ms);
-                        setTimeout(function() {
-                            update(false);
-                        }, remaining_ms + 30); // Allow API update
-                    };
-                }
-                else if (data.body.currently_playing_type = "episode") {
-                    setTimeout(function() {
-                        document.getElementById("song").innerHTML = "Now playing a podcast";
-                        document.getElementById("artist").innerHTML = "Podcast data is not currently supported in Spotify's API";
-                        document.getElementById("bg").innerHTML = "";
-                        fadeIn();
-                    });
-                };
-            }
-            else if (data.statusCode == 204) {
-                document.getElementById("song").innerHTML = 'No track loaded';
-                document.getElementById("artist").innerHTML = 'please play a track';
-                $('#toggle').removeClass();
-                console.log('No loaded track found');
-                mySong = null;
-            }
-            else if (data.statusCode == 429) {
-                document.getElementById("song").innerHTML = 'Rate Limiting Applied';
-                document.getElementById("artist").innerHTML = 'please try again later';
-                console.log('429 error');
-                console.log(data)
-                mySong = null;
-                clearInterval(updateInt);
-            }
-            else {
-                document.getElementById("song").innerHTML = 'Error';
-                document.getElementById("artist").innerHTML = 'check console logs';
-                console.log(data);
-            };
-        }
-    });
+function show_data(data) {
+    if (mySong != data.body.item.id) {
+        isSpecial = false;
+        fadeOut();
+        setTimeout(() => {
+            document.getElementById('song').innerHTML = data.body.item.name;
+            fadeIn();
+        }, fadeTime)
+    }
+    if (myArtist != data.body.item.artists[0].id) {
+        fadeOut();
+        setTimeout(() => {
+            document.getElementById('artist').innerHTML = data.body.item.artists[0].name;
+            fadeIn();
+        }, fadeTime)
+    }
+    if (myAlbum != data.body.item.album.id) {
+        myBg = `<img src="${data.body.item.album.images[0].url}">`;
+        sel_songs(data.body.item.id);
+        fadeOutAlbum();
+        setTimeout(() => {
+            document.getElementById("bg").innerHTML = myBg;
+            fadeInAlbum();
+        }, fadeTime);
+    }
+    set_volume();
+    set_toggle(data.body.is_playing);
+
+    myVolume = data.body.device.volume_percent;
+    mySong = data.body.item.id;
+    myArtist = data.body.item.artists[0].id;
+    myAlbum = data.body.item.album.id;
+};
+
+function set_volume() {
+    document.getElementById('myRange').value = myVolume;
+};
+
+function set_toggle(data) {
+    if (data) {
+        $('#toggle').removeClass().addClass('fa fa-pause');
+    }
+    else {
+        $('#toggle').removeClass().addClass('fa fa-play');
+    }
+};
+
+function sel_songs(data) {
+    switch(data) {
+        case '7rgjkzZBhBjObaYsvq8Ej0':
+            myBg = `<video autoplay muted loop><source src="https://kyle.awayan.com/lose.mov" type="video/mp4"></video>`;
+        break;
+        case 'SONG ID':
+            myBg = '';
+        break;
+    };
 };

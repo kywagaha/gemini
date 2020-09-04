@@ -24,6 +24,21 @@ $(document).ready(function() {
     });
 });
 
+$('#volume').hover(() => {
+    var  throttleFunction  =  function (func, delay) {
+        if (timerId) {
+            return;
+        }
+        timerId  =  setTimeout(() => {
+            func();
+            timerId  =  undefined;
+        }, delay)
+    };
+    throttleFunction(() => {
+        console.log('hover')
+    }, 200);
+})
+
 // Fading functions
 function fadeIn() {
     $('#bg').fadeIn(fadeTime);
