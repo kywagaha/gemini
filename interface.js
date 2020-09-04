@@ -49,11 +49,12 @@ function fadeInAlbum() {
 function hideHeader() {
     $("header").fadeOut(fadeTime/2);
     $("footer").fadeOut(fadeTime/2);
-    
+    $(".volume").fadeOut(fadeTime/2);   
 }
 function showHeader() {
     $("header").fadeIn(fadeTime/2);
     $("footer").fadeIn(fadeTime/2);
+    $(".volume").fadeIn(fadeTime/2);   
 }
 // Ctrl+s function for re-signin
 function doc_keyUp(e) {

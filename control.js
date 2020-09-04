@@ -156,6 +156,12 @@ $("#minimize").click(function () {
     window.minimize(); 
 })
 
+$("#volume").click(function () {
+    if(firing)
+        return;
+    $(".slider").fadeOut(fadeTime/2); 
+})
+
 $(document).on('input', '#myRange', function() {
     volume_control($(this).val())
 });

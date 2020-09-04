@@ -134,8 +134,18 @@ h2 {
 .slider {
   position: relative;
   -webkit-appearance: slider-vertical;
-  width: 35px;
-  height: 150px;
-  bottom: 200px;
+  width: 3px;
+  height: 100px;
+  bottom: 115px;
+  right: 10px;
   z-index: 1
+}
+
+.volume {
+  float: right;
+  bottom: 25px;
+  right: 10px;
+  position: relative;
+  color: white; 
+  z-index: 1;
 }
