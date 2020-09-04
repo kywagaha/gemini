@@ -62,7 +62,9 @@ $.ajax({
     },
     error: function(err) {
         document.getElementById('song').innerHTML = 'Error';
-        document.getElementById('artist').innerHTML = 'check console logs';
+        document.getElementById('artist').innerHTML = 'Please check if your internet is connected. Try pressing CTRL/Command + R to refresh.';
+        $('h1').fadeIn(300);
+        $('h2').fadeIn(300);
         console.log(err);
     }
 });
@@ -87,6 +89,14 @@ function new_update() {
                 show_data(no_play);
             break;
             };
+        },
+        error: function(err) {
+            document.getElementById('song').innerHTML = 'Error';
+            document.getElementById('artist').innerHTML = 'Please check if your internet is connected. Try pressing CTRL/Command + R to refresh.';
+            $('h1').fadeIn(300);
+            $('h2').fadeIn(300);
+            $('#bg').fadeOut(300);
+            console.log(err);
         }
     });
 };
