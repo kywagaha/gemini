@@ -101,8 +101,8 @@ function show_data(data) {
     }
     if (mySong != data.body.item.id) {
         sel_songs(data.body.item.id);
+        // i just learned truth tables in discrete mathematics. although there's no proposition (with my knowledge at least, we just started this topic lol), making the table and copying it to the code really helped me out and simplified things. thanks profressor stefano carpin
         if (isSpecial == false && sameAlbum == false) {
-            console.log('changing album art')
             fadeOutAlbum();
             setTimeout(() => {
                 document.getElementById("bg").innerHTML = myBg;
@@ -112,7 +112,6 @@ function show_data(data) {
         }
         if (isSpecial == false && sameAlbum == true) {
             if (document.getElementById("bg").innerHTML.substring(1, 4) == 'vid') {
-                console.log('changing album art')
                 fadeOutAlbum();
                 setTimeout(() => {
                     document.getElementById("bg").innerHTML = myBg;
@@ -122,7 +121,6 @@ function show_data(data) {
             }
         }
         if (isSpecial == true && sameAlbum == false) {
-            console.log('changing album art (video)')
             fadeOutAlbum();
             setTimeout(() => {
                 document.getElementById("bg").innerHTML = myBg;
@@ -133,7 +131,6 @@ function show_data(data) {
             isSpecial = false;
         }
         if (isSpecial == true && sameAlbum == true) {
-            console.log('changing album art (video)')
             fadeOutAlbum();
             setTimeout(() => {
                 document.getElementById("bg").innerHTML = myBg;
