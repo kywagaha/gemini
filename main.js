@@ -24,10 +24,10 @@ var win;
 function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 728,
-    height: 728,
-    minWidth: 400,
-    minHeight: 400,
+    width: 640,
+    height: 640,
+    minWidth: 200,
+    minHeight: 200,
     title: 'Gemini',
     backgroundColor: '#000000',
     webPreferences: {

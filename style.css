@@ -109,6 +109,16 @@ h2 {
   }
 }
 
+@media screen and (max-width: 500px) {
+  h1 {
+    text-shadow: 5px 5px 30px rgba(0,0,0,50);
+  }
+    h2 {
+     font-size: 15px;
+     text-shadow: 5px 5px 30px rgba(0,0,0,50);
+  }
+}
+
 .center {
   display: flex;
   flex-direction: column;
@@ -138,6 +148,8 @@ h2 {
   margin: auto; 
   min-width: 50%;
   min-height: 100%;
+  object-fit: cover;
+  height: 100%
 }
 
 #bg video {
@@ -149,8 +161,8 @@ h2 {
   margin: auto;
   min-width: 50%;
   min-height: 100%;
-  object-position: top;
-  padding-top: 40%;
+  object-fit: cover;
+  height: 100%
 }
 
 .slider {
