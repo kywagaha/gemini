@@ -119,3 +119,16 @@ $("#minimize").click(() => {
     var window = remote.getCurrentWindow();
     window.minimize(); 
 })
+
+$("#top").click(() => {
+    if(firing)
+        return;
+    var window = remote.getCurrentWindow();
+    if (!window.isAlwaysOnTop()) {
+        window.setAlwaysOnTop(true)
+        $("#top").css("opacity", "100%");
+    } else {
+        window.setAlwaysOnTop(false);
+        $("#top").css("opacity", "50%");
+    }
+})
