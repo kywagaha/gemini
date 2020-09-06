@@ -3,20 +3,39 @@
   <head>
     <meta charset="UTF-8">
     <title>Gemini</title>
-    <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' https://kyle.awayan.com/gemini/videos.js">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="macos.css">
     <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.css">
+    <script type="text/javascript" src="https://kyle.awayan.com/gemini/videos.js"></script>
   </head>
   <header>
     <div class="header">
-      <div style="float: left">
-        <i id="full" class="fa fa-expand" style="-webkit-app-region: no-drag;"></i>
+      <div class="titlebar-drag-region"></div>
+      <div class="notmac">
+        <div style="float: left">
+          <i id="full" class="fa fa-expand" style="-webkit-app-region: no-drag;"></i>
+          <i id="top" class="fas fa-thumbtack" style="-webkit-app-region: no-drag;"></i>
+        </div>
+        <div style="float: right">
+          <i id="minimize" class="far fa-window-minimize" style="-webkit-app-region: no-drag;"></i>
+          <i id="square" class="far fa-window-maximize" style="-webkit-app-region: no-drag;"></i>
+          <i id="x" class="far fa-window-close" style="-webkit-app-region: no-drag;"></i>
+        </div>
       </div>
-      <div style="float: right">
-        <i id="minimize" class="far fa-window-minimize" style="-webkit-app-region: no-drag;"></i>
-        <i id="square" class="far fa-window-maximize" style="-webkit-app-region: no-drag;"></i>
-        <i id="x" class="far fa-window-close" style="-webkit-app-region: no-drag;"></i>
+      <div class="mac focus" id="mac">
+        <div style="float: left">
+          <div class="example">
+            <div class="traffic-lights">
+              <button class="traffic-light traffic-light-close" id="close"></button>
+              <button class="traffic-light traffic-light-minimize" id="mini"></button>
+              <button class="traffic-light traffic-light-maximize" id="maximize"></button>
+            </div>
+          </div>
+        </div>
+          <div style="float: right">
+            <i id="topmac" class="fas fa-thumbtack" style="-webkit-app-region: no-drag;"></i>
+          </div>
       </div>
     </div>
   </header>
@@ -34,5 +53,7 @@
       <i id="seek" class="fa fa-fast-forward"></i>
   </div>
   </footer>
-  <script type="text/javascript" src="spotify.js"></script>
+  <script type="text/javascript" src="info.js"></script>
+  <script type="text/javascript" src="control.js"></script>
+  <script type="text/javascript" src="interface.js"></script>
 </html>

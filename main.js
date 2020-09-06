@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 var express = require('express');
 var express = express();
 var SpotifyWebApi = require('spotify-web-api-node');
@@ -24,17 +24,28 @@ var win;
 function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 728,
-    height: 728,
+    width: 640,
+    height: 640,
+    minWidth: 200,
+    minHeight: 200,
     title: 'Gemini',
     backgroundColor: '#000000',
     webPreferences: {
         nodeIntegration: true,
-        devTools: true
+        devTools: true,
+        enableRemoteModule: true,
     },
     frame: false
   });
 
+  win.on('blur', () => {
+    win.webContents.send('focus', 'no');
+  })
+  
+  win.on('focus', () => {
+    win.webContents.send('focus', 'yes');
+  })
+  
   // and load the index.html of the app.
   win.menuBarVisible = false;
   win.loadURL(authorizeURL);
@@ -92,18 +103,36 @@ express.get('/currently-playing', function(req, res) {
     }
   );
 });
+
 express.get('/control', function (req, res) {
   switch (req.query.type) {
-    case 'play': spotifyApi.play();
+    case 'play': spotifyApi.play()
+    .catch((err) => {
+      catch_error(err);
+    });
       break;
-    case 'pause': spotifyApi.pause();
+    case 'pause': spotifyApi.pause()
+    .catch((err) => {
+      catch_error(err);
+    });
       break;
-    case 'forward': spotifyApi.skipToNext();
+    case 'forward': spotifyApi.skipToNext()
+    .catch((err) => {
+      catch_error(err);
+    });
       break;
-    case 'backward': spotifyApi.skipToPrevious();
+    case 'backward': spotifyApi.skipToPrevious()
+    .catch((err) => {
+      catch_error(err);
+    });
       break;
   };
   res.send();
 });
 
+function catch_error(error) {
+  console.log(error);
+  if (error.statusCode == 403) {
+  };
+};
 app.whenReady().then(createWindow);
