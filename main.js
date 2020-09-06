@@ -35,7 +35,6 @@ function createWindow () {
         devTools: true,
         enableRemoteModule: true,
     },
-    titleBarStyle: 'hidden',
     frame: false
   });
 

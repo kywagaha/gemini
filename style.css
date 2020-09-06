@@ -42,6 +42,10 @@ header {
   z-index: 1;
 }
 
+.mac {
+  letter-spacing: normal;
+}
+
 .titlebar-drag-region {
   display: block;
   position: absolute;

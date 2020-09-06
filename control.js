@@ -102,6 +102,32 @@ $("#x").click(() => {
     window.close();
 })
 
+$("#close").click(() => {
+    if(firing)
+        return;
+    var window = remote.getCurrentWindow();
+    window.close();
+})
+
+$("#mini").click(() => {
+    if(firing)
+        return;
+    var window = remote.getCurrentWindow();
+    window.minimize();
+})
+
+$("#maximize").click(() => {
+    if(firing)
+        return;
+    var window = remote.getCurrentWindow();
+    if (!window.isFullScreen()) {
+        window.setFullScreen(true);
+    } else {
+        window.setFullScreen(false);
+    }
+})
+
+
 $("#square").click(() => {
     if(firing)
         return;
@@ -130,5 +156,18 @@ $("#top").click(() => {
     } else {
         window.setAlwaysOnTop(false);
         $("#top").css("opacity", "");
+    }
+})
+
+$("#topmac").click(() => {
+    if(firing)
+        return;
+    var window = remote.getCurrentWindow();
+    if (!window.isAlwaysOnTop()) {
+        window.setAlwaysOnTop(true)
+        $("#topmac").css("opacity", "100%");
+    } else {
+        window.setAlwaysOnTop(false);
+        $("#topmac").css("opacity", "");
     }
 })
