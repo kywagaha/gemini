@@ -3,6 +3,8 @@ var fadeTime = 500;
 
 if (navigator.appVersion.indexOf("Mac") > -1) {
     $('.notmac').hide();
+} else {
+    $('.mac').hide()
 }
 
 // Hide mouse function
