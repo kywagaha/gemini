@@ -1,5 +1,4 @@
 var $ = require('jquery');
-
 var mySong;
 var myArtist;
 var myAlbum;
@@ -32,83 +31,64 @@ const nothing_playing_json = {
     }
 };
     // Initial setup
-$.ajax({
-    url: 'http://localhost:8080/currently-playing',
-    type: 'GET',
-    success: function(data) {
-        switch(data.statusCode) {
-            case 200:
-                switch(data.body.currently_playing_type) {
-                    case 'track':
-                        document.getElementById('song').innerHTML = data.body.item.name;
-                        document.getElementById('artist').innerHTML = data.body.item.artists[0].name;
-                        myBg = `<img src="${data.body.item.album.images[0].url}">`;
-                        sel_songs(data.body.item.id);
-                        document.getElementById("bg").innerHTML = myBg;
-                        fadeIn();
-                        fadeInAlbum();
-                        setInterval(new_update, update_ms);
-                        mySong = data.body.item.id;
-                        myArtist = data.body.item.artists[0].id;
-                        myAlbum = data.body.item.album.id;
-                        set_toggle(data.body.is_playing);
-                    break;
-                    case 'episode':
-                        set_podcast(data);
-                        setInterval(new_update, update_ms);
-                    break;
-                };
-            break;
-            case 204:
-                data = nothing_playing_json;
-                sel_songs(data.body.item.id);
+ipcRenderer.on('init-playing-reply', (event, data) => {
+  console.log(data) // prints "pong"
+  switch(data.statusCode) {
+    case 200:
+        switch(data.body.currently_playing_type) {
+            case 'track':
                 document.getElementById('song').innerHTML = data.body.item.name;
                 document.getElementById('artist').innerHTML = data.body.item.artists[0].name;
+                myBg = `<img src="${data.body.item.album.images[0].url}">`;
+                sel_songs(data.body.item.id);
+                document.getElementById("bg").innerHTML = myBg;
                 fadeIn();
-                setInterval(new_update, update_ms);
+                fadeInAlbum();
+                setInterval(update, update_ms);
+                mySong = data.body.item.id;
+                myArtist = data.body.item.artists[0].id;
+                myAlbum = data.body.item.album.id;
+                set_toggle(data.body.is_playing);
+            break;
+            case 'episode':
+                set_podcast(data);
+                setInterval(update, update_ms);
             break;
         };
-    },
-    error: function(err) {
-        document.getElementById('song').innerHTML = 'Error';
-        document.getElementById('artist').innerHTML = 'Please check if your internet is connected. Try pressing CTRL/Command + R to refresh.';
-        $('h1').fadeIn(300);
-        $('h2').fadeIn(300);
-        console.log(err);
-    }
-});
-
-function new_update() {
-    $.ajax({
-        url: 'http://localhost:8080/currently-playing',
-        type: 'GET',
-        success: function(data) {
-            switch(data.statusCode) {
-                case 200:
-                switch(data.body.currently_playing_type) {
-                    case 'track':
-                        show_data(data);
-                    break;
-                    case 'episode':
-                        set_podcast(data);
-                    break;
-                };
-                break;
-                case 204:
-                    show_data(nothing_playing_json);
-                break;
-            };
-        },
-        error: function(err) {
-            document.getElementById('song').innerHTML = 'Error';
-            document.getElementById('artist').innerHTML = 'Please check if your internet is connected. Try pressing CTRL/Command + R to refresh.';
-            $('h1').fadeIn(300);
-            $('h2').fadeIn(300);
-            $('#bg').fadeOut(300);
-            console.log(err);
-        }
-    });
+    break;
+    case 204:
+        data = nothing_playing_json;
+        sel_songs(data.body.item.id);
+        document.getElementById('song').innerHTML = data.body.item.name;
+        document.getElementById('artist').innerHTML = data.body.item.artists[0].name;
+        fadeIn();
+        setInterval(update, update_ms);
+    break;
 };
+})
+ipcRenderer.send('init-playing', '');
+
+function update() {
+    ipcRenderer.send('update-playing');
+};
+
+ipcRenderer.on('update-playing-reply', (event, data) => {
+    switch(data.statusCode) {
+        case 200:
+        switch(data.body.currently_playing_type) {
+            case 'track':
+                show_data(data);
+            break;
+            case 'episode':
+                set_podcast(data);
+            break;
+        };
+        break;
+        case 204:
+            show_data(nothing_playing_json);
+        break;
+    };
+});
 
 var hasToggled = false;
 var sameAlbum = false;
