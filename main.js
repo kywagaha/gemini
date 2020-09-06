@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, ipcRenderer } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 var express = require('express');
 var express = express();
 var SpotifyWebApi = require('spotify-web-api-node');
