@@ -1,11 +1,12 @@
 var $ = require('jquery');
 var fadeTime = 500;
+var timer = 1000
 
 if (navigator.appVersion.indexOf("Mac") > -1) {
-    $('.notmac').hide();
+    $('.mac').show();
 } else {
-    $('.mac').hide()
-}
+    $('.notmac').show();
+};
 
 // Hide mouse function
 $(document).ready(function() {
@@ -25,10 +26,18 @@ $(document).ready(function() {
                 setTimeout(function() {
                     forceMouseHide = false;
                 }, 200);
-            }, 2500);
+            }, timer);
         };
     });
 });
+
+$('i').mouseover(function() {
+    timer = 60000
+})
+
+$('i').mouseleave(function() {
+    timer = 1000
+})
 
 // Fading functions
 function fadeIn() {
@@ -55,19 +64,19 @@ function fadeInAlbum() {
 function hideHeader() {
     $("header").fadeOut(fadeTime/2);
     $("footer").fadeOut(fadeTime/2);
-}
+};
 function showHeader() {
     $("header").fadeIn(fadeTime/2);
     $("footer").fadeIn(fadeTime/2);
-}
+};
 // Ctrl+s function for re-signin
 function doc_keyUp(e) {
     if (e.ctrlKey && e.keyCode == 83) {
-        window.location.replace('http://localhost:8080/sign-in');
+        ipcRenderer.send('auth-server', 'sign-in');
     }
     else if (e.keyCode == 27) {
     var window = remote.getCurrentWindow();
     window.setFullScreen(false);
-    }
+    };
 };
 document.addEventListener('keyup', doc_keyUp, false);
