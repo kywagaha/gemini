@@ -14,7 +14,6 @@ var spotifyApi = new SpotifyWebApi({
 });
 
 var server = express.listen(8080);
-isListening = true;
 
 
 var scopes = ['user-modify-playback-state', 'user-read-playback-state'],
@@ -173,16 +172,15 @@ ipcMain.on('buttons', (event, arg) => {
 });
 
 function restart_express() {
-  if (!isListening) {
+  if (!server) {
     server.listen(8080);
-    isListening = true;
   };
 };
 
 function close_express() {
-  if (isListening) {
+  if (server) {
     server.close();
-    isListening = false;
+    server = null;
   };
 };
 
