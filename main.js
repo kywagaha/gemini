@@ -31,7 +31,7 @@ function createWindow () {
     backgroundColor: '#000000',
     webPreferences: {
         nodeIntegration: true,
-        devTools: false,
+        devTools: true,
         enableRemoteModule: false,
     },
     frame: false
@@ -224,4 +224,6 @@ function catch_error(error) {
   if (error.statusCode == 403) {
   };
 };
+
+app.commandLine.appendSwitch ("disable-http-cache");
 app.whenReady().then(createWindow);
