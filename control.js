@@ -1,5 +1,5 @@
 var $ = require('jquery');
-const { ipcRenderer } = require('electron');
+const { ipcRenderer, ipcMain } = require('electron');
 var changeMs = 200;
 
 function control(type) {
@@ -102,19 +102,23 @@ $("#full").click(() => {
 $("#close").click(() => {
     if(firing)
         return;
-    ipcRenderer.send('buttons', 'close-mac');
+    ipcRenderer.send('buttons', 'close');
 });
 
 $("#mini").click(() => {
     if(firing)
         return;
-    ipcRenderer.send('buttons', 'minimize-mac');
+    ipcRenderer.send('buttons', 'minimize');
 });
 
 $("#maximize").click(() => {
     if(firing)
-        return;
-    ipcRenderer.send('buttons', 'maximize-mac');
+    return;
+    if (keysdown[18] == true) {
+        ipcRenderer.send('buttons', 'maximize')
+        return
+    }
+    ipcRenderer.send('buttons', 'full');
 });
 
 $("#x").click(() => {

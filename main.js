@@ -122,30 +122,6 @@ ipcMain.on('buttons', (event, arg) => {
       win.close()
     break;
 
-    case 'close-mac':
-      win.close()
-    break;
-
-    case 'minimize-mac':
-      win.minimize();
-    break;
-
-    case 'maximize-mac':
-      if (!win.isFullScreen() && keysdown[18] == true) {
-        if (!win.isMaximized()) {
-            win.maximize()
-        } else {
-            win.unmaximize()
-        }
-        return
-        }
-        if (!win.isFullScreen()) {
-            win.setFullScreen(true);
-        } else {
-            win.setFullScreen(false);
-        }
-    break;
-
     case 'maximize':
       if (!win.isMaximized()) {
           win.maximize();          
