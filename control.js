@@ -129,6 +129,6 @@ $("#top").click(() => {
         $("#top").css("opacity", "100%");
     } else {
         window.setAlwaysOnTop(false);
-        $("#top").css("opacity", "50%");
+        $("#top").css("opacity", "");
     }
 })
