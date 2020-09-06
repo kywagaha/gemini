@@ -37,3 +37,6 @@ We have explicit permission from the creator of the Forma DJR Font, David Jonath
 - [7 rings - Ariana Grande](https://open.spotify.com/track/6ocbgoVGwYJhOv1GgI9NsF?si=ULM0YYAqTCyD02T9U2hnyA)
 - [urs - NIKI](https://open.spotify.com/track/50oEtTUNlce4TuZXQoJzXW?si=NmvfHvWaQv2IdD_BtC8Twg)
 - [Stuck with U - Ariana Grande and Justin Bieber](https://open.spotify.com/track/4HBZA5flZLE435QTztThqH?si=DyRI2hgvQhiOjEphCCPcSw)
+- [Trying - Luna Li](https://open.spotify.com/track/6JOcqL8v344EarvtlQZ3km?si=2evfA1cTSsy8W0fFJQlNnw)
+- [Indigo - NIKI](https://open.spotify.com/track/1sOr5OXjbukTzBDgmvd6Fa?si=FhkQLdrLRJmal0TDCjGuag)
+- [All I Want - Olivia Rodrigo](https://open.spotify.com/track/1v6svH1Fyx9C1nIt1mA2DT?si=RZTjLnkDRHW48UljXYY3sw)
