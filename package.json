@@ -1,6 +1,6 @@
 {
   "name": "gemini",
-  "version": "3.1.1",
+  "version": "4.0.0",
   "description": "Aesthetic now playing screen for Spotify",
   "main": "main.js",
   "scripts": {
