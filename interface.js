@@ -1,6 +1,6 @@
 var $ = require('jquery');
 var fadeTime = 500;
-var timer = 1000
+var timer = 2500;
 
 if (navigator.appVersion.indexOf("Mac") > -1) {
     $('.mac').show();
@@ -30,14 +30,6 @@ $(document).ready(function() {
         };
     });
 });
-
-$('i').mouseover(function() {
-    timer = 60000
-})
-
-$('i').mouseleave(function() {
-    timer = 1000
-})
 
 // Fading functions
 function fadeIn() {
@@ -74,12 +66,22 @@ function doc_keyUp(e) {
     if (e.ctrlKey && e.keyCode == 83) {
         ipcRenderer.send('auth-server', 'sign-in');
     }
-    else if (e.keyCode == 27) {
-    var window = remote.getCurrentWindow();
-    window.setFullScreen(false);
-    }
-    else if (e.keyCode == 32) {
-        togglePlay();
+    else {
+        switch(e.keyCode) {
+            case 27:
+                var window = remote.getCurrentWindow();
+                window.setFullScreen(false);
+                break;
+            case 32:
+                togglePlay();
+                break;
+            case 37:
+                control('backward');
+                break;
+            case 39:
+                control('forward');
+                break;
+        }
     };
 };
 document.addEventListener('keyup', doc_keyUp, false);

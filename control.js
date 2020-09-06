@@ -167,8 +167,6 @@ ipcRenderer.on('not', (event, arg) => {
         case false:
             $("#top").css("opacity", "");
             break;
-        default:
-            break;
     }
 });
 
@@ -180,7 +178,5 @@ ipcRenderer.on('mac', (event, arg) => {
         case false:
             $("#topmac").css("opacity", "");
             break;
-        default:
-            break;
-    }
+    };
 });
