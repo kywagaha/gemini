@@ -1,5 +1,6 @@
 var $ = require('jquery');
 var fadeTime = 500;
+var timer = 1000
 
 if (navigator.appVersion.indexOf("Mac") > -1) {
     $('.mac').show();
@@ -25,10 +26,18 @@ $(document).ready(function() {
                 setTimeout(function() {
                     forceMouseHide = false;
                 }, 200);
-            }, 2500);
+            }, timer);
         };
     });
 });
+
+$('i').mouseover(function() {
+    timer = 60000
+})
+
+$('i').mouseleave(function() {
+    timer = 1000
+})
 
 // Fading functions
 function fadeIn() {
