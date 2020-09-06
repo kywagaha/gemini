@@ -77,6 +77,9 @@ function doc_keyUp(e) {
     else if (e.keyCode == 27) {
     var window = remote.getCurrentWindow();
     window.setFullScreen(false);
+    }
+    else if (e.keyCode == 32) {
+        togglePlay();
     };
 };
 document.addEventListener('keyup', doc_keyUp, false);
