@@ -113,13 +113,13 @@ ipcMain.on('auth-server', (event, arg) => {
     restart_express();
     var fURL = spotifyApi.createAuthorizeURL(scopes, state, true);
       win.loadURL(fURL);
-  }
+  };
 });
 
 ipcMain.on('buttons', (event, arg) => {
   switch (arg) {
     case 'close':
-      win.close()
+      win.close();
     break;
 
     case 'maximize':
@@ -127,14 +127,18 @@ ipcMain.on('buttons', (event, arg) => {
           win.maximize();          
       } else {
           win.unmaximize();
-      }
+      };
     break;
 
     case 'full':
         if (!win.isFullScreen()) {
           win.setFullScreen(true);
+          event.reply('pin', false);
+          event.reply('pin-mac', false);
       } else {
           win.setFullScreen(false);
+          event.reply('pin', true);
+          event.reply('pin-mac', true);
       };
     break;
 
@@ -144,29 +148,29 @@ ipcMain.on('buttons', (event, arg) => {
 
     case 'top':
       if (!win.isAlwaysOnTop()) {
-          win.setAlwaysOnTop(true)
+          win.setAlwaysOnTop(true);
           event.reply('not', true);
       } else {
           win.setAlwaysOnTop(false);
           event.reply('not', false);
-      }
+      };
     break;
 
     case 'topmac':
       if (!win.isAlwaysOnTop()) {
-        win.setAlwaysOnTop(true)
+        win.setAlwaysOnTop(true);
         event.reply('mac', true);
     } else {
         win.setAlwaysOnTop(false);
         event.reply('mac', false);
-    }
+    };
     break;
     
     default:
       break;
-  }
+  };
 
-})
+});
 
 function restart_express() {
   if (!isListening) {
@@ -179,8 +183,8 @@ function close_express() {
   if (isListening) {
     server.close();
     isListening = false;
-  }
-}
+  };
+};
 
 // Callback path after Spotify auth
 express.get('/callback', function (req, res) {
@@ -216,7 +220,6 @@ function refresh() {
     }
   );
 };
-
 
 function catch_error(error) {
   console.log(error);

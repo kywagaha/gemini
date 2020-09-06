@@ -32,14 +32,15 @@ const nothing_playing_json = {
 };
     // Initial setup
 ipcRenderer.on('init-playing-reply', (event, data) => {
-  console.log(data) // prints "pong"
   switch(data.statusCode) {
     case 200:
         switch(data.body.currently_playing_type) {
             case 'track':
                 document.getElementById('song').innerHTML = data.body.item.name;
                 document.getElementById('artist').innerHTML = data.body.item.artists[0].name;
-                myBg = `<img src="${data.body.item.album.images[0].url}">`;
+                if (!data.body.item.is_local) {
+                    myBg = `<img src="${data.body.item.album.images[0].url}">`;
+                }
                 sel_songs(data.body.item.id);
                 document.getElementById("bg").innerHTML = myBg;
                 fadeIn();
@@ -108,7 +109,9 @@ function show_data(data) {
                 document.getElementById("bg").innerHTML = myBg;
                 fadeInAlbum();
             }, fadeTime);
-            myBg = `<img src="${data.body.item.album.images[0].url}">`;
+            if (!data.body.item.is_local) {
+                myBg = `<img src="${data.body.item.album.images[0].url}">`;
+            }
         }
         if (isSpecial == false && sameAlbum == true) {
             if (document.getElementById("bg").innerHTML.substring(1, 4) == 'vid') {
@@ -117,7 +120,9 @@ function show_data(data) {
                     document.getElementById("bg").innerHTML = myBg;
                     fadeInAlbum();
                 }, fadeTime);
-                myBg = `<img src="${data.body.item.album.images[0].url}">`;
+                if (!data.body.item.is_local) {
+                    myBg = `<img src="${data.body.item.album.images[0].url}">`;
+                }
             }
         }
         if (isSpecial == true && sameAlbum == false) {
@@ -126,7 +131,9 @@ function show_data(data) {
                 document.getElementById("bg").innerHTML = myBg;
                 fadeInAlbum();
             }, fadeTime);
-            myBg = `<img src="${data.body.item.album.images[0].url}">`;
+            if (!data.body.item.is_local) {
+                myBg = `<img src="${data.body.item.album.images[0].url}">`;
+            }
             sel_songs(data.body.item.id);
         }
         if (isSpecial == true && sameAlbum == true) {
@@ -136,7 +143,9 @@ function show_data(data) {
                     document.getElementById("bg").innerHTML = myBg;
                     fadeInAlbum();
                 }, fadeTime);
-                myBg = `<img src="${data.body.item.album.images[0].url}">`;
+                if (!data.body.item.is_local) {
+                    myBg = `<img src="${data.body.item.album.images[0].url}">`;
+                }
                 sel_songs(data.body.item.id);
             }
         }
