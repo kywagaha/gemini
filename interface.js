@@ -2,9 +2,9 @@ var $ = require('jquery');
 var fadeTime = 500;
 
 if (navigator.appVersion.indexOf("Mac") > -1) {
-    $('.mac').css("visibility", "visible");
+    $('.mac').show();
 } else {
-    $('.notmac').css("visibility", "visible");
+    $('.notmac').show();
 };
 
 // Hide mouse function
