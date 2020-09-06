@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 var express = require('express');
 var express = express();
 var SpotifyWebApi = require('spotify-web-api-node');
@@ -38,6 +38,14 @@ function createWindow () {
     frame: false
   });
 
+  win.on('blur', () => {
+    win.webContents.send('focus', 'no');
+  })
+  
+  win.on('focus', () => {
+    win.webContents.send('focus', 'yes');
+  })
+  
   // and load the index.html of the app.
   win.menuBarVisible = false;
   win.loadURL(authorizeURL);

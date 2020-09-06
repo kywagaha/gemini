@@ -1,4 +1,5 @@
 const remote = require('electron').remote;
+const { ipcRenderer } = require('electron')
 var $ = require('jquery');
 var changeMs = 200;
 
@@ -62,6 +63,34 @@ var track = function(){
     }, changeMs);
 };
 
+// A map to remember in
+var keysdown = {};
+
+// keydown handler
+$(document).keydown(function(e){
+
+  // Do we already know it's down?
+  if (keysdown[e.keyCode]) {
+      // Ignore it
+      return;
+  }
+
+  // Remember it's down
+  keysdown[e.keyCode] = true;
+
+  // Do our thing
+  switch(e.keyCode){
+    case 18: //left (a)
+      break;
+  }
+});
+
+// keyup handler
+$(document).keyup(function(e){
+  // Remove this key from the map
+  delete keysdown[e.keyCode];
+});
+
 var firing = false;
 $("#toggle").click(() => {
     if(firing)
@@ -120,6 +149,14 @@ $("#maximize").click(() => {
     if(firing)
         return;
     var window = remote.getCurrentWindow();
+    if (!window.isFullScreen() && keysdown[18] == true) {
+        if (!window.isMaximized()) {
+            window.maximize()
+        } else {
+            window.unmaximize()
+        }
+        return
+    }
     if (!window.isFullScreen()) {
         window.setFullScreen(true);
     } else {
@@ -171,3 +208,11 @@ $("#topmac").click(() => {
         $("#topmac").css("opacity", "");
     }
 })
+
+ipcRenderer.on('focus', (event, arg) => {
+    if (arg == 'yes') {
+        $("#mac").addClass("focus")
+    } else {
+        $("#mac").removeClass("focus")
+    }
+  })
