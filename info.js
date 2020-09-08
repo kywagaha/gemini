@@ -207,3 +207,12 @@ function set_podcast(data) {
     fadeIn();
     set_toggle(data.body.is_playing);
 }
+
+window.addEventListener('error', function(e) {
+    console.log(e)
+    if (e.path[1].tagName == 'VIDEO') {
+        console.log('closed')
+        ipcRenderer.send('webdown', '');
+        location.reload(true);
+    }
+}, true);
