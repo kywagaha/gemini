@@ -44,7 +44,9 @@ ipcRenderer.on('init-playing-reply', (event, data) => {
                     if (arg == 'null') {
                         console.log('null')
                         isSpecial = false
-                        myBg = `<img src="${data.body.item.album.images[0].url}">`;
+                        if (!data.body.item.is_local) {
+                            myBg = `<img src="${data.body.item.album.images[0].url}">`;
+                        }
                         console.log(myBg)
                         document.getElementById("bg").innerHTML = myBg;
                         fadeInAlbum();
@@ -117,10 +119,14 @@ function show_data(data) {
         if (arg == 'null') {
             console.log('null')
             isSpecial = false
-            if (myBg == `<img src="${data.body.item.album.images[0].url}">`) {
-                return
+            if (!data.body.item.is_local) {
+                if (myBg == `<img src="${data.body.item.album.images[0].url}">`) {
+                    return
+                }
+                myBg = `<img src="${data.body.item.album.images[0].url}">`;
+            } else {
+                myBg = null
             }
-            myBg = `<img src="${data.body.item.album.images[0].url}">`;
             console.log(myBg)
             document.getElementById("bg").innerHTML = myBg;
             fadeInAlbum();
