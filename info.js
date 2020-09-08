@@ -73,7 +73,7 @@ ipcRenderer.on('init-playing-reply', (event, data) => {
     break;
     case 204:
         data = nothing_playing_json;
-        sel_songs(data.body.item.id);
+        ipcRenderer.send('isvideo', data.body.item.id);
         document.getElementById('song').innerHTML = data.body.item.name;
         document.getElementById('artist').innerHTML = data.body.item.artists[0].name;
         fadeIn();
