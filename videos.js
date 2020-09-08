@@ -24,7 +24,6 @@ ipcMain.on('isvideo', (event, arg) => {
       event.reply('isvideo', video)
     }
 
-    client.close()
   } findvideo()
 })
 
