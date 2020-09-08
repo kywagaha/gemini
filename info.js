@@ -3,6 +3,7 @@ var mySong;
 var myArtist;
 var myAlbum;
 var myBg;
+var data;
 
 var isSpecial = false;
 
@@ -31,7 +32,8 @@ const nothing_playing_json = {
     }
 };
     // Initial setup
-ipcRenderer.on('init-playing-reply', (event, data) => {
+ipcRenderer.on('init-playing-reply', (event, Spotdata) => {
+    data = Spotdata
   switch(data.statusCode) {
     case 200:
         switch(data.body.currently_playing_type) {
@@ -39,25 +41,6 @@ ipcRenderer.on('init-playing-reply', (event, data) => {
                 document.getElementById('song').innerHTML = data.body.item.name;
                 document.getElementById('artist').innerHTML = data.body.item.artists[0].name;
                 ipcRenderer.send('isvideo', data.body.item.id);
-                ipcRenderer.once('isvideo', (event, arg) => {
-                    console.log('serannt')
-                    if (arg == 'null') {
-                        console.log('null')
-                        isSpecial = false
-                        if (!data.body.item.is_local) {
-                            myBg = `<img src="${data.body.item.album.images[0].url}">`;
-                        }
-                        console.log(myBg)
-                        document.getElementById("bg").innerHTML = myBg;
-                        fadeInAlbum();
-                    } else {
-                        isSpecial = true
-                        myBg = `<video autoplay muted loop style="${arg.css}"><source src='${arg.videourl}'> type="video/mp4"></video>`
-                        document.getElementById("bg").innerHTML = myBg;
-                        console.log(myBg)
-                        fadeInAlbum()
-                    }
-                });
                 fadeIn();
                 setInterval(update, update_ms);
                 mySong = data.body.item.id;
@@ -108,42 +91,52 @@ ipcRenderer.on('update-playing-reply', (event, data) => {
 var hasToggled = false;
 var sameAlbum = false;
 var wasSpecial = false;
-function show_data(data) {
+
+ipcRenderer.on('isvideo', (event, arg) => {
+    console.log('checking...')
+    if (arg == 'null') {
+        console.log('null!')
+        console.log('null')
+        isSpecial = false
+        if (!data.body.item.is_local) {
+            if (myBg == `<img src="${data.body.item.album.images[0].url}">`) {
+                console.log('return function')
+                return
+            }
+            myBg = `<img src="${data.body.item.album.images[0].url}">`;
+        } else {
+            console.log('local track!')
+            myBg = null
+        }
+        console.log(myBg)
+        document.getElementById("bg").innerHTML = myBg;
+        console.log('fading in no video!')
+        fadeInAlbum();
+    } else {
+        console.log('video!')
+        isSpecial = true
+        if (document.getElementById("bg").innerHTML.substring(1, 4) == 'img') {
+            fadeOutAlbum()
+        }
+        setTimeout(() => {
+            myBg = `<video autoplay muted loop style="${arg.css}"><source src='${arg.videourl}'> type="video/mp4"></video>`
+            document.getElementById("bg").innerHTML = myBg;
+            console.log(myBg)
+            setTimeout(() => {
+                console.log("fading in!")
+                fadeInAlbum()
+            }, 500);
+        }, 1000);
+    }
+});
+
+function show_data(Spotdata) {
+    data = Spotdata
     if (myAlbum != data.body.item.album.id) {
         sameAlbum = false
     } else {
         sameAlbum = true
     }
-    ipcRenderer.on('isvideo', (event, arg) => {
-        console.log('serannt')
-        if (arg == 'null') {
-            console.log('null')
-            isSpecial = false
-            if (!data.body.item.is_local) {
-                if (myBg == `<img src="${data.body.item.album.images[0].url}">`) {
-                    return
-                }
-                myBg = `<img src="${data.body.item.album.images[0].url}">`;
-            } else {
-                myBg = null
-            }
-            console.log(myBg)
-            document.getElementById("bg").innerHTML = myBg;
-            fadeInAlbum();
-        } else {
-            isSpecial = true
-            console.log('bruhhhh')
-            if (document.getElementById("bg").innerHTML.substring(1, 4) == 'img') {
-                fadeOutAlbum()
-            }
-            setTimeout(() => {
-                myBg = `<video autoplay muted loop style="${arg.css}"><source src='${arg.videourl}'> type="video/mp4"></video>`
-                document.getElementById("bg").innerHTML = myBg;
-                console.log(myBg)
-                fadeInAlbum()
-            }, 1000);
-        }
-    });
     if (mySong != data.body.item.id) {
         // i just learned truth tables in discrete mathematics. although there's no proposition (with my knowledge at least, we just started this topic lol), making the table and copying it to the code really helped me out and simplified things. thanks profressor stefano carpin
         if (isSpecial == false && sameAlbum == false) {
