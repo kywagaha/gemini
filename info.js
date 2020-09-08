@@ -38,13 +38,25 @@ ipcRenderer.on('init-playing-reply', (event, data) => {
             case 'track':
                 document.getElementById('song').innerHTML = data.body.item.name;
                 document.getElementById('artist').innerHTML = data.body.item.artists[0].name;
-                if (!data.body.item.is_local) {
-                    myBg = `<img src="${data.body.item.album.images[0].url}">`;
-                }
-                sel_songs(data.body.item.id);
-                document.getElementById("bg").innerHTML = myBg;
+                ipcRenderer.send('isvideo', data.body.item.id);
+                ipcRenderer.once('isvideo', (event, arg) => {
+                    console.log('serannt')
+                    if (arg == 'null') {
+                        console.log('null')
+                        isSpecial = false
+                        myBg = `<img src="${data.body.item.album.images[0].url}">`;
+                        console.log(myBg)
+                        document.getElementById("bg").innerHTML = myBg;
+                        fadeInAlbum();
+                    } else {
+                        isSpecial = true
+                        myBg = `<video autoplay muted loop><source src='${arg}'> type="video/mp4"></video>`
+                        document.getElementById("bg").innerHTML = myBg;
+                        console.log(myBg)
+                        fadeInAlbum()
+                    }
+                });
                 fadeIn();
-                fadeInAlbum();
                 setInterval(update, update_ms);
                 mySong = data.body.item.id;
                 myArtist = data.body.item.artists[0].id;
@@ -100,55 +112,56 @@ function show_data(data) {
     } else {
         sameAlbum = true
     }
+    ipcRenderer.on('isvideo', (event, arg) => {
+        console.log('serannt')
+        if (arg == 'null') {
+            console.log('null')
+            isSpecial = false
+            if (myBg == `<img src="${data.body.item.album.images[0].url}">`) {
+                return
+            }
+            myBg = `<img src="${data.body.item.album.images[0].url}">`;
+            console.log(myBg)
+            document.getElementById("bg").innerHTML = myBg;
+            fadeInAlbum();
+        } else {
+            isSpecial = true
+            console.log('bruhhhh')
+            if (document.getElementById("bg").innerHTML.substring(1, 4) == 'img') {
+                fadeOutAlbum()
+            }
+            setTimeout(() => {
+                myBg = `<video autoplay muted loop><source src='${arg}'> type="video/mp4"></video>`
+                document.getElementById("bg").innerHTML = myBg;
+                console.log(myBg)
+                fadeInAlbum()
+            }, 1000);
+        }
+    });
     if (mySong != data.body.item.id) {
-        sel_songs(data.body.item.id);
         // i just learned truth tables in discrete mathematics. although there's no proposition (with my knowledge at least, we just started this topic lol), making the table and copying it to the code really helped me out and simplified things. thanks profressor stefano carpin
         if (isSpecial == false && sameAlbum == false) {
+            console.log('1')
             fadeOutAlbum();
-            setTimeout(() => {
-                document.getElementById("bg").innerHTML = myBg;
-                fadeInAlbum();
-            }, fadeTime);
-            if (!data.body.item.is_local) {
-                myBg = `<img src="${data.body.item.album.images[0].url}">`;
-            }
+            ipcRenderer.send('isvideo', data.body.item.id);
+            console.log('sent')
         }
         if (isSpecial == false && sameAlbum == true) {
-            if (document.getElementById("bg").innerHTML.substring(1, 4) == 'vid') {
-                fadeOutAlbum();
-                setTimeout(() => {
-                    document.getElementById("bg").innerHTML = myBg;
-                    fadeInAlbum();
-                }, fadeTime);
-                if (!data.body.item.is_local) {
-                    myBg = `<img src="${data.body.item.album.images[0].url}">`;
-                }
-            }
+            ipcRenderer.send('isvideo', data.body.item.id);
         }
         if (isSpecial == true && sameAlbum == false) {
+            console.log('3')
             fadeOutAlbum();
-            setTimeout(() => {
-                document.getElementById("bg").innerHTML = myBg;
-                fadeInAlbum();
-            }, fadeTime);
-            if (!data.body.item.is_local) {
-                myBg = `<img src="${data.body.item.album.images[0].url}">`;
-            }
-            sel_songs(data.body.item.id);
+            ipcRenderer.send('isvideo', data.body.item.id);
+            console.log('sent')
         }
         if (isSpecial == true && sameAlbum == true) {
             if (!wasSpecial) {
+                console.log('4')
                 fadeOutAlbum();
-                setTimeout(() => {
-                    document.getElementById("bg").innerHTML = myBg;
-                    fadeInAlbum();
-                }, fadeTime);
-                if (!data.body.item.is_local) {
-                    myBg = `<img src="${data.body.item.album.images[0].url}">`;
-                }
-                sel_songs(data.body.item.id);
-            }
-        }
+                ipcRenderer.send('isvideo', data.body.item.id);
+                console.log('sent')
+        }}
         fadeOut();
         setTimeout(() => {
             document.getElementById('song').innerHTML = data.body.item.name;

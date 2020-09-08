@@ -33,11 +33,8 @@ $(document).ready(function() {
 
 // Fading functions
 function fadeIn() {
-    $('#bg').fadeIn(fadeTime);
-    setTimeout(function(){
-        $('h1').fadeIn(fadeTime);
-        $('h2').fadeIn(fadeTime);
-    }, 300);
+    $('h1').fadeIn(fadeTime);
+    $('h2').fadeIn(fadeTime);
 };
 
 function fadeOut() {

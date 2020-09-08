@@ -3,6 +3,7 @@ var express = require('express');
 var express = express();
 var SpotifyWebApi = require('spotify-web-api-node');
 require('dotenv').config();
+require('./videos')
 
 var CLIENT_ID = process.env.CLIENT_ID;
 var CLIENT_SECRET = process.env.CLIENT_SECRET;
@@ -31,7 +32,7 @@ function createWindow () {
     backgroundColor: '#000000',
     webPreferences: {
         nodeIntegration: true,
-        devTools: false,
+        devTools: true,
         enableRemoteModule: false,
     },
     frame: false

@@ -1,6 +1,6 @@
 {
   "name": "gemini",
-  "version": "4.0.0-beta.3",
+  "version": "4.0.0-beta.4",
   "description": "Aesthetic now playing screen for Spotify",
   "main": "main.js",
   "scripts": {
@@ -19,6 +19,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jquery": "^3.5.1",
+    "mongodb": "^3.6.1",
     "spotify-web-api-node": "^4.0.0"
   },
   "build": {
