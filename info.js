@@ -52,7 +52,7 @@ ipcRenderer.on('init-playing-reply', (event, data) => {
                         fadeInAlbum();
                     } else {
                         isSpecial = true
-                        myBg = `<video autoplay muted loop><source src='${arg}'> type="video/mp4"></video>`
+                        myBg = `<video autoplay muted loop style="${arg.css}"><source src='${arg.videourl}'> type="video/mp4"></video>`
                         document.getElementById("bg").innerHTML = myBg;
                         console.log(myBg)
                         fadeInAlbum()
@@ -137,7 +137,7 @@ function show_data(data) {
                 fadeOutAlbum()
             }
             setTimeout(() => {
-                myBg = `<video autoplay muted loop><source src='${arg}'> type="video/mp4"></video>`
+                myBg = `<video autoplay muted loop style="${arg.css}"><source src='${arg.videourl}'> type="video/mp4"></video>`
                 document.getElementById("bg").innerHTML = myBg;
                 console.log(myBg)
                 fadeInAlbum()
