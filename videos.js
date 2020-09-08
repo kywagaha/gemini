@@ -1,7 +1,7 @@
 const { ipcMain } = require('electron');
 const { MongoClient } = require("mongodb");
 const uri = "mongodb+srv://guest:Bly5TKBM0yE8jn13@videos.z7e7t.mongodb.net/customvideos?retryWrites=true&w=majority" // used for videos easter egg. feel free to use this uri and view it yourself
-
+/*
 ipcMain.on('isvideo', (event, arg) => {
   async function findvideo() {
     console.log('checking...')
@@ -35,4 +35,11 @@ ipcMain.on('webdown', (event, arg) => {
       event.reply('isvideo', 'null')
     }, 1000);
   });
+});
+*/
+
+ipcMain.on('isvideo', (event, arg) => {
+  setTimeout(() => {
+    event.reply('isvideo', 'null')
+  }, 1000);
 });
