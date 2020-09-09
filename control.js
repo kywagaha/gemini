@@ -1,3 +1,8 @@
+const { contextBridge } = require('electron')
+contextBridge.exposeInMainWorld('myAPI', {
+    doAThing: () => {}
+  })
+
 var $ = require('jquery');
 const { ipcRenderer } = require('electron');
 var changeMs = 200;

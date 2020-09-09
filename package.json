@@ -1,6 +1,6 @@
 {
   "name": "gemini",
-  "version": "4.0.0-beta.6",
+  "version": "4.0.0",
   "description": "Aesthetic now playing screen for Spotify",
   "main": "main.js",
   "scripts": {
@@ -20,7 +20,8 @@
     "express": "^4.17.1",
     "jquery": "^3.5.1",
     "mongodb": "^3.6.1",
-    "spotify-web-api-node": "^4.0.0"
+    "spotify-web-api-node": "^4.0.0",
+    "update-electron-app": "^1.5.0"
   },
   "build": {
     "appId": "com.electron.gemini",

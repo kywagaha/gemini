@@ -1,4 +1,5 @@
-const { app, BrowserWindow, ipcMain, autoUpdater } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
+require('update-electron-app')()
 var express = require('express');
 var express = express();
 var SpotifyWebApi = require('spotify-web-api-node');
@@ -31,9 +32,9 @@ function createWindow () {
     title: 'Gemini',
     backgroundColor: '#000000',
     webPreferences: {
-        nodeIntegration: true,
-        devTools: false,
-        enableRemoteModule: false,
+      nodeIntegration: true,
+      worldSafeExecuteJavaScript: false,
+      contextIsolation: true
     },
     frame: false
   });
