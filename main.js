@@ -1,9 +1,14 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, autoUpdater } = require('electron');
 var express = require('express');
 var express = express();
 var SpotifyWebApi = require('spotify-web-api-node');
 require('dotenv').config();
 require('./videos')
+
+const updateserver = 'https://gemini-hazel.vercel.app/'
+const feed = `${updateserver}/update/${process.platform}/${app.getVersion()}`
+
+autoUpdater.setFeedURL(feed)
 
 var CLIENT_ID = process.env.CLIENT_ID;
 var CLIENT_SECRET = process.env.CLIENT_SECRET;
