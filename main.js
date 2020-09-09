@@ -14,7 +14,7 @@ var spotifyApi = new SpotifyWebApi({
   redirectUri: 'http://localhost:8080/callback'
 });
 
-var server = express.listen(8080);
+var server = express.listen(8080, 'localhost');
 
 
 var scopes = ['user-modify-playback-state', 'user-read-playback-state'],
@@ -173,15 +173,12 @@ ipcMain.on('buttons', (event, arg) => {
 });
 
 function restart_express() {
-  if (!server) {
-    server.listen(8080);
-  };
+  server.listen(8080, 'localhost')
 };
 
 function close_express() {
   if (server) {
     server.close();
-    server = null;
   };
 };
 
