@@ -32,7 +32,7 @@ function createWindow () {
     backgroundColor: '#000000',
     webPreferences: {
         nodeIntegration: true,
-        devTools: true,
+        devTools: false,
         enableRemoteModule: false,
     },
     frame: false
