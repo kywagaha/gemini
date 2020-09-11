@@ -1,6 +1,6 @@
 {
   "name": "gemini",
-  "version": "4.0.0-beta.7",
+  "version": "4.0.0",
   "description": "Aesthetic now playing screen for Spotify",
   "main": "./app/main.js",
   "scripts": {
@@ -17,6 +17,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.14.0",
     "dotenv": "^8.2.0",
+    "electron-updater": "^4.3.4",
     "express": "^4.17.1",
     "jquery": "^3.5.1",
     "mongodb": "^3.6.2",
@@ -31,10 +32,7 @@
       "output": "build/builds"
     }
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Gabe-H/Gemini.git"
-  },
+  "repository": "git+https://github.com/Gabe-H/Gemini.git",
   "bugs": {
     "url": "https://github.com/Gabe-H/Gemini/issues"
   },

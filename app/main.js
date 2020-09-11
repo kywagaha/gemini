@@ -1,11 +1,13 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
-require('update-electron-app')()
+const { autoUpdater } = require("electron-updater")
 var express = require('express');
 var express = express();
 var SpotifyWebApi = require('spotify-web-api-node');
 require('dotenv').config();
 require('../src/videos')
 const path = require("path");
+
+autoUpdater.checkForUpdatesAndNotify()
 
 var CLIENT_ID = process.env.CLIENT_ID;
 var CLIENT_SECRET = process.env.CLIENT_SECRET;
