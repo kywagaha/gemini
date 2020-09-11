@@ -2,7 +2,7 @@
   "name": "gemini",
   "version": "4.0.0",
   "description": "Aesthetic now playing screen for Spotify",
-  "main": "main.js",
+  "main": "./app/main.js",
   "scripts": {
     "start": "electron .",
     "pack": "electron-builder --dir",

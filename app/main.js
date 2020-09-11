@@ -4,7 +4,7 @@ var express = require('express');
 var express = express();
 var SpotifyWebApi = require('spotify-web-api-node');
 require('dotenv').config();
-require('./videos')
+require('../src/videos')
 const path = require("path");
 
 var CLIENT_ID = process.env.CLIENT_ID;
@@ -192,7 +192,7 @@ express.get('/callback', function (req, res) {
         // Set the access token on the API object to use it in later calls
         spotifyApi.setAccessToken(data.body['access_token']);
         spotifyApi.setRefreshToken(data.body['refresh_token']);
-        win.loadFile('./index.html');
+        win.loadFile('./src/index.html');
         setInterval(refresh, (data.body['expires_in'] - 10) * 1000);
         close_express();
       },
