@@ -3,4 +3,3 @@ build/builds
 dist/
 .env
 .DS_Store
-yarn.lock

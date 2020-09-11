@@ -7,10 +7,8 @@ Aesthetic now playing screen for Spotify
 ## or as a full-screen display!
 ![screenshot](https://i.imgur.com/rBw86rZ.jpg)
 
-
 # Installation
-Requires Node.js
-`npm install`
+`yarn install` or `npm install`, but yarn is recommended for building the app.
 
 # Setup
 First you need to make a Spotify application. Once you have your client ID and client secret, make an .env file in the root directory (the file name is just `.env`). Fill in the .env file like this (no 'quotation marks' around the vars):
@@ -20,12 +18,17 @@ CLIENT_SECRET=987654321
 ```
 Then edit the settings for the app on the Spotify developer dashboard, and set the `Redirect Uri` to `http://localhost:8080/callback`.
 
-Once it's all ready, `npm start`.
+Once it's all ready, `yarn start` or `npm start`.
 
 # Usage
 While a track is playing, Gemini will update to show the current song and artist. 
 
-Should you need to sign in again, pressing `ctrl+s` will take you back to that screen.
+Should you need to sign in again, pressing `Ctrl+S` will take you back to that screen.
+
+# Building
+`yarn dist`
+
+Recommeneded to run on macOS as it can compile a Windows, Mac, and Linux version. If you only want to compile for a specific operating system, change `dist` in `package.json`. Refer to the `electron-builder` arguments [here](https://www.electron.build/cli).
 
 # Font License
 We have explicit permission from the creator of the Forma DJR Font, David Jonathan Ross, to use in Gemini. If you want to develop and fork Gemini, please do not install the fonts on your system and use it for your own use. It is against the license and you should buy the [font](https://djr.com/forma/) for your own personal use.

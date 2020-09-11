@@ -6,7 +6,7 @@
   "scripts": {
     "start": "electron .",
     "pack": "electron-builder --dir",
-    "build": "electron-builder -mwl --linux deb"
+    "dist": "electron-builder -mwl"
   },
   "author": "Gabe Haarberg and Kyle Awayan <kyle@awayan.com>",
   "license": "ISC",
