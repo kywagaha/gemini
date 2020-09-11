@@ -1,5 +1,4 @@
 const { contextBridge, ipcRenderer } = require('electron')
-require('jQuery')
 
 contextBridge.exposeInMainWorld(
     'ipcRenderer',
