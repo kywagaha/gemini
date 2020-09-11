@@ -60,7 +60,7 @@ function showHeader() {
 // Ctrl+s function for re-signin
 function doc_keyUp(e) {
     if (e.ctrlKey && e.keyCode == 83) {
-        ipcRenderer.send('auth-server', 'sign-in');
+        window.reset.signin()
     }
     else {
         switch(e.keyCode) {

@@ -1,7 +1,7 @@
 var changeMs = 200;
 
 function control(type) {
-    ipcRenderer.send('control', type);
+    window.check.type(type)
 };
 
 // Toggle playback
@@ -11,7 +11,7 @@ var togglePlay = function(){
     var resetTime = setTimeout(() => {
         hasToggled = false;
     }, 1000);
-    ipcRenderer.send('toggle-play', '');
+    window.controls.toggleplay()
 };
 
 ipcRenderer.on('toggle-play-reply', (event, data) => {
@@ -94,59 +94,59 @@ $("#previous").click(() => {
 $("#full").click(() => {
     if(firing)
         return;
-    ipcRenderer.send('buttons', 'full');
+    window.actions.fullscreen()
 });
 
 $("#close").click(() => {
     if(firing)
         return;
-    ipcRenderer.send('buttons', 'close');
+    window.actions.close()
 });
 
 $("#mini").click(() => {
     if(firing)
         return;
-    ipcRenderer.send('buttons', 'minimize');
+    window.actions.minimize()
 });
 
 $("#maximize").click(() => {
     if(firing)
     return;
     if (keysdown[18] == true) {
-        ipcRenderer.send('buttons', 'maximize')
+        window.actions.maximize()
         return
     }
-    ipcRenderer.send('buttons', 'full');
+    window.actions.fullscreen()
 });
 
 $("#x").click(() => {
     if(firing)
         return;
-    ipcRenderer.send('buttons', 'close');
+    window.actions.close()
 });
 
 $("#square").click(() => {
     if(firing)
         return;
-    ipcRenderer.send('buttons', 'maximize');
+    window.actions.maximize()
 });
 
 $("#minimize").click(() => {
     if(firing)
         return;
-    ipcRenderer.send('buttons', 'minimize');
+    window.actions.ninimize()
 });
 
 $("#top").click(() => {
     if(firing)
         return;
-    ipcRenderer.send('buttons', 'top');
+    window.actions.top()
 });
 
 $("#topmac").click(() => {
     if(firing)
         return;
-    ipcRenderer.send('buttons', 'topmac');
+    window.actions.topmac()
 });
 
 ipcRenderer.on('focus', (event, arg) => {

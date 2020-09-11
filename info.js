@@ -39,7 +39,7 @@ ipcRenderer.on('init-playing-reply', (event, Spotdata) => {
             case 'track':
                 document.getElementById('song').innerHTML = data.body.item.name;
                 document.getElementById('artist').innerHTML = data.body.item.artists[0].name;
-                ipcRenderer.send('isvideo', data.body.item.id);
+                window.doesSong.havevideo(data.body.item.id)
                 fadeIn();
                 setInterval(update, update_ms);
                 mySong = data.body.item.id;
@@ -55,7 +55,7 @@ ipcRenderer.on('init-playing-reply', (event, Spotdata) => {
     break;
     case 204:
         data = nothing_playing_json;
-        ipcRenderer.send('isvideo', data.body.item.id);
+        window.doesSong.havevideo(data.body.item.id)
         document.getElementById('song').innerHTML = data.body.item.name;
         document.getElementById('artist').innerHTML = data.body.item.artists[0].name;
         fadeIn();
@@ -63,10 +63,10 @@ ipcRenderer.on('init-playing-reply', (event, Spotdata) => {
     break;
 };
 })
-ipcRenderer.send('init-playing', '');
+window.playing.init()
 
 function update() {
-    ipcRenderer.send('update-playing');
+    window.playing.update()
 };
 
 ipcRenderer.on('update-playing-reply', (event, data) => {
@@ -141,23 +141,23 @@ function show_data(Spotdata) {
         if (isSpecial == false && sameAlbum == false) {
             console.log('1')
             fadeOutAlbum();
-            ipcRenderer.send('isvideo', data.body.item.id);
+            window.doesSong.havevideo(data.body.item.id)
             console.log('sent')
         }
         if (isSpecial == false && sameAlbum == true) {
-            ipcRenderer.send('isvideo', data.body.item.id);
+            window.doesSong.havevideo(data.body.item.id)
         }
         if (isSpecial == true && sameAlbum == false) {
             console.log('3')
             fadeOutAlbum();
-            ipcRenderer.send('isvideo', data.body.item.id);
+            window.doesSong.havevideo(data.body.item.id)
             console.log('sent')
         }
         if (isSpecial == true && sameAlbum == true) {
             if (!wasSpecial) {
                 console.log('4')
                 fadeOutAlbum();
-                ipcRenderer.send('isvideo', data.body.item.id);
+                window.doesSong.havevideo(data.body.item.id)
                 console.log('sent')
         }}
         fadeOut();
@@ -204,7 +204,7 @@ window.addEventListener('error', function(e) {
     console.log(e)
     if (e.path[1].tagName == 'VIDEO') {
         console.log('closed')
-        ipcRenderer.send('webdown', '');
+        window.turnOff.video()
         location.reload(true);
     }
 }, true);
