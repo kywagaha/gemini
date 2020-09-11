@@ -3,7 +3,7 @@ Aesthetic now playing screen for Spotify
 
 ![screenshot](https://i.imgur.com/HOda3vb.png)
 ## Use it as a mini-player!
-![screenshot](https://i.imgur.com/x7IiRRi.png)
+![screenshot](https://i.imgur.com/LH0iuJO.png)
 ## or as a full-screen display!
 ![screenshot](https://i.imgur.com/rBw86rZ.jpg)
 
