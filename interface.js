@@ -1,4 +1,3 @@
-var $ = require('jquery');
 var fadeTime = 500;
 var timer = 2500;
 

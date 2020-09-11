@@ -5,6 +5,7 @@ var express = express();
 var SpotifyWebApi = require('spotify-web-api-node');
 require('dotenv').config();
 require('./videos')
+const path = require("path");
 
 var CLIENT_ID = process.env.CLIENT_ID;
 var CLIENT_SECRET = process.env.CLIENT_SECRET;
@@ -32,7 +33,9 @@ function createWindow () {
     title: 'Gemini',
     backgroundColor: '#000000',
     webPreferences: {
-      nodeIntegration: true,
+      worldSafeExecuteJavaScript: true,
+      contextIsolation: true,
+      preload: path.join(__dirname, "preload.js")
     },
     frame: false
   });

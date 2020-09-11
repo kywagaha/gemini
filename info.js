@@ -1,4 +1,3 @@
-var $ = require('jquery');
 var mySong;
 var myArtist;
 var myAlbum;

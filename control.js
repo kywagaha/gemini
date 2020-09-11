@@ -1,5 +1,3 @@
-var $ = require('jquery');
-const { ipcRenderer } = require('electron');
 var changeMs = 200;
 
 function control(type) {
