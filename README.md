@@ -26,6 +26,8 @@ While a track is playing, Gemini will update to show the current song and artist
 Should you need to sign in again, pressing `Ctrl+S` will take you back to that screen.
 
 # Building
+Put your Client ID and secret in `main.js`. The `.env` will not work in production. Note that your client ID and secret will be exposed if someone looks in the build's source files.
+
 `yarn dist`
 
 Recommeneded to run on macOS as it can compile a Windows, Mac, and Linux version. If you only want to compile for a specific operating system, change `dist` in `package.json`. Refer to the `electron-builder` arguments [here](https://www.electron.build/cli).
