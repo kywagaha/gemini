@@ -14,6 +14,7 @@ ipcMain.on('isvideo', (event, arg) => {
 
     const options = {
       projection: { _id: 0, videourl: 1, css: 1 },
+      maxTimeMS: 50
     };
 
     const video = await collection.findOne(query, options);
