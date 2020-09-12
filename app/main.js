@@ -142,6 +142,7 @@ ipcMain.on('buttons', (event, arg) => {
           event.reply('pin-mac', false);
           win.setAlwaysOnTop(false);
           event.reply('not', false);
+          event.reply('mac', false);
       } else {
         win.webContents.send('hidepin', 'notfullscreen');
           win.setFullScreen(false);
