@@ -37,10 +37,10 @@ ipcRenderer.on('init-playing-reply', (event, Spotdata) => {
     case 200:
         switch(data.body.currently_playing_type) {
             case 'track':
-                if (data.body.item.name.includes("Remix") || data.body.item.name.includes("Mix") || data.body.item.name.includes("Version")) {
-                    document.getElementById('song').innerHTML = data.body.item.name
+                parenthesis                if (data.body.item.name.includes("Remix") || data.body.item.name.includes("Mix") || data.body.item.name.includes("Version") || data.body.item.name.includes("Live") || data.body.item.name.includes("Ver.")) {
+                    document.getElementById('song').innerHTML = data.body.item.name.split(/\[/)[0]
                 } else {
-                    document.getElementById('song').innerHTML = data.body.item.name.split(/[(-]/)[0];
+                    document.getElementById('song').innerHTML = data.body.item.name.split(/[(-]/)[0]
                 }
                 window.doesSong.haveVideo(data.body.item.id)
                 fadeIn();
@@ -177,10 +177,10 @@ function show_data(Spotdata) {
         fadeOut();
         setTimeout(() => {
             document.getElementById('artist').innerHTML = showArtist;
-            if (data.body.item.name.includes("Remix") || data.body.item.name.includes("Mix") || data.body.item.name.includes("Version")) {
-                document.getElementById('song').innerHTML = data.body.item.name
+            if (data.body.item.name.includes("Remix") || data.body.item.name.includes("Mix") || data.body.item.name.includes("Version") || data.body.item.name.includes("Live")) {
+                document.getElementById('song').innerHTML = data.body.item.name.split(/\[/)[0]
             } else {
-                document.getElementById('song').innerHTML = data.body.item.name.split(/[(-]/)[0];
+                document.getElementById('song').innerHTML = data.body.item.name.split(/[(-]/)[0]
             }
             fadeIn();
         }, fadeTime)
