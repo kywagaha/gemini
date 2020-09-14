@@ -32,6 +32,9 @@ Put your Client ID and secret in `main.js`. The `.env` will not work in producti
 
 Recommeneded to run on macOS as it can compile a Windows, Mac, and Linux version. If you only want to compile for a specific operating system, change `dist` in `package.json`. Refer to the `electron-builder` arguments [here](https://www.electron.build/cli).
 
+# To Do
+Please check out our [projects page](https://github.com/Gabe-H/Gemini/projects/2)! Please open an issue if you have any suggestions!
+
 # Font License
 We have explicit permission from the creator of the Forma DJR Font, David Jonathan Ross, to use in Gemini. If you want to develop and fork Gemini, please do not install the fonts on your system and use it for your own use. It is against the license and you should buy the [font](https://djr.com/forma/) for your own personal use.
 
