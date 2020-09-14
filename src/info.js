@@ -37,7 +37,7 @@ ipcRenderer.on('init-playing-reply', (event, Spotdata) => {
     case 200:
         switch(data.body.currently_playing_type) {
             case 'track':
-                parenthesis                if (data.body.item.name.includes("Remix") || data.body.item.name.includes("Mix") || data.body.item.name.includes("Version") || data.body.item.name.includes("Live") || data.body.item.name.includes("Ver.")) {
+                if (data.body.item.name.includes("Remix") || data.body.item.name.includes("Mix") || data.body.item.name.includes("Version") || data.body.item.name.includes("Live") || data.body.item.name.includes("Ver.")) {
                     document.getElementById('song').innerHTML = data.body.item.name.split(/\[/)[0]
                 } else {
                     document.getElementById('song').innerHTML = data.body.item.name.split(/[(-]/)[0]
