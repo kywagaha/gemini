@@ -38,12 +38,16 @@ ipcRenderer.on('init-playing-reply', (event, Spotdata) => {
         switch(data.body.currently_playing_type) {
             case 'track':
                 document.getElementById('song').innerHTML = data.body.item.name;
-                document.getElementById('artist').innerHTML = data.body.item.artists[0].name;
-                window.doesSong.havevideo(data.body.item.id)
+                window.doesSong.haveVideo(data.body.item.id)
                 fadeIn();
                 setInterval(update, update_ms);
                 mySong = data.body.item.id;
-                myArtist = data.body.item.artists[0].id;
+                var thisArtist = data.body.item.artists
+                var showArtist = data.body.item.artists[0].name;
+                for(i=1;i<data.body.item.artists.length;i++) {
+                    showArtist += ', ' + thisArtist[i].name
+                }
+                document.getElementById('artist').innerHTML = showArtist;
                 myAlbum = data.body.item.album.id;
                 set_toggle(data.body.is_playing);
             break;
@@ -55,7 +59,7 @@ ipcRenderer.on('init-playing-reply', (event, Spotdata) => {
     break;
     case 204:
         data = nothing_playing_json;
-        window.doesSong.havevideo(data.body.item.id)
+        window.doesSong.haveVideo(data.body.item.id)
         document.getElementById('song').innerHTML = data.body.item.name;
         document.getElementById('artist').innerHTML = data.body.item.artists[0].name;
         fadeIn();
@@ -137,42 +141,42 @@ function show_data(Spotdata) {
         sameAlbum = true
     }
     if (mySong != data.body.item.id) {
+        
+        var thisArtist = data.body.item.artists
+        var showArtist = data.body.item.artists[0].name;
+        for(i=1;i<data.body.item.artists.length;i++) {
+            showArtist += ', ' + thisArtist[i].name
+        }
         // i just learned truth tables in discrete mathematics. although there's no proposition (with my knowledge at least, we just started this topic lol), making the table and copying it to the code really helped me out and simplified things. thanks profressor stefano carpin
         if (isSpecial == false && sameAlbum == false) {
             console.log('1')
             fadeOutAlbum();
-            window.doesSong.havevideo(data.body.item.id)
+            window.doesSong.haveVideo(data.body.item.id)
             console.log('sent')
         }
         if (isSpecial == false && sameAlbum == true) {
-            window.doesSong.havevideo(data.body.item.id)
+            window.doesSong.haveVideo(data.body.item.id)
         }
         if (isSpecial == true && sameAlbum == false) {
             console.log('3')
             fadeOutAlbum();
-            window.doesSong.havevideo(data.body.item.id)
+            window.doesSong.haveVideo(data.body.item.id)
             console.log('sent')
         }
         if (isSpecial == true && sameAlbum == true) {
             if (!wasSpecial) {
                 console.log('4')
                 fadeOutAlbum();
-                window.doesSong.havevideo(data.body.item.id)
+                window.doesSong.haveVideo(data.body.item.id)
                 console.log('sent')
         }}
         fadeOut();
         setTimeout(() => {
+            document.getElementById('artist').innerHTML = showArtist;
             document.getElementById('song').innerHTML = data.body.item.name;
             fadeIn();
         }, fadeTime)
         wasSpecial = isSpecial;
-    }
-    if (myArtist != data.body.item.artists[0].id) {
-        fadeOut();
-        setTimeout(() => {
-            document.getElementById('artist').innerHTML = data.body.item.artists[0].name;
-            fadeIn();
-        }, fadeTime)
     }
     if (!hasToggled) {
         set_toggle(data.body.is_playing);

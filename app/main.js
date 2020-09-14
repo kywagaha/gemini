@@ -112,6 +112,7 @@ ipcMain.on('control', (event, arg) => {
       break;
   };
 });
+
 ipcMain.on('auth-server', (event, arg) => {
   if (arg == 'sign-in') {
     restart_express();

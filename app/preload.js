@@ -37,7 +37,7 @@ contextBridge.exposeInMainWorld(
 contextBridge.exposeInMainWorld(
   'doesSong',
   {
-    havevideo: (arg) => ipcRenderer.send('isvideo', arg),
+    haveVideo: (arg) => ipcRenderer.send('isvideo', arg),
   }
 )
 
