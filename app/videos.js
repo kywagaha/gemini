@@ -10,7 +10,6 @@ fetch(url, settings)
     .then(res => res.json())
     .then((json) => {
        myJSON = json;
-       console.log(myJSON)
     });
 
 
