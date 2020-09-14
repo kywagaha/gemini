@@ -37,7 +37,11 @@ ipcRenderer.on('init-playing-reply', (event, Spotdata) => {
     case 200:
         switch(data.body.currently_playing_type) {
             case 'track':
-                document.getElementById('song').innerHTML = data.body.item.name;
+                if (data.body.item.name.includes("Remix") || data.body.item.name.includes("Mix") || data.body.item.name.includes("Version")) {
+                    document.getElementById('song').innerHTML = data.body.item.name
+                } else {
+                    document.getElementById('song').innerHTML = data.body.item.name.split(/[(-]/)[0];
+                }
                 window.doesSong.haveVideo(data.body.item.id)
                 fadeIn();
                 setInterval(update, update_ms);
@@ -173,7 +177,11 @@ function show_data(Spotdata) {
         fadeOut();
         setTimeout(() => {
             document.getElementById('artist').innerHTML = showArtist;
-            document.getElementById('song').innerHTML = data.body.item.name;
+            if (data.body.item.name.includes("Remix") || data.body.item.name.includes("Mix") || data.body.item.name.includes("Version")) {
+                document.getElementById('song').innerHTML = data.body.item.name
+            } else {
+                document.getElementById('song').innerHTML = data.body.item.name.split(/[(-]/)[0];
+            }
             fadeIn();
         }, fadeTime)
         wasSpecial = isSpecial;

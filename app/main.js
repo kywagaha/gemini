@@ -4,7 +4,7 @@ var express = require('express');
 var express = express();
 var SpotifyWebApi = require('spotify-web-api-node');
 require('dotenv').config();
-require('../src/videos')
+require('./videos')
 const path = require("path");
 
 autoUpdater.checkForUpdatesAndNotify()
