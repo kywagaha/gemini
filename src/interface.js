@@ -65,8 +65,19 @@ function doc_keyUp(e) {
     else {
         switch(e.keyCode) {
             case 27:
-                var window = remote.getCurrentWindow();
-                window.setFullScreen(false);
+                window.actions.fullscreen();
+                break;
+            case 70:
+                window.actions.fullscreen();
+                break;
+            case 74:
+                control('backward');
+                break;
+            case 75:
+                togglePlay();
+                break;
+            case 76:
+                control('forward');
                 break;
             case 32:
                 togglePlay();

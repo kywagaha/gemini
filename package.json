@@ -20,7 +20,7 @@
     "electron-updater": "^4.3.4",
     "express": "^4.17.1",
     "jquery": "^3.5.1",
-    "mongodb": "^3.6.2",
+    "node-fetch": "^2.6.1",
     "spotify-web-api-node": "^4.0.0",
     "update-electron-app": "^1.5.0"
   },

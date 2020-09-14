@@ -5,7 +5,7 @@ contextBridge.exposeInMainWorld(
   {
     on: (event, data) => ipcRenderer.on(event, data)
   }
-)
+);
 
 contextBridge.exposeInMainWorld(
   'actions',
@@ -17,14 +17,14 @@ contextBridge.exposeInMainWorld(
     top: () => ipcRenderer.send('buttons', 'top'),
     topmac: () => ipcRenderer.send('buttons', 'topmac'),
   }
-)
+);
 
 contextBridge.exposeInMainWorld(
   'controls',
   {
     toggleplay: () => ipcRenderer.send('toggle-play', ''),
   }
-)
+);
 
 
 contextBridge.exposeInMainWorld(
@@ -32,14 +32,14 @@ contextBridge.exposeInMainWorld(
   {
     type: (type) => ipcRenderer.send('control', type),
   }
-)
+);
 
 contextBridge.exposeInMainWorld(
   'doesSong',
   {
     haveVideo: (arg) => ipcRenderer.send('isvideo', arg),
   }
-)
+);
 
 contextBridge.exposeInMainWorld(
   'playing',
@@ -47,18 +47,18 @@ contextBridge.exposeInMainWorld(
     init: () => ipcRenderer.send('init-playing', ''),
     update: () => ipcRenderer.send('update-playing')
   }
-)
+);
 
 contextBridge.exposeInMainWorld(
   'turnOff',
   {
     video: () => ipcRenderer.send('webdown', '')
   }
-)
+);
 
 contextBridge.exposeInMainWorld(
   'reset',
   {
     signin: () => ipcRenderer.send('auth-server', 'sign-in')
   }
-)
+);

@@ -30,9 +30,10 @@ const nothing_playing_json = {
         }
     }
 };
+window.playing.init();
+
     // Initial setup
-ipcRenderer.on('init-playing-reply', (event, Spotdata) => {
-    data = Spotdata
+ipcRenderer.on('init-playing-reply', (event, data) => {
   switch(data.statusCode) {
     case 200:
         switch(data.body.currently_playing_type) {
@@ -42,6 +43,8 @@ ipcRenderer.on('init-playing-reply', (event, Spotdata) => {
                 } else {
                     document.getElementById('song').innerHTML = data.body.item.name.split(/[\[(-]/)[0]
                 }
+                console.log(1)
+                myBg = `<img src="${data.body.item.album.images[0].url}">`;
                 window.doesSong.haveVideo(data.body.item.id)
                 fadeIn();
                 setInterval(update, update_ms);
@@ -71,7 +74,6 @@ ipcRenderer.on('init-playing-reply', (event, Spotdata) => {
     break;
 };
 })
-window.playing.init()
 
 function update() {
     window.playing.update()
@@ -100,42 +102,25 @@ var sameAlbum = false;
 var wasSpecial = false;
 
 ipcRenderer.on('isvideo', (event, arg) => {
-    console.log('checking...')
-    if (arg == 'null') {
-        console.log('null!')
-        console.log('null')
-        isSpecial = false
-        if (!data.body.item.is_local) {
-            if (myBg == `<img src="${data.body.item.album.images[0].url}">`) {
-                console.log('return function')
-                return
-            }
-            myBg = `<img src="${data.body.item.album.images[0].url}">`;
-        } else {
-            console.log('local track!')
-            myBg = null
-        }
-        console.log(myBg)
-        document.getElementById("bg").innerHTML = myBg;
-        console.log('fading in no video!')
-        fadeInAlbum();
-    } else {
-        console.log('video!')
-        isSpecial = true
-        if (document.getElementById("bg").innerHTML.substring(1, 4) == 'img') {
-            fadeOutAlbum()
-        }
-        setTimeout(() => {
-            myBg = `<video autoplay muted loop style="${arg.css}"><source src='${arg.videourl}'> type="video/mp4"></video>`
-            document.getElementById("bg").innerHTML = myBg;
-            console.log(myBg)
-            setTimeout(() => {
-                console.log("fading in!")
-                fadeInAlbum()
-            }, 500);
-        }, 1000);
+    console.log('checking...');
+    if (arg == null) {
+        console.log(null);
+        isSpecial = false;
+        console.log(myBg);
+        console.log('fading in no video!');
     }
+    else {
+        console.log('video!');
+        isSpecial = true;
+        if (document.getElementById("bg").innerHTML.substring(1, 4) == 'img') {
+            fadeOutAlbum();
+        }
+        myBg = `<video autoplay muted loop style="${arg.css}"><source src='${arg.url}'> type="video/mp4"></video>`
+        console.log(myBg)
+    }
+    setBackground();
 });
+
 
 function show_data(Spotdata) {
     data = Spotdata
@@ -143,9 +128,11 @@ function show_data(Spotdata) {
         sameAlbum = false
     } else {
         sameAlbum = true
-    }
+    };
+
     if (mySong != data.body.item.id) {
         
+        myBg = `<img src="${data.body.item.album.images[0].url}">`;
         var thisArtist = data.body.item.artists
         var showArtist = data.body.item.artists[0].name;
         for(i=1;i<data.body.item.artists.length;i++) {
@@ -189,7 +176,6 @@ function show_data(Spotdata) {
     if (!hasToggled) {
         set_toggle(data.body.is_playing);
     };
-
     mySong = data.body.item.id;
     myArtist = data.body.item.artists[0].id;
     myAlbum = data.body.item.album.id;
@@ -207,9 +193,17 @@ function set_toggle(data) {
 function set_podcast(data) {
     document.getElementById('song').innerHTML = 'Playing podcast';
     document.getElementById('artist').innerHTML = 'No podcast data available yet';
-    document.getElementById('bg').innerHTML = '';
+    myBg = '';
+    setBackground();
     fadeIn();
     set_toggle(data.body.is_playing);
+}
+
+function setBackground() {
+    setTimeout(() => {
+        document.getElementById("bg").innerHTML = myBg;
+    }, fadeTime);
+    fadeInAlbum();
 }
 
 window.addEventListener('error', function(e) {

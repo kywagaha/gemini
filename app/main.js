@@ -183,7 +183,7 @@ ipcMain.on('buttons', (event, arg) => {
 });
 
 function restart_express() {
-  server.listen(8080, 'localhost')
+  server.listen(8080, 'localhost');
 };
 
 function close_express() {

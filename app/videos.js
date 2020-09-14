@@ -1,41 +1,38 @@
 const { ipcMain } = require('electron');
-const { MongoClient } = require("mongodb");
-const uri = "mongodb+srv://guest:Bly5TKBM0yE8jn13@videos.z7e7t.mongodb.net/customvideos?retryWrites=true&w=majority" // used for videos easter egg. feel free to use this uri and view it yourself
+const fetch = require('node-fetch');
+
+let url = "https://raw.githubusercontent.com/Gabe-H/Gemini-Media/master/videos.json";
+var myJSON;
+
+let settings = { method: "Get" };
+
+fetch(url, settings)
+    .then(res => res.json())
+    .then((json) => {
+       myJSON = json;
+       console.log(myJSON)
+    });
+
 
 ipcMain.on('isvideo', (event, arg) => {
-  async function findvideo() {
-    console.log('checking...')
-    const client = await MongoClient.connect(uri, { useUnifiedTopology: true, useNewUrlParser: true })
-
-    const database = client.db("customvideos");
-    const collection = database.collection("videos");
-
-    const query = { songid: arg };
-
-    const options = {
-      projection: { _id: 0, videourl: 1, css: 1 },
-      maxTimeMS: 50
-    };
-
-    const video = await collection.findOne(query, options);
-    console.log(video)
-
-    if (video == null){
-      event.reply('isvideo', 'null')
-    } else {
-      event.reply('isvideo', video)
+  var isSpecial = false;
+    for(i=0;i<Object.keys(myJSON).length;i++) {
+        if(myJSON[i].id == arg) {
+            console.log(myJSON[i])
+            event.reply('isvideo', myJSON[i])
+            isSpecial = true;
+        }
     }
+    if (isSpecial == false) {
+      console.log(null);
+      event.reply('isvideo', null)
+    }
+});
 
-    client.close()
-  } findvideo()
-})
-
-ipcMain.on('webdown', (event, arg) => {
-  ipcMain.removeAllListeners('isvideo')
-  console.log('website for videos is down')
-  ipcMain.on('isvideo', (event, arg) => {
-    setTimeout(() => {
-      event.reply('isvideo', 'null')
-    }, 1000);
-  });
+ipcMain.on('refresh-json', (event, arg) => {
+  fetch(url, settings)
+    .then(res => res.json())
+    .then((json) => {
+       myJSON = json;
+    });
 });
