@@ -9,7 +9,6 @@ function initJSON() {
   fetch(url, settings)
     .then(res => res.json())
     .then((json) => {
-        console.log(json["ids"])
         myJSON = json["ids"];
     });
 }
@@ -21,7 +20,6 @@ ipcMain.on('isvideo', (event, arg) => {
   var isSpecial = false;
     for(i=0;i<Object.keys(myJSON).length;i++) {
         if(myJSON[i].id == arg) {
-            console.log('Is special, video= ' + myJSON[i].url)
             event.reply('isvideo', myJSON[i])
             isSpecial = true;
         }

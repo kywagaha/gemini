@@ -3,7 +3,7 @@ var myArtist;
 var myAlbum;
 var myBg;
 var data;
-
+var init = true;
 var isSpecial = false;
 
 const update_ms = 1000;
@@ -106,11 +106,14 @@ var sameAlbum = false;
 var wasSpecial = false;
 
 ipcRenderer.on('isvideo', (event, arg) => {
-    console.log(arg)
     if (arg == null) {
         isSpecial = false;
     }
     else {
+        if (init) {
+            wasSpecial = true;
+            init = false;
+        }
         isSpecial = true;
         if (document.getElementById("bg").innerHTML.substring(1, 4) == 'img') {
             fadeOutAlbum();

@@ -35,6 +35,7 @@ function createWindow () {
     title: 'Gemini',
     backgroundColor: '#000000',
     webPreferences: {
+      enableRemoteModule: false,
       worldSafeExecuteJavaScript: true,
       contextIsolation: true,
       preload: path.join(__dirname, "preload.js")

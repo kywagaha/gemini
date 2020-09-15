@@ -32,8 +32,8 @@ $(document).ready(function() {
 
 // Fading functions
 function fadeIn() {
-    $('h1').fadeIn(fadeTime);
-    $('h2').fadeIn(fadeTime);
+    $('h1').fadeIn(fadeTime-250);
+    $('h2').fadeIn(fadeTime-250);
 };
 
 function fadeOut() {
@@ -46,7 +46,9 @@ function fadeOutAlbum() {
 };
 
 function fadeInAlbum() {
-    $('#bg').fadeIn(fadeTime);
+    setTimeout(() => {
+        $('#bg').fadeIn(fadeTime);
+    }, 150)
 };
 
 function hideHeader() {
