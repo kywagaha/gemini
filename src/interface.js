@@ -66,28 +66,28 @@ function doc_keyUp(e) {
         switch(e.keyCode) {
             case 27:
                 window.actions.fullscreen();
-                break;
+            break;
             case 70:
                 window.actions.fullscreen();
-                break;
+            break;
             case 74:
                 control('backward');
-                break;
+            break;
             case 75:
                 togglePlay();
-                break;
+            break;
             case 76:
                 control('forward');
-                break;
+            break;
             case 32:
                 togglePlay();
-                break;
+            break;
             case 37:
                 control('backward');
-                break;
+            break;
             case 39:
                 control('forward');
-                break;
+            break;
         }
     };
 };

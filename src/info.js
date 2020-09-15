@@ -67,10 +67,14 @@ ipcRenderer.on('init-playing-reply', (event, data) => {
     case 204:
         data = nothing_playing_json;
         window.doesSong.haveVideo(data.body.item.id)
-        document.getElementById('song').innerHTML = data.body.item.name;
-        document.getElementById('artist').innerHTML = data.body.item.artists[0].name;
+        setSongArtist(data.body.item.name, data.body.item.artists[0].name)
         fadeIn();
         setInterval(update, update_ms);
+    break;
+    default:
+        document.getElementById('song').innerHTML = 'Error';
+        document.getElementById('artist').innerHTML = 'Check error logs';
+        console.log(data)
     break;
 };
 })
@@ -102,21 +106,16 @@ var sameAlbum = false;
 var wasSpecial = false;
 
 ipcRenderer.on('isvideo', (event, arg) => {
-    console.log('checking...');
+    console.log(arg)
     if (arg == null) {
-        console.log(null);
         isSpecial = false;
-        console.log(myBg);
-        console.log('fading in no video!');
     }
     else {
-        console.log('video!');
         isSpecial = true;
         if (document.getElementById("bg").innerHTML.substring(1, 4) == 'img') {
             fadeOutAlbum();
         }
         myBg = `<video autoplay muted loop style="${arg.css}"><source src='${arg.url}'> type="video/mp4"></video>`
-        console.log(myBg)
     }
     setBackground();
 });
@@ -131,7 +130,7 @@ function show_data(Spotdata) {
     };
 
     if (mySong != data.body.item.id) {
-        
+        fadeOut();
         myBg = `<img src="${data.body.item.album.images[0].url}">`;
         var thisArtist = data.body.item.artists
         var showArtist = data.body.item.artists[0].name;
@@ -161,7 +160,6 @@ function show_data(Spotdata) {
                 window.doesSong.haveVideo(data.body.item.id)
                 console.log('sent')
         }}
-        fadeOut();
         setTimeout(() => {
             document.getElementById('artist').innerHTML = showArtist;
             if (data.body.item.name.includes("Remix") || data.body.item.name.includes("Mix") || data.body.item.name.includes("Version") || data.body.item.name.includes("Live") || data.body.item.name.includes("Ver.") || data.body.item.name.includes("ver.")) {
@@ -191,20 +189,27 @@ function set_toggle(data) {
 };
 
 function set_podcast(data) {
-    document.getElementById('song').innerHTML = 'Playing podcast';
-    document.getElementById('artist').innerHTML = 'No podcast data available yet';
+    setSongArtist('Playing podcast', 'No podcast data available yet');
     myBg = '';
     setBackground();
     fadeIn();
     set_toggle(data.body.is_playing);
-}
+};
 
 function setBackground() {
     setTimeout(() => {
         document.getElementById("bg").innerHTML = myBg;
+        fadeInAlbum();
     }, fadeTime);
-    fadeInAlbum();
-}
+};
+
+function setSongArtist(song, artist) {
+    setTimeout(() => {
+        document.getElementById('song').innerHTML = song;
+        document.getElementById('artist').innerHTML = artist;
+        fadeIn();
+    }, fadeTime);
+};
 
 window.addEventListener('error', function(e) {
     console.log(e)
