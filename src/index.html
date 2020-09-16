@@ -1,55 +1,96 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Gemini</title>
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self'">
-    <link rel="stylesheet" href="../styles/style.css">
-    <link rel="stylesheet" href="../styles/macos.css">
-    <script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
-    <link rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.css">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self'" />
+    <link rel="stylesheet" href="../styles/style.css" />
+    <link rel="stylesheet" href="../styles/macos.css" />
+    <script
+      type="text/javascript"
+      src="../node_modules/jquery/dist/jquery.min.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="../node_modules/@fortawesome/fontawesome-free/css/all.css"
+    />
   </head>
   <header>
     <div class="header">
       <div class="titlebar-drag-region"></div>
       <div class="notmac" style="display: none">
         <div style="float: left">
-          <i id="full" class="fa fa-expand" style="-webkit-app-region: no-drag;"></i>
-          <i id="top" class="fas fa-thumbtack" style="-webkit-app-region: no-drag;"></i>
+          <i
+            id="full"
+            class="fa fa-expand"
+            style="-webkit-app-region: no-drag"
+          ></i>
+          <i
+            id="top"
+            class="fas fa-thumbtack"
+            style="-webkit-app-region: no-drag"
+          ></i>
         </div>
         <div style="float: right">
-          <i id="minimize" class="far fa-window-minimize" style="-webkit-app-region: no-drag;"></i>
-          <i id="square" class="far fa-window-maximize" style="-webkit-app-region: no-drag;"></i>
-          <i id="x" class="far fa-window-close" style="-webkit-app-region: no-drag;"></i>
+          <i
+            id="minimize"
+            class="far fa-window-minimize"
+            style="-webkit-app-region: no-drag"
+          ></i>
+          <i
+            id="square"
+            class="far fa-window-maximize"
+            style="-webkit-app-region: no-drag"
+          ></i>
+          <i
+            id="x"
+            class="far fa-window-close"
+            style="-webkit-app-region: no-drag"
+          ></i>
         </div>
       </div>
       <div class="mac focus" id="mac" style="display: none">
         <div style="float: left">
-            <div class="traffic-lights">
-              <button class="traffic-light traffic-light-close" id="close"></button>
-              <button class="traffic-light traffic-light-minimize" id="mini"></button>
-              <button class="traffic-light traffic-light-maximize" id="maximize"></button>
-            </div>
-        </div>
-          <div style="float: right">
-            <i id="topmac" class="fas fa-thumbtack" style="-webkit-app-region: no-drag;"></i>
+          <div class="traffic-lights">
+            <button
+              class="traffic-light traffic-light-close"
+              id="close"
+            ></button>
+            <button
+              class="traffic-light traffic-light-minimize"
+              id="mini"
+            ></button>
+            <button
+              class="traffic-light traffic-light-maximize"
+              id="maximize"
+            ></button>
           </div>
+        </div>
+        <div style="float: right">
+          <i
+            id="topmac"
+            class="fas fa-thumbtack"
+            style="-webkit-app-region: no-drag"
+          ></i>
+        </div>
       </div>
     </div>
   </header>
   <body>
-      <div class=center id=overlay>
-        <h1 id="song"></h1>
-        <h2 id="artist"></h2>
-      </div>
-    <div class=album id="bg"></div>
+    <div class="center" id="overlay">
+      <h1 id="song"></h1>
+      <h2 id="artist"></h2>
+    </div>
+    <div class="album" id="bg"></div>
   </body>
   <footer>
-    <div style="position: absolute; bottom: 15px; text-align: center; width: 100%;">
+    <div
+      style="position: absolute; bottom: 15px; text-align: center; width: 100%"
+    >
       <i id="previous" class="fa fa-fast-backward"></i>
       <i id="toggle"></i>
       <i id="seek" class="fa fa-fast-forward"></i>
-  </div>
+    </div>
   </footer>
   <script type="text/javascript" src="control.js"></script>
   <script type="text/javascript" src="info.js"></script>
