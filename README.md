@@ -25,6 +25,12 @@ While a track is playing, Gemini will update to show the current song and artist
 
 Should you need to sign in again, pressing `Ctrl+S` will take you back to that screen.
 
+## Keyboard Controls
+- `Space` or `K`: Play/Pause
+- `Left arrow key` or `J`: Previous track
+- `Right arrow key` or `L`: Next track
+- `Esc`: Exit out of fullscreen
+
 # Building
 Put your Client ID and secret in `main.js`. The `.env` will not work in production. Note that your client ID and secret will be exposed if someone looks in the build's source files.
 
