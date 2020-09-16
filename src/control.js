@@ -122,7 +122,7 @@ $("#square").click(() => {
 
 $("#minimize").click(() => {
   if (firing) return;
-  window.actions.ninimize();
+  window.actions.minimize();
 });
 
 $("#top").click(() => {
