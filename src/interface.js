@@ -32,8 +32,8 @@ $(document).ready(function() {
 
 // Fading functions
 function fadeIn() {
-    $('h1').fadeIn(fadeTime-250);
-    $('h2').fadeIn(fadeTime-250);
+    $('h1').fadeIn(fadeTime-200);
+    $('h2').fadeIn(fadeTime-200);
 };
 
 function fadeOut() {
