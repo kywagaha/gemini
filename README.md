@@ -1,4 +1,4 @@
-# Gemini [![Build Status](https://travis-ci.com/Gabe-H/Gemini.svg?branch=master)](https://travis-ci.com/Gabe-H/Gemini)
+# Gemini
 Aesthetic now playing screen for Spotify
 
 ![screenshot](https://i.imgur.com/HOda3vb.png)
