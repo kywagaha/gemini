@@ -197,6 +197,7 @@ function show_data(Spotdata) {
   }
   if (!hasToggled) {
     set_toggle(data.body.is_playing);
+    set_shuffle(data.body.shuffle_state)
   }
   mySong = data.body.item.id;
   myArtist = data.body.item.artists[0].id;
@@ -208,6 +209,14 @@ function set_toggle(data) {
     $("#toggle").removeClass().addClass("fa fa-pause");
   } else {
     $("#toggle").removeClass().addClass("fa fa-play");
+  }
+}
+
+function set_shuffle(data) {
+  if (data) {
+    $("#shuffle").css("opacity", "100%");
+  } else {
+    $("#shuffle").css("opacity", "");
   }
 }
 

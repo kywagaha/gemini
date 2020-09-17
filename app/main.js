@@ -88,6 +88,17 @@ ipcMain.on("toggle-play", (event, arg) => {
   );
 });
 
+ipcMain.on("toggle-shuffle", (event, arg) => {
+  spotifyApi.getMyCurrentPlaybackState().then(
+    function (data) {
+      event.reply("toggle-shuffle-reply", data);
+    },
+    function (err) {
+      event.reply("toggle-shuffle-reply", err);
+    }
+  )
+})
+
 ipcMain.on("control", (event, arg) => {
   switch (arg) {
     case "play":
@@ -106,10 +117,33 @@ ipcMain.on("control", (event, arg) => {
       });
       break;
     case "backward":
+      spotifyApi.seek(0).catch((err) => {
+        catch_error(err);
+      });
       spotifyApi.skipToPrevious().catch((err) => {
         catch_error(err);
       });
       break;
+    case "shuffle":
+      spotifyApi.getMyCurrentPlaybackState().then(function(data) {
+        console.log(data.body.shuffle_state)
+        if (data.body.shuffle_state == true) {
+          console.log('setting false')
+          spotifyApi.setShuffle({state: false}).then(function(data) {
+            console.log(data.statusCode)
+          })
+          event.reply("is_shuffle", false);
+        }
+        if (data.body.shuffle_state == false) {
+          console.log('setting true')
+          spotifyApi.setShuffle({state: true}).then(function(data) {
+            console.log(data.statusCode)
+          }).catch((err) => {
+            console.log(err)
+          });
+          event.reply("is_shuffle", true);
+        }
+      })
   }
 });
 
@@ -198,6 +232,7 @@ express.get("/callback", function (req, res) {
     function (data) {
       // Set the access token on the API object to use it in later calls
       spotifyApi.setAccessToken(data.body["access_token"]);
+      console.log(data.body["access_token"])
       spotifyApi.setRefreshToken(data.body["refresh_token"]);
       win.loadFile("./src/index.html");
       setInterval(refresh, (data.body["expires_in"] - 10) * 1000);

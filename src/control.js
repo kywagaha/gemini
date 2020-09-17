@@ -11,7 +11,16 @@ var togglePlay = function () {
   var resetTime = setTimeout(() => {
     hasToggled = false;
   }, 1000);
-  window.controls.toggleplay();
+  window.controls.togglePlay();
+};
+var toggleShuffle = function () {
+  hasToggled = true;
+  clearInterval(resetTime);
+  var resetTime = setTimeout(() => {
+    hasToggled = false;
+  }, 1000);
+  control('shuffle')
+  window.controls.toggleShuffle();
 };
 
 ipcRenderer.on("toggle-play-reply", (event, data) => {
@@ -29,6 +38,13 @@ ipcRenderer.on("toggle-play-reply", (event, data) => {
     console.log("Nothing playing");
   }
 });
+
+ipcRenderer.on("toggle-shuffle-reply", (event, data) => {
+  var isShuffle = data.body.shuffle_state;
+  if (isShuffle == true) {
+    $("#shuffle").removeClass().addClass("fa fa-random");
+  }
+})
 
 // Skip to next song in queue
 var seek = function () {
@@ -73,6 +89,12 @@ $("#toggle").click(() => {
   togglePlay();
   firing = false;
 });
+
+$("#shuffle").click(() => {
+  if (firing) return;
+  toggleShuffle();
+  firing = false;
+})
 
 $("#seek").click(() => {
   if (firing) return;
@@ -150,6 +172,17 @@ ipcRenderer.on("not", (event, arg) => {
       break;
     case false:
       $("#top").css("opacity", "");
+      break;
+  }
+});
+
+ipcRenderer.on("is_shuffle", (event, arg) => {
+  switch (arg) {
+    case true:
+      $("#shuffle").css("opacity", "100%");
+      break;
+    case false:
+      $("#shuffle").css("opacity", "");
       break;
   }
 });

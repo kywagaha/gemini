@@ -14,7 +14,8 @@ contextBridge.exposeInMainWorld("actions", {
 });
 
 contextBridge.exposeInMainWorld("controls", {
-  toggleplay: () => ipcRenderer.send("toggle-play", ""),
+  togglePlay: () => ipcRenderer.send("toggle-play", ""),
+  toggleShuffle: () => ipcRenderer.send("toggle-shuffle", "")
 });
 
 contextBridge.exposeInMainWorld("check", {
