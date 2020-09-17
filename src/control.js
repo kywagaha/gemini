@@ -22,6 +22,14 @@ var toggleShuffle = function () {
   control('shuffle')
   window.controls.toggleShuffle();
 };
+var cycleRepeat = function () {
+  hasToggled = true;
+  clearInterval(resetTime);
+  var resetTime = setTimeout(() => {
+    hasToggled = false;
+  }, 1000);
+  window.controls.cycleRepeat(myRepeat);
+}
 
 ipcRenderer.on("toggle-play-reply", (event, data) => {
   var isPlaying = data.body.is_playing;
@@ -44,6 +52,12 @@ ipcRenderer.on("toggle-shuffle-reply", (event, data) => {
   if (isShuffle == true) {
     $("#shuffle").removeClass().addClass("fa fa-random");
   }
+})
+
+ipcRenderer.on("repeat-reply", (event, arg)  => {
+  myRepeat = arg;
+  console.log(myRepeat)
+  set_repeat(myRepeat);
 })
 
 // Skip to next song in queue
@@ -94,7 +108,11 @@ $("#shuffle").click(() => {
   if (firing) return;
   toggleShuffle();
   firing = false;
-})
+});
+
+$("#repeat").click(() => {
+  cycleRepeat();
+});
 
 $("#seek").click(() => {
   if (firing) return;

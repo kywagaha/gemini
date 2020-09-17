@@ -2,6 +2,7 @@ var mySong;
 var myArtist;
 var myAlbum;
 var myBg;
+var myRepeat;
 var data;
 var init = true;
 var isSpecial = false;
@@ -68,6 +69,9 @@ ipcRenderer.on("init-playing-reply", (event, data) => {
           document.getElementById("artist").innerHTML = showArtist;
           myAlbum = data.body.item.album.id;
           set_toggle(data.body.is_playing);
+          set_shuffle(data.body.shuffle_state);
+          set_repeat(data.body.repeat_state);
+          myRepeat = data.body.repeat_state;
           break;
         case "episode":
           set_podcast(data);
@@ -197,7 +201,9 @@ function show_data(Spotdata) {
   }
   if (!hasToggled) {
     set_toggle(data.body.is_playing);
-    set_shuffle(data.body.shuffle_state)
+    set_shuffle(data.body.shuffle_state);
+    set_repeat(data.body.repeat_state);
+    myRepeat = data.body.repeat_state;
   }
   mySong = data.body.item.id;
   myArtist = data.body.item.artists[0].id;
@@ -218,6 +224,23 @@ function set_shuffle(data) {
   } else {
     $("#shuffle").css("opacity", "");
   }
+}
+
+function set_repeat(data) {
+  switch(data) {
+    case 'off':
+      $("#repeat").removeClass().addClass("fas fa-redo-alt");
+      $("#repeat").css("opacity", "");
+      break;
+    case 'context':
+      $("#repeat").removeClass().addClass("fas fa-redo-alt");
+      $("#repeat").css("opacity", "100%");
+      break;
+    case 'track':
+      $("#repeat").removeClass().addClass("fas fa-sync-alt");
+      $("#repeat").css("opacity", "100%");
+      break;
+  };
 }
 
 function set_podcast(data) {

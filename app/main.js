@@ -99,6 +99,23 @@ ipcMain.on("toggle-shuffle", (event, arg) => {
   )
 })
 
+ipcMain.on("cycle-repeat", (event, arg) => {
+      switch (arg) {
+        case 'off':
+          spotifyApi.setRepeat({state: 'context'})
+          event.reply("repeat-reply", 'context')
+          break;
+        case 'context':
+          spotifyApi.setRepeat({state: 'track'})
+          event.reply("repeat-reply", 'track')
+          break;
+        case 'track':
+          spotifyApi.setRepeat({state: 'off'})
+          event.reply("repeat-reply", 'off')
+          break;
+      };
+})
+
 ipcMain.on("control", (event, arg) => {
   switch (arg) {
     case "play":
@@ -126,18 +143,13 @@ ipcMain.on("control", (event, arg) => {
       break;
     case "shuffle":
       spotifyApi.getMyCurrentPlaybackState().then(function(data) {
-        console.log(data.body.shuffle_state)
         if (data.body.shuffle_state == true) {
-          console.log('setting false')
           spotifyApi.setShuffle({state: false}).then(function(data) {
-            console.log(data.statusCode)
           })
           event.reply("is_shuffle", false);
         }
         if (data.body.shuffle_state == false) {
-          console.log('setting true')
           spotifyApi.setShuffle({state: true}).then(function(data) {
-            console.log(data.statusCode)
           }).catch((err) => {
             console.log(err)
           });
@@ -263,8 +275,6 @@ function refresh() {
 
 function catch_error(error) {
   console.log(error);
-  if (error.statusCode == 403) {
-  }
 }
 
 app.whenReady().then(createWindow);
