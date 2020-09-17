@@ -229,16 +229,19 @@ function set_shuffle(data) {
 function set_repeat(data) {
   switch(data) {
     case 'off':
-      $("#repeat").removeClass().addClass("fas fa-redo-alt");
+      $("#repeat").removeClass().addClass("fas fa-sync-alt");
       $("#repeat").css("opacity", "");
+      $("#repeat").html("");
       break;
     case 'context':
-      $("#repeat").removeClass().addClass("fas fa-redo-alt");
+      $("#repeat").removeClass().addClass("fas fa-sync-alt");
       $("#repeat").css("opacity", "100%");
+      $("#repeat").html("");
       break;
     case 'track':
       $("#repeat").removeClass().addClass("fas fa-sync-alt");
       $("#repeat").css("opacity", "100%");
+      $("#repeat").html(`<span class="repeat">1</span>`);
       break;
   };
 }
