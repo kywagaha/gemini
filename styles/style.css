@@ -188,3 +188,9 @@ h2 {
   right: 10px;
   z-index: 1;
 }
+
+.repeat {
+  font-family: "FormaDJRDisplay";
+  position: fixed;
+  font-size: 12px;
+}
