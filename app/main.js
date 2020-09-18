@@ -88,6 +88,34 @@ ipcMain.on("toggle-play", (event, arg) => {
   );
 });
 
+ipcMain.on("toggle-shuffle", (event, arg) => {
+  spotifyApi.getMyCurrentPlaybackState().then(
+    function (data) {
+      event.reply("toggle-shuffle-reply", data);
+    },
+    function (err) {
+      event.reply("toggle-shuffle-reply", err);
+    }
+  )
+})
+
+ipcMain.on("cycle-repeat", (event, arg) => {
+      switch (arg) {
+        case 'off':
+          spotifyApi.setRepeat({state: 'context'})
+          event.reply("repeat-reply", 'context')
+          break;
+        case 'context':
+          spotifyApi.setRepeat({state: 'track'})
+          event.reply("repeat-reply", 'track')
+          break;
+        case 'track':
+          spotifyApi.setRepeat({state: 'off'})
+          event.reply("repeat-reply", 'off')
+          break;
+      };
+})
+
 ipcMain.on("control", (event, arg) => {
   switch (arg) {
     case "play":
@@ -106,10 +134,28 @@ ipcMain.on("control", (event, arg) => {
       });
       break;
     case "backward":
+      spotifyApi.seek(0).catch((err) => {
+        catch_error(err);
+      });
       spotifyApi.skipToPrevious().catch((err) => {
         catch_error(err);
       });
       break;
+    case "shuffle":
+      spotifyApi.getMyCurrentPlaybackState().then(function(data) {
+        if (data.body.shuffle_state == true) {
+          spotifyApi.setShuffle({state: false}).then(function(data) {
+          })
+          event.reply("is_shuffle", false);
+        }
+        if (data.body.shuffle_state == false) {
+          spotifyApi.setShuffle({state: true}).then(function(data) {
+          }).catch((err) => {
+            console.log(err)
+          });
+          event.reply("is_shuffle", true);
+        }
+      })
   }
 });
 
@@ -181,6 +227,22 @@ ipcMain.on("buttons", (event, arg) => {
   }
 });
 
+ipcMain.on("search", (event, args) => {
+  console.log('searching for ', args)
+  spotifyApi.search(args, ['track'], {limit : 1}).then(function(data) {
+    if (data.body.tracks.items[0]) {
+      var imgURL = data.body.tracks.items[0].album.images[0].url;
+      console.log(imgURL);
+      event.reply("local-reply", imgURL);
+    } else {
+      console.log('no image');
+      event.reply("local-reply", '')
+    }
+  }, function (err) {
+    console.log(err)
+  }).catch((err) => catch_error(err))
+})
+
 function restart_express() {
   server.listen(8080, "localhost");
 }
@@ -198,6 +260,7 @@ express.get("/callback", function (req, res) {
     function (data) {
       // Set the access token on the API object to use it in later calls
       spotifyApi.setAccessToken(data.body["access_token"]);
+      console.log(data.body["access_token"])
       spotifyApi.setRefreshToken(data.body["refresh_token"]);
       win.loadFile("./src/index.html");
       setInterval(refresh, (data.body["expires_in"] - 10) * 1000);
@@ -228,8 +291,6 @@ function refresh() {
 
 function catch_error(error) {
   console.log(error);
-  if (error.statusCode == 403) {
-  }
 }
 
 app.whenReady().then(createWindow);

@@ -11,10 +11,13 @@ contextBridge.exposeInMainWorld("actions", {
   maximize: () => ipcRenderer.send("buttons", "maximize"),
   top: () => ipcRenderer.send("buttons", "top"),
   topmac: () => ipcRenderer.send("buttons", "topmac"),
+  search: (args) => ipcRenderer.send("search", args)
 });
 
 contextBridge.exposeInMainWorld("controls", {
-  toggleplay: () => ipcRenderer.send("toggle-play", ""),
+  togglePlay: () => ipcRenderer.send("toggle-play", ""),
+  toggleShuffle: () => ipcRenderer.send("toggle-shuffle", ""),
+  cycleRepeat: (status) => ipcRenderer.send("cycle-repeat", status)
 });
 
 contextBridge.exposeInMainWorld("check", {

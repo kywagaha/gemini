@@ -17,6 +17,7 @@ initJSON();
 setInterval(initJSON, 3600000);
 
 ipcMain.on("isvideo", (event, arg) => {
+  console.log(arg)
   var isSpecial = false;
   for (i = 0; i < Object.keys(myJSON).length; i++) {
     if (myJSON[i].id == arg) {
