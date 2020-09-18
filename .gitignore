@@ -3,3 +3,4 @@ build/builds
 dist/
 .env
 .DS_Store
+.dummy
