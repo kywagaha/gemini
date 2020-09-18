@@ -227,6 +227,22 @@ ipcMain.on("buttons", (event, arg) => {
   }
 });
 
+ipcMain.on("search", (event, args) => {
+  console.log('searching for ', args)
+  spotifyApi.search(args, ['track'], {limit : 1}).then(function(data) {
+    if (data.body.tracks.items[0]) {
+      var imgURL = data.body.tracks.items[0].album.images[0].url;
+      console.log(imgURL);
+      event.reply("local-reply", imgURL);
+    } else {
+      console.log('no image');
+      event.reply("local-reply", '')
+    }
+  }, function (err) {
+    console.log(err)
+  }).catch((err) => catch_error(err))
+})
+
 function restart_express() {
   server.listen(8080, "localhost");
 }
