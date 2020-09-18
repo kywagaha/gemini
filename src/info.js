@@ -154,6 +154,7 @@ ipcRenderer.on("update-playing-reply", (event, data) => {
 
 ipcRenderer.on("local-reply", (event, args) => {
   myBg = `<img src="${args}">`;
+  window.doesSong.haveVideo(mySong);
   fadeOutAlbum();
   setBackground();
 })
@@ -258,8 +259,7 @@ function show_data(data) {
           args
         ]);
         mySong = data.body.item.uri;
-        console.log(mySong)
-        window.doesSong.haveVideo(mySong);
+        console.log(mySong);
         fadeOut();
         setTimeout(() => {
           if (data.body.item.artists[0].name == ''){
@@ -299,17 +299,19 @@ function set_shuffle(data) {
 function set_repeat(data) {
   switch(data) {
     case 'off':
-      $("#repeat").removeClass().addClass("fas fa-redo-alt");
+      $("#repeat").removeClass().addClass("fas fa-sync-alt");
       $("#repeat").css("opacity", "");
       $("#repeat").html("");
       break;
     case 'context':
-      $("#repeat").removeClass().addClass("fas fa-redo-alt");
+      $("#repeat").removeClass().addClass("fas fa-sync-alt");
       $("#repeat").css("opacity", "100%");
+      $("#repeat").html("");
       break;
     case 'track':
       $("#repeat").removeClass().addClass("fas fa-sync-alt");
       $("#repeat").css("opacity", "100%");
+      $("#repeat").html(`<span class="repeat">1</span>`);
       break;
   };
 }
