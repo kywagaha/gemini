@@ -11,14 +11,9 @@ Aesthetic now playing screen for Spotify
 `yarn install` or `npm install`, but yarn is recommended for building the app.
 
 # Setup
-First you need to make a Spotify application. Once you have your client ID and client secret, make an .env file in the root directory (the file name is just `.env`). Fill in the .env file like this (no 'quotation marks' around the vars):
-```
-CLIENT_ID=123456789
-CLIENT_SECRET=987654321
-```
-Then edit the settings for the app on the Spotify developer dashboard, and set the `Redirect Uri` to `http://localhost:8080/callback`.
+`yarn start` or `npm start`
 
-Once it's all ready, `yarn start` or `npm start`.
+If you would like to use your own Client ID and secret,
 
 # Usage
 While a track is playing, Gemini will update to show the current song and artist. 

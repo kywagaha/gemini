@@ -12,17 +12,24 @@ autoUpdater.checkForUpdatesAndNotify();
 var CLIENT_ID = process.env.CLIENT_ID;
 var CLIENT_SECRET = process.env.CLIENT_SECRET;
 
-var spotifyApi = new SpotifyWebApi({
-  clientId: CLIENT_ID,
-  clientSecret: CLIENT_SECRET,
-  redirectUri: "http://localhost:8080/callback",
-});
+if (CLIENT_ID === undefined && CLIENT_SECRET === undefined) {
+  authorizeURL = "https://gemini-auth.herokuapp.com/auth";
+  var server = express.listen(8080, "localhost");
+  var spotifyApi = new SpotifyWebApi()
+} else {
+  console.log("using your client ID and secret");
+  var spotifyApi = new SpotifyWebApi({
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    redirectUri: "http://localhost:8080/callback",
+  });
 
-var server = express.listen(8080, "localhost");
+  var server = express.listen(8080, "localhost");
 
-var scopes = ["user-modify-playback-state", "user-read-playback-state"],
-  state = "";
-var authorizeURL = spotifyApi.createAuthorizeURL(scopes, state); // spotifyApi.createAuthorizeURL(scopes, state, true); for login/auth everytime
+  var scopes = ["user-modify-playback-state", "user-read-playback-state"],
+    state = "";
+  var authorizeURL = spotifyApi.createAuthorizeURL(scopes, state); // spotifyApi.createAuthorizeURL(scopes, state, true); for login/auth everytime
+}
 
 var win;
 function createWindow() {
@@ -32,7 +39,6 @@ function createWindow() {
     minWidth: 200,
     minHeight: 200,
     title: "Gemini",
-    backgroundColor: "#000000",
     webPreferences: {
       enableRemoteModule: false,
       worldSafeExecuteJavaScript: true,
@@ -96,25 +102,25 @@ ipcMain.on("toggle-shuffle", (event, arg) => {
     function (err) {
       event.reply("toggle-shuffle-reply", err);
     }
-  )
-})
+  );
+});
 
 ipcMain.on("cycle-repeat", (event, arg) => {
-      switch (arg) {
-        case 'off':
-          spotifyApi.setRepeat({state: 'context'})
-          event.reply("repeat-reply", 'context')
-          break;
-        case 'context':
-          spotifyApi.setRepeat({state: 'track'})
-          event.reply("repeat-reply", 'track')
-          break;
-        case 'track':
-          spotifyApi.setRepeat({state: 'off'})
-          event.reply("repeat-reply", 'off')
-          break;
-      };
-})
+  switch (arg) {
+    case "off":
+      spotifyApi.setRepeat({ state: "context" });
+      event.reply("repeat-reply", "context");
+      break;
+    case "context":
+      spotifyApi.setRepeat({ state: "track" });
+      event.reply("repeat-reply", "track");
+      break;
+    case "track":
+      spotifyApi.setRepeat({ state: "off" });
+      event.reply("repeat-reply", "off");
+      break;
+  }
+});
 
 ipcMain.on("control", (event, arg) => {
   switch (arg) {
@@ -142,20 +148,21 @@ ipcMain.on("control", (event, arg) => {
       });
       break;
     case "shuffle":
-      spotifyApi.getMyCurrentPlaybackState().then(function(data) {
+      spotifyApi.getMyCurrentPlaybackState().then(function (data) {
         if (data.body.shuffle_state == true) {
-          spotifyApi.setShuffle({state: false}).then(function(data) {
-          })
+          spotifyApi.setShuffle({ state: false }).then(function (data) {});
           event.reply("is_shuffle", false);
         }
         if (data.body.shuffle_state == false) {
-          spotifyApi.setShuffle({state: true}).then(function(data) {
-          }).catch((err) => {
-            console.log(err)
-          });
+          spotifyApi
+            .setShuffle({ state: true })
+            .then(function (data) {})
+            .catch((err) => {
+              console.log(err);
+            });
           event.reply("is_shuffle", true);
         }
-      })
+      });
   }
 });
 
@@ -228,20 +235,26 @@ ipcMain.on("buttons", (event, arg) => {
 });
 
 ipcMain.on("search", (event, args) => {
-  console.log('searching for ', args)
-  spotifyApi.search(args, ['track'], {limit : 1}).then(function(data) {
-    if (data.body.tracks.items[0]) {
-      var imgURL = data.body.tracks.items[0].album.images[0].url;
-      console.log(imgURL);
-      event.reply("local-reply", imgURL);
-    } else {
-      console.log('no image');
-      event.reply("local-reply", '')
-    }
-  }, function (err) {
-    console.log(err)
-  }).catch((err) => catch_error(err))
-})
+  console.log("searching for ", args);
+  spotifyApi
+    .search(args, ["track"], { limit: 1 })
+    .then(
+      function (data) {
+        if (data.body.tracks.items[0]) {
+          var imgURL = data.body.tracks.items[0].album.images[0].url;
+          console.log(imgURL);
+          event.reply("local-reply", imgURL);
+        } else {
+          console.log("no image");
+          event.reply("local-reply", "");
+        }
+      },
+      function (err) {
+        console.log(err);
+      }
+    )
+    .catch((err) => catch_error(err));
+});
 
 function restart_express() {
   server.listen(8080, "localhost");
@@ -255,25 +268,34 @@ function close_express() {
 
 // Callback path after Spotify auth
 express.get("/callback", function (req, res) {
-  var myCode = req.query.code;
-  spotifyApi.authorizationCodeGrant(myCode).then(
-    function (data) {
-      // Set the access token on the API object to use it in later calls
-      spotifyApi.setAccessToken(data.body["access_token"]);
-      console.log(data.body["access_token"])
-      spotifyApi.setRefreshToken(data.body["refresh_token"]);
-      win.loadFile("./src/index.html");
-      setInterval(refresh, (data.body["expires_in"] - 10) * 1000);
-      close_express();
-    },
-    function (err) {
-      setTimeout(function () {
-        var fURL = spotifyApi.createAuthorizeURL(scopes, state, true);
-        win.loadURL(fURL);
-      }, 300);
-      console.log(err);
-    }
-  );
+  if (req.query.code === undefined) {
+    console.log(req.query)
+    spotifyApi.setAccessToken(req.query.token);
+    spotifyApi.setRefreshToken(req.query.refresh);
+    win.loadFile("./src/index.html");
+    setInterval(refresh, (req.query.expires - 10) * 1000);
+    close_express();
+  } else {
+    var myCode = req.query.code
+    spotifyApi.authorizationCodeGrant(myCode).then(
+      function (data) {
+        // Set the access token on the API object to use it in later calls
+        spotifyApi.setAccessToken(data.body["access_token"]);
+        console.log(data.body["access_token"]);
+        spotifyApi.setRefreshToken(data.body["refresh_token"]);
+        win.loadFile("./src/index.html");
+        setInterval(refresh, (data.body["expires_in"] - 10) * 1000);
+        close_express();
+      },
+      function (err) {
+        setTimeout(function () {
+          var fURL = spotifyApi.createAuthorizeURL(scopes, state, true);
+          win.loadURL(fURL);
+        }, 300);
+        console.log(err);
+      }
+    );
+  }
 });
 
 // Token refresh function
