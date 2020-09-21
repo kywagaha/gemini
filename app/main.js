@@ -4,7 +4,6 @@ var express = require("express");
 var fetch = require('node-fetch')
 var express = express();
 var SpotifyWebApi = require("spotify-web-api-node");
-require("dotenv").config();
 require("./videos");
 const path = require("path");
 
