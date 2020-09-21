@@ -1,28 +1,17 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const { autoUpdater } = require("electron-updater");
 var express = require("express");
+var fetch = require('node-fetch')
 var express = express();
 var SpotifyWebApi = require("spotify-web-api-node");
-require("dotenv").config();
 require("./videos");
 const path = require("path");
 
 autoUpdater.checkForUpdatesAndNotify();
-
-var CLIENT_ID = process.env.CLIENT_ID;
-var CLIENT_SECRET = process.env.CLIENT_SECRET;
-
-var spotifyApi = new SpotifyWebApi({
-  clientId: CLIENT_ID,
-  clientSecret: CLIENT_SECRET,
-  redirectUri: "http://localhost:8080/callback",
-});
-
 var server = express.listen(8080, "localhost");
 
-var scopes = ["user-modify-playback-state", "user-read-playback-state"],
-  state = "";
-var authorizeURL = spotifyApi.createAuthorizeURL(scopes, state); // spotifyApi.createAuthorizeURL(scopes, state, true); for login/auth everytime
+const base_url = 'https://gemini-authorization.herokuapp.com/' // Include trailing '/'
+spotifyApi = new SpotifyWebApi();
 
 var win;
 function createWindow() {
@@ -52,7 +41,7 @@ function createWindow() {
 
   // and load the index.html of the app.
   win.menuBarVisible = false;
-  win.loadURL(authorizeURL);
+  win.loadURL(base_url+'auth');
 }
 
 ipcMain.on("init-playing", (event, arg) => {
@@ -162,8 +151,7 @@ ipcMain.on("control", (event, arg) => {
 ipcMain.on("auth-server", (event, arg) => {
   if (arg == "sign-in") {
     restart_express();
-    var fURL = spotifyApi.createAuthorizeURL(scopes, state, true);
-    win.loadURL(fURL);
+    win.loadURL(base_url+'auth');
   }
 });
 
@@ -256,37 +244,26 @@ function close_express() {
 // Callback path after Spotify auth
 express.get("/callback", function (req, res) {
   var myCode = req.query.code;
-  spotifyApi.authorizationCodeGrant(myCode).then(
-    function (data) {
-      // Set the access token on the API object to use it in later calls
-      spotifyApi.setAccessToken(data.body["access_token"]);
-      console.log(data.body["access_token"])
-      spotifyApi.setRefreshToken(data.body["refresh_token"]);
-      win.loadFile("./src/index.html");
-      setInterval(refresh, (data.body["expires_in"] - 10) * 1000);
-      close_express();
-    },
-    function (err) {
-      setTimeout(function () {
-        var fURL = spotifyApi.createAuthorizeURL(scopes, state, true);
-        win.loadURL(fURL);
-      }, 300);
-      console.log(err);
-    }
-  );
+  res.send();
+  fetch(base_url+'request_token?code='+myCode)
+    .then(res => res.json())
+    .then(json => {
+      spotifyApi.setAccessToken(json.body.access_token);
+      spotifyApi.setRefreshToken(json.body.refresh_token);
+      win.loadFile('src/index.html');
+      setInterval(refresh, 3500*1000);
+    })
+  close_express();
 });
 
 // Token refresh function
 function refresh() {
-  spotifyApi.refreshAccessToken().then(
-    function (data) {
-      // Save the access token so that it's used in future calls
-      spotifyApi.setAccessToken(data.body["access_token"]);
-    },
-    function (err) {
-      console.log("Refresh error: ", err);
-    }
-  );
+  var myRefresh = spotifyApi.getRefreshToken()
+  fetch(base_url+'refresh?refresh_token='+myRefresh)
+    .then(res => res.json())
+    .then(json => {
+      spotifyApi.setAccessToken(json.access_token)
+    });
 }
 
 function catch_error(error) {

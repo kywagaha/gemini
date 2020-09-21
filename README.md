@@ -11,14 +11,9 @@ Aesthetic now playing screen for Spotify
 `yarn install` or `npm install`, but yarn is recommended for building the app.
 
 # Setup
-First you need to make a Spotify application. Once you have your client ID and client secret, make an .env file in the root directory (the file name is just `.env`). Fill in the .env file like this (no 'quotation marks' around the vars):
-```
-CLIENT_ID=123456789
-CLIENT_SECRET=987654321
-```
-Then edit the settings for the app on the Spotify developer dashboard, and set the `Redirect Uri` to `http://localhost:8080/callback`.
+`yarn start` or `npm start`
 
-Once it's all ready, `yarn start` or `npm start`.
+If you would like to use your own Client ID and secret,
 
 # Usage
 While a track is playing, Gemini will update to show the current song and artist. 
@@ -32,9 +27,9 @@ Should you need to sign in again, pressing `Ctrl+S` will take you back to that s
 - `Esc`: Exit out of fullscreen
 
 # Building
-Put your Client ID and secret in `main.js`. The `.env` will not work in production. Note that your client ID and secret will be exposed if someone looks in the build's source files.
-
 `yarn dist`
+
+Uses [Gemini-Authorization](https://github.com/Gabe-H/Gemini-Authorization) hosted on Heroku by default. Feel free to use it's source code for further customization as well.
 
 Recommeneded to run on macOS as it can compile a Windows, Mac, and Linux version. If you only want to compile for a specific operating system, change `dist` in `package.json`. Refer to the `electron-builder` arguments [here](https://www.electron.build/cli).
 
