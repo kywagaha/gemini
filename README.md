@@ -29,7 +29,11 @@ Should you need to sign in again, pressing `Ctrl+S` will take you back to that s
 # Building
 `yarn dist`
 
-Uses [Gemini-Authorization](https://github.com/Gabe-H/Gemini-Authorization) hosted on Heroku by default. Feel free to use it's source code for further customization as well.
+Uses [Gemini-Authorization](https://github.com/Gabe-H/Gemini-Authorization) hosted on Heroku by default. Feel free to use it's source code for further customization as well. If you would rather prefer to not use an online authentication, you can do it locally by creating a file named `.env`, and set the Client parameters as
+```
+CLIENT_ID=123456
+CLIENT_SECRET=abcdefg
+```
 
 Recommeneded to run on macOS as it can compile a Windows, Mac, and Linux version. If you only want to compile for a specific operating system, change `dist` in `package.json`. Refer to the `electron-builder` arguments [here](https://www.electron.build/cli).
 

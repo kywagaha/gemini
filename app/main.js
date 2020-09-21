@@ -3,6 +3,7 @@ const { autoUpdater } = require("electron-updater");
 var express = require("express");
 var fetch = require('node-fetch')
 var express = express();
+require('dotenv').config();
 var SpotifyWebApi = require("spotify-web-api-node");
 require("./videos");
 const path = require("path");
@@ -11,7 +12,25 @@ autoUpdater.checkForUpdatesAndNotify();
 var server = express.listen(8080, "localhost");
 
 const base_url = 'https://gemini-authorization.herokuapp.com/' // Include trailing '/'
-spotifyApi = new SpotifyWebApi();
+
+const CLIENT_ID = process.env.CLIENT_ID || null;
+const CLIENT_SECRET = process.env.CLIENT_SECRET || null;
+const scopes = ["user-modify-playback-state", "user-read-playback-state"];
+
+var onlineAuth;
+if (CLIENT_ID == null && CLIENT_SECRET == null) {
+  console.log('Using online authentication')
+  var spotifyApi = new SpotifyWebApi();
+  onlineAuth = true;
+} else {
+  console.log('Using local authentication');
+  var spotifyApi = new SpotifyWebApi({
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    redirectUri: 'http://localhost:8080/callback'
+  });
+  onlineAuth = false;
+}
 
 var win;
 function createWindow() {
@@ -41,7 +60,70 @@ function createWindow() {
 
   // and load the index.html of the app.
   win.menuBarVisible = false;
-  win.loadURL(base_url+'auth');
+  if (onlineAuth) {
+    win.loadURL(base_url+'auth');
+  } else {
+    var url = spotifyApi.createAuthorizeURL(scopes, '');
+    win.loadURL(url);
+  }
+}
+
+// Callback path after Spotify auth
+express.get("/callback", function (req, res) {
+  var myCode = req.query.code;
+  res.send();
+  if (onlineAuth) {
+    fetch(base_url+'request_token?code='+myCode)
+      .then(res => res.json())
+      .then(json => {
+        spotifyApi.setAccessToken(json.body.access_token);
+        spotifyApi.setRefreshToken(json.body.refresh_token);
+        win.loadFile('src/index.html');
+        setInterval(refresh, 3500*1000);
+      })
+  }
+  else {
+    spotifyApi.authorizationCodeGrant(myCode).then(
+      function (data) {
+        // Set the access token on the API object to use it in later calls
+        spotifyApi.setAccessToken(data.body["access_token"]);
+        console.log(data.body["access_token"])
+        spotifyApi.setRefreshToken(data.body["refresh_token"]);
+        win.loadFile("./src/index.html");
+        setInterval(refresh, 3500*1000);
+        close_express();
+      },
+      function (err) {
+        setTimeout(function () {
+          var fURL = spotifyApi.createAuthorizeURL(scopes, state, true);
+          win.loadURL(fURL);
+        }, 300);
+        console.log(err);
+      })
+  }
+  close_express();
+});
+
+// Token refresh function
+function refresh() {
+  var myRefresh = spotifyApi.getRefreshToken()
+  if (onlineAuth) {
+    fetch(base_url+'refresh?refresh_token='+myRefresh)
+      .then(res => res.json())
+      .then(json => {
+        spotifyApi.setAccessToken(json.access_token)
+      });
+  } else {
+    spotifyApi.refreshAccessToken().then(
+      function(data) {
+        console.log('Refreshed with new token:', data.body.access_token)
+        spotifyApi.setAccessToken(data.body.access_token)
+      },
+      function(err) {
+        console.log(err)
+      }
+    )
+  }
 }
 
 ipcMain.on("init-playing", (event, arg) => {
@@ -241,33 +323,5 @@ function close_express() {
   }
 }
 
-// Callback path after Spotify auth
-express.get("/callback", function (req, res) {
-  var myCode = req.query.code;
-  res.send();
-  fetch(base_url+'request_token?code='+myCode)
-    .then(res => res.json())
-    .then(json => {
-      spotifyApi.setAccessToken(json.body.access_token);
-      spotifyApi.setRefreshToken(json.body.refresh_token);
-      win.loadFile('src/index.html');
-      setInterval(refresh, 3500*1000);
-    })
-  close_express();
-});
-
-// Token refresh function
-function refresh() {
-  var myRefresh = spotifyApi.getRefreshToken()
-  fetch(base_url+'refresh?refresh_token='+myRefresh)
-    .then(res => res.json())
-    .then(json => {
-      spotifyApi.setAccessToken(json.access_token)
-    });
-}
-
-function catch_error(error) {
-  console.log(error);
-}
 
 app.whenReady().then(createWindow);
