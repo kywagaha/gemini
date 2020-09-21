@@ -35,7 +35,7 @@ CLIENT_ID=123456
 CLIENT_SECRET=abcdefg
 ```
 
-Recommeneded to run on macOS as it can compile a Windows, Mac, and Linux version. If you only want to compile for a specific operating system, change `dist` in `package.json`. Refer to the `electron-builder` arguments [here](https://www.electron.build/cli).
+Recommeneded to run on macOS as it can compile a Windows, Mac, and Linux version. If you only want to compile for a specific operating system, run `yarn electron-builder ` with `--win` for windows, `--mac` for macOS, or `--linux` for linux. Refer to the `electron-builder` arguments [here](https://www.electron.build/cli).
 
 # To Do
 Please check out our [projects page](https://github.com/Gabe-H/Gemini/projects/2)! Please open an issue if you have any suggestions!
