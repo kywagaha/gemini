@@ -12,7 +12,7 @@ autoUpdater.checkForUpdatesAndNotify();
 var server = express.listen(8080, "localhost");
 
 const base_url = 'https://gemini-authorization.herokuapp.com/' // Include trailing '/'
-
+// OPTIONAL: define client credentials in
 const CLIENT_ID = process.env.CLIENT_ID || null;
 const CLIENT_SECRET = process.env.CLIENT_SECRET || null;
 const scopes = ["user-modify-playback-state", "user-read-playback-state"];
@@ -103,7 +103,6 @@ express.get("/callback", function (req, res) {
   }
   close_express();
 });
-
 // Token refresh function
 function refresh() {
   var myRefresh = spotifyApi.getRefreshToken()
@@ -126,6 +125,7 @@ function refresh() {
   }
 }
 
+// Initial /currently-playing request
 ipcMain.on("init-playing", (event, arg) => {
   spotifyApi.getMyCurrentPlaybackState().then(
     function (data) {
@@ -136,7 +136,7 @@ ipcMain.on("init-playing", (event, arg) => {
     }
   );
 });
-
+// Updating /currently-playing request
 ipcMain.on("update-playing", (event, arg) => {
   spotifyApi.getMyCurrentPlaybackState().then(
     function (data) {
@@ -147,7 +147,7 @@ ipcMain.on("update-playing", (event, arg) => {
     }
   );
 });
-
+// Set play/pause button to correct state
 ipcMain.on("toggle-play", (event, arg) => {
   spotifyApi.getMyCurrentPlaybackState().then(
     function (data) {
@@ -158,7 +158,7 @@ ipcMain.on("toggle-play", (event, arg) => {
     }
   );
 });
-
+// Set shuffle true/false based on current state
 ipcMain.on("toggle-shuffle", (event, arg) => {
   spotifyApi.getMyCurrentPlaybackState().then(
     function (data) {
@@ -169,7 +169,7 @@ ipcMain.on("toggle-shuffle", (event, arg) => {
     }
   )
 })
-
+// Cycle through repeat options in order (none, context, track)
 ipcMain.on("cycle-repeat", (event, arg) => {
       switch (arg) {
         case 'off':
@@ -186,7 +186,7 @@ ipcMain.on("cycle-repeat", (event, arg) => {
           break;
       };
 })
-
+// Handles controlling requests (play, pause, skip, previous)
 ipcMain.on("control", (event, arg) => {
   switch (arg) {
     case "play":
@@ -229,14 +229,19 @@ ipcMain.on("control", (event, arg) => {
       })
   }
 });
-
+// Allows for re-signin
 ipcMain.on("auth-server", (event, arg) => {
   if (arg == "sign-in") {
     restart_express();
-    win.loadURL(base_url+'auth');
+    if (onlineAuth) {
+      win.loadURL(base_url+'auth');
+    } else {
+      var url = spotifyApi.createAuthorizeURL(scopes, '');
+      win.loadURL(url);
+    }
   }
 });
-
+// Electron window controls (minimize, maximize, close)
 ipcMain.on("buttons", (event, arg) => {
   switch (arg) {
     case "close":
@@ -296,22 +301,6 @@ ipcMain.on("buttons", (event, arg) => {
       break;
   }
 });
-
-ipcMain.on("search", (event, args) => {
-  console.log('searching for ', args)
-  spotifyApi.search(args, ['track'], {limit : 1}).then(function(data) {
-    if (data.body.tracks.items[0]) {
-      var imgURL = data.body.tracks.items[0].album.images[0].url;
-      console.log(imgURL);
-      event.reply("local-reply", imgURL);
-    } else {
-      console.log('no image');
-      event.reply("local-reply", '')
-    }
-  }, function (err) {
-    console.log(err)
-  }).catch((err) => catch_error(err))
-})
 
 function restart_express() {
   server.listen(8080, "localhost");

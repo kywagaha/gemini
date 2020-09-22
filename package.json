@@ -6,9 +6,9 @@
   "scripts": {
     "start": "electron .",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder -mwl"
+    "dist": "electron-builder"
   },
-  "author": "Gabe Haarberg and Kyle Awayan <kyle@awayan.com>",
+  "author": "Gabe Haarberg <homerunhit3@hotmail.com> and Kyle Awayan <kyle@awayan.com>",
   "license": "ISC",
   "devDependencies": {
     "electron": "^10.1.1",

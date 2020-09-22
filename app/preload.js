@@ -10,8 +10,7 @@ contextBridge.exposeInMainWorld("actions", {
   minimize: () => ipcRenderer.send("buttons", "minimize"),
   maximize: () => ipcRenderer.send("buttons", "maximize"),
   top: () => ipcRenderer.send("buttons", "top"),
-  topmac: () => ipcRenderer.send("buttons", "topmac"),
-  search: (args) => ipcRenderer.send("search", args)
+  topmac: () => ipcRenderer.send("buttons", "topmac")
 });
 
 contextBridge.exposeInMainWorld("controls", {

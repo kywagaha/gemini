@@ -90,9 +90,6 @@ ipcRenderer.on("init-playing-reply", (event, data) => {
           if (artist != '') {
             args = song+' '+artist;
           }
-          window.actions.search([
-            args
-          ]);
           if (data.body.item.artists[0].name == ''){
             document.getElementById('artist').innerHTML = '';
           } else {
@@ -255,9 +252,6 @@ function show_data(data) {
         if (artist != '') {
           args = song+' '+artist;
         }
-        window.actions.search([
-          args
-        ]);
         mySong = data.body.item.uri;
         console.log(mySong);
         fadeOut();
