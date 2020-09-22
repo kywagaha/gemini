@@ -18,7 +18,6 @@ This uses [Gemini-Authorization](https://github.com/Gabe-H/Gemini-Authorization)
 CLIENT_ID=123456
 CLIENT_SECRET=abcdefg
 ```
-Note that your client ID and secret will be exposed if someone looks in to the compiled source files, so it's best to just compile a version for yourself if you want to use your own client ID and secret.
 
 # Usage
 While a track is playing, Gemini will update to show the current song and artist. 
@@ -33,6 +32,10 @@ Should you need to sign in again, pressing `Ctrl+S` will take you back to that s
 
 # Building
 `yarn dist`
+
+Insert your client ID and secret in `main.js`, replacing the `process.env` variables. Delete the `.env` file as it will not work in production.
+
+Note that your client ID and secret will be exposed if someone looks in to the compiled source files, so it's best to just compile a version for yourself if you want to use your own client ID and secret.
 
 Refer to the `electron-builder` arguments for your specific operating system [here](https://www.electron.build/cli).
 
