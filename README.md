@@ -13,7 +13,7 @@ Aesthetic now playing screen for Spotify
 # Setup
 `yarn start` or `npm start`.
 
-This uses [Gemini-Authorization](https://github.com/Gabe-H/Gemini-Authorization) for Spotify authentication by default. It lets us conceal our clinet ID and secret for the compiled version. If you would like to use your own Client ID and secret, you can do it locally by creating a file named `.env`, and set the Client parameters as
+This uses [Gemini-Authorization](https://github.com/Gabe-H/Gemini-Authorization) for Spotify authentication by default. It lets us conceal our clinet ID and secret for the compiled version. If you would like to use your own client ID and secret, you can do it locally by creating a file named `.env`, and set the client parameters as
 ```
 CLIENT_ID=123456
 CLIENT_SECRET=abcdefg
