@@ -11,9 +11,14 @@ Aesthetic now playing screen for Spotify
 `yarn install` or `npm install`, but yarn is recommended for building the app.
 
 # Setup
-`yarn start` or `npm start`
+`yarn start` or `npm start`.
 
-If you would like to use your own Client ID and secret,
+This uses [Gemini-Authorization](https://github.com/Gabe-H/Gemini-Authorization) for Spotify authentication by default. It lets us conceal our clinet ID and secret for the compiled version. If you would like to use your own Client ID and secret, you can do it locally by creating a file named `.env`, and set the Client parameters as
+```
+CLIENT_ID=123456
+CLIENT_SECRET=abcdefg
+```
+Note that your client ID and secret will be exposed if someone looks in to the compiled source files, so it's best to just compile a version for yourself if you want to use your own client ID and secret.
 
 # Usage
 While a track is playing, Gemini will update to show the current song and artist. 
@@ -29,13 +34,7 @@ Should you need to sign in again, pressing `Ctrl+S` will take you back to that s
 # Building
 `yarn dist`
 
-Uses [Gemini-Authorization](https://github.com/Gabe-H/Gemini-Authorization) hosted on Heroku by default. Feel free to use it's source code for further customization as well. If you would rather prefer to not use an online authentication, you can do it locally by creating a file named `.env`, and set the Client parameters as
-```
-CLIENT_ID=123456
-CLIENT_SECRET=abcdefg
-```
-
-Recommeneded to run on macOS as it can compile a Windows, Mac, and Linux version. If you only want to compile for a specific operating system, run `yarn electron-builder ` with `--win` for windows, `--mac` for macOS, or `--linux` for linux. Refer to the `electron-builder` arguments [here](https://www.electron.build/cli).
+Refer to the `electron-builder` arguments for your specific operating system [here](https://www.electron.build/cli).
 
 # To Do
 Please check out our [projects page](https://github.com/Gabe-H/Gemini/projects/2)! Please open an issue if you have any suggestions!
