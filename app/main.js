@@ -1,7 +1,8 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const { autoUpdater } = require("electron-updater");
 var express = require("express");
-var fetch = require('node-fetch')
+var fetch = require('node-fetch');
+const windowStateKeeper = require('electron-window-state');
 var express = express();
 require('dotenv').config();
 var SpotifyWebApi = require("spotify-web-api-node");
@@ -34,9 +35,15 @@ if (CLIENT_ID == null && CLIENT_SECRET == null) {
 
 var win;
 function createWindow() {
+  let mainWindowState = windowStateKeeper({
+    defaultWidth: 800,
+    defaultHeight: 800
+  });
   win = new BrowserWindow({
-    width: 640,
-    height: 640,
+    'x': mainWindowState.x,
+    'y': mainWindowState.y,
+    'width': mainWindowState.width,
+    'height': mainWindowState.height,
     minWidth: 200,
     minHeight: 200,
     title: "Gemini",
@@ -66,6 +73,7 @@ function createWindow() {
     var url = spotifyApi.createAuthorizeURL(scopes, '');
     win.loadURL(url);
   }
+  mainWindowState.manage(win);
 }
 
 // Callback path after Spotify auth
