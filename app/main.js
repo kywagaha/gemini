@@ -309,6 +309,16 @@ ipcMain.on("buttons", (event, arg) => {
       break;
   }
 });
+// Set window width to window height
+ipcMain.on("set-square", (event, arg) => {
+  width = (win.getSize())[0];
+  height = (win.getSize())[1];
+  if (width < height) {
+    win.setSize(width, width);
+  } else if (height < width) {
+    win.setSize(height, height);
+  };
+});
 
 function restart_express() {
   server.listen(8080, "localhost");
