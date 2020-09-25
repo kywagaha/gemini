@@ -29,6 +29,7 @@ Should you need to sign in again, pressing `Ctrl+S` will take you back to that s
 - `Left arrow key` or `J`: Previous track
 - `Right arrow key` or `L`: Next track
 - `Esc`: Exit out of fullscreen
+- `Ctrl + D`: Reset window to square aspect ratio
 
 # Building
 `yarn dist`
