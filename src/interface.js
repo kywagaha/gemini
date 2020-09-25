@@ -63,6 +63,8 @@ function showHeader() {
 function doc_keyUp(e) {
   if (e.ctrlKey && e.keyCode == 83) {
     window.reset.signin();
+  } else if (e.ctrlKey && e.keyCode == 68) {
+    window.actions.square()
   } else {
     switch (e.keyCode) {
       case 27:

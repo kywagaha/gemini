@@ -1,18 +1,19 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
-const { autoUpdater } = require("electron-updater");
-var express = require("express");
-var fetch = require('node-fetch')
-var express = express();
-require('dotenv').config();
+const windowStateKeeper = require('electron-window-state');
 var SpotifyWebApi = require("spotify-web-api-node");
-require("./videos");
+const { autoUpdater } = require("electron-updater");
+var fetch = require('node-fetch');
+var express = require("express");
 const path = require("path");
+require('dotenv').config();
+var express = express();
+require("./videos");
 
 autoUpdater.checkForUpdatesAndNotify();
 var server = express.listen(8080, "localhost");
 
 const base_url = 'https://gemini-authorization.herokuapp.com/' // Include trailing '/'
-// OPTIONAL: define client credentials in
+// OPTIONAL: define client credentials in .env
 const CLIENT_ID = process.env.CLIENT_ID || null;
 const CLIENT_SECRET = process.env.CLIENT_SECRET || null;
 const scopes = ["user-modify-playback-state", "user-read-playback-state"];
@@ -34,9 +35,15 @@ if (CLIENT_ID == null && CLIENT_SECRET == null) {
 
 var win;
 function createWindow() {
+  let mainWindowState = windowStateKeeper({
+    defaultWidth: 800,
+    defaultHeight: 800
+  });
   win = new BrowserWindow({
-    width: 640,
-    height: 640,
+    'x': mainWindowState.x,
+    'y': mainWindowState.y,
+    'width': mainWindowState.width,
+    'height': mainWindowState.height,
     minWidth: 200,
     minHeight: 200,
     title: "Gemini",
@@ -66,6 +73,7 @@ function createWindow() {
     var url = spotifyApi.createAuthorizeURL(scopes, '');
     win.loadURL(url);
   }
+  mainWindowState.manage(win);
 }
 
 // Callback path after Spotify auth
@@ -300,6 +308,32 @@ ipcMain.on("buttons", (event, arg) => {
     default:
       break;
   }
+});
+// Set window width to window height
+ipcMain.on("set-square", (event, arg) => {
+  width = (win.getSize())[0];
+  height = (win.getSize())[1];
+  if (width < height) {
+    win.setSize(width, width);
+  } else if (height < width) {
+    win.setSize(height, height);
+  };
+});
+// Search Spotify for local files
+ipcMain.on("search", (event, args) => {	
+  console.log('searching for ', args)	
+  spotifyApi.search(args, ['track'], {limit : 1}).then(function(data) {	
+    if (data.body.tracks.items[0]) {	
+      var imgURL = data.body.tracks.items[0].album.images[0].url;	
+      console.log(imgURL);	
+      event.reply("local-reply", imgURL);	
+    } else {	
+      console.log('no image');	
+      event.reply("local-reply", '')	
+    }	
+  }, function (err) {	
+    console.log(err)	
+  }).catch((err) => catch_error(err))	
 });
 
 function restart_express() {

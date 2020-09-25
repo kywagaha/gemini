@@ -36,60 +36,72 @@ window.playing.init();
 // Initial setup
 ipcRenderer.on("init-playing-reply", (event, data) => {
   switch (data.statusCode) {
-    case 200:
+    case 200: // Song is playing
       switch (data.body.item.is_local) {
-        case false:
+        case false: // Non local music
           switch (data.body.currently_playing_type) {
-            case "track":
+            case "track": // For track (not podcast)
+              var thisName = data.body.item.name;
               if (
-                data.body.item.name.includes("Remix") ||
-                data.body.item.name.includes("Mix") ||
-                data.body.item.name.includes("Version") ||
-                data.body.item.name.includes("Live") ||
-                data.body.item.name.includes("Ver.") ||
-                data.body.item.name.includes("ver.")
+                thisName.includes("Remix") ||
+                thisName.includes("Mix") ||
+                thisName.includes("Version") ||
+                thisName.includes("Live") ||
+                thisName.includes("Ver.") ||
+                thisName.includes("ver.")
               ) {
-                document.getElementById(
-                  "song"
-                ).innerHTML = data.body.item.name.split(/\[/)[0];
+                document.getElementById("song").innerHTML = data.body.item.name.split(/\[/)[0];
               } else {
                 document.getElementById(
                   "song"
                 ).innerHTML = data.body.item.name.split(/[\[(-]/)[0];
-              }
+              }; // Special title cases
+
+              // Initialize background var
               myBg = `<img src="${data.body.item.album.images[0].url}">`;
+              // Check if song uri has a video (defined in gemini-media repo)
               window.doesSong.haveVideo(data.body.item.uri);
-              fadeIn();
-              setInterval(update, update_ms);
-              mySong = data.body.item.id;
-              var thisArtist = data.body.item.artists;
-              var showArtist = data.body.item.artists[0].name;
-              for (i = 1; i < data.body.item.artists.length; i++) {
+
+              mySong = data.body.item.id; // Set song placeholder
+              var thisArtist = data.body.item.artists; // .artists array in json response
+              var showArtist = data.body.item.artists[0].name; // Temporary artist string
+              for (i = 1; i < data.body.item.artists.length; i++) { // Append to showArtist if more than 1 artist
                 showArtist += ", " + thisArtist[i].name;
-              }
-              document.getElementById("artist").innerHTML = showArtist;
+              };
+              document.getElementById("artist").innerHTML = showArtist; // Artist element to appended artist str
+              fadeIn(); // Show text on screen
+
+                // Set album placeholder
               myAlbum = data.body.item.album.id;
+                // Trigger functions 
               set_toggle(data.body.is_playing);
               set_shuffle(data.body.shuffle_state);
               set_repeat(data.body.repeat_state);
-              myRepeat = data.body.repeat_state;
+                // Start sending 1s updates to main.js
+              setInterval(update, update_ms);
               break;
-            case "episode":
+            case "episode": // Case podcast
+                // Not enough info from API yet, 
               set_podcast(data);
+                // Start sending 1s updates to main.js
               setInterval(update, update_ms);
               break;
           }
           break;
-        case true:
+        case true: // Case local track
           mySong = data.body.item.uri;
           var song = data.body.item.name;
           var artist = data.body.item.artists[0].name
           var args = song;
-          console.log(mySong)
-          window.doesSong.haveVideo(mySong);
+          console.log(mySong); // Log song uri since it's not obtainable from Spotify app. For use with a special case
+          window.doesSong.haveVideo(mySong); // Check for special
+          
           if (artist != '') {
             args = song+' '+artist;
-          }
+          };
+          window.actions.search([	
+            args
+          ]);
           if (data.body.item.artists[0].name == ''){
             document.getElementById('artist').innerHTML = '';
           } else {
@@ -101,7 +113,6 @@ ipcRenderer.on("init-playing-reply", (event, data) => {
           set_toggle(data.body.is_playing);
           set_shuffle(data.body.shuffle_state);
           set_repeat(data.body.repeat_state);
-          myRepeat = data.body.repeat_state;
           break;
       }
       break;
@@ -251,7 +262,10 @@ function show_data(data) {
         var args = song;
         if (artist != '') {
           args = song+' '+artist;
-        }
+        };
+        window.actions.search([	
+          args
+        ]);
         mySong = data.body.item.uri;
         console.log(mySong);
         fadeOut();
@@ -291,6 +305,7 @@ function set_shuffle(data) {
 }
 
 function set_repeat(data) {
+  myRepeat = data;
   switch(data) {
     case 'off':
       $("#repeat").removeClass().addClass("fas fa-sync-alt");
