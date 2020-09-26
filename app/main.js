@@ -1,39 +1,15 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
+module.exports = { startApp:startApp, startAuth:startAuth };
 const windowStateKeeper = require('electron-window-state');
-var SpotifyWebApi = require("spotify-web-api-node");
 const { autoUpdater } = require("electron-updater");
-var fetch = require('node-fetch');
-var express = require("express");
-const path = require("path");
-require('dotenv').config();
-var express = express();
+var constants = require("./constants");
+var spotifyApi = constants.spotifyApi;
+var settings = constants.settings;
+var auth = require('./auth');
 require("./videos");
 
 autoUpdater.checkForUpdatesAndNotify();
-var server = express.listen(8080, "localhost");
 
-const base_url = 'https://gemini-authorization.herokuapp.com/' // Include trailing '/'
-// OPTIONAL: define client credentials in .env
-const CLIENT_ID = process.env.CLIENT_ID || null;
-const CLIENT_SECRET = process.env.CLIENT_SECRET || null;
-const scopes = ["user-modify-playback-state", "user-read-playback-state"];
-
-var onlineAuth;
-if (CLIENT_ID == null && CLIENT_SECRET == null) {
-  console.log('Using online authentication')
-  var spotifyApi = new SpotifyWebApi();
-  onlineAuth = true;
-} else {
-  console.log('Using local authentication');
-  var spotifyApi = new SpotifyWebApi({
-    clientId: CLIENT_ID,
-    clientSecret: CLIENT_SECRET,
-    redirectUri: 'http://localhost:8080/callback'
-  });
-  onlineAuth = false;
-}
-
-var win;
 function createWindow() {
   let mainWindowState = windowStateKeeper({
     defaultWidth: 800,
@@ -52,9 +28,9 @@ function createWindow() {
       enableRemoteModule: false,
       worldSafeExecuteJavaScript: true,
       contextIsolation: true,
-      preload: path.join(__dirname, "preload.js"),
+      preload: (__dirname + "/preload.js"),
     },
-    frame: false,
+    frame: false
   });
 
   win.on("blur", () => {
@@ -67,70 +43,24 @@ function createWindow() {
 
   // and load the index.html of the app.
   win.menuBarVisible = false;
-  if (onlineAuth) {
-    win.loadURL(base_url+'auth');
-  } else {
-    var url = spotifyApi.createAuthorizeURL(scopes, '');
-    win.loadURL(url);
-  }
   mainWindowState.manage(win);
+
+  if (settings.hasSync('refresh_token')) {
+    auth.tryRefresh(settings.getSync('refresh_token'))
+  } else {
+    startAuth()
+  }
 }
 
-// Callback path after Spotify auth
-express.get("/callback", function (req, res) {
-  var myCode = req.query.code;
-  res.send();
-  if (onlineAuth) {
-    fetch(base_url+'request_token?code='+myCode)
-      .then(res => res.json())
-      .then(json => {
-        spotifyApi.setAccessToken(json.body.access_token);
-        spotifyApi.setRefreshToken(json.body.refresh_token);
-        win.loadFile('src/index.html');
-        setInterval(refresh, 3500*1000);
-      })
-  }
-  else {
-    spotifyApi.authorizationCodeGrant(myCode).then(
-      function (data) {
-        // Set the access token on the API object to use it in later calls
-        spotifyApi.setAccessToken(data.body["access_token"]);
-        console.log(data.body["access_token"])
-        spotifyApi.setRefreshToken(data.body["refresh_token"]);
-        win.loadFile("./src/index.html");
-        setInterval(refresh, 3500*1000);
-        close_express();
-      },
-      function (err) {
-        setTimeout(function () {
-          var fURL = spotifyApi.createAuthorizeURL(scopes, state, true);
-          win.loadURL(fURL);
-        }, 300);
-        console.log(err);
-      })
-  }
-  close_express();
-});
-// Token refresh function
+function startApp() {
+  setInterval(refresh, 60*59*1000);
+  win.loadFile('src/index.html');
+}
+function startAuth() {
+  win.loadURL(auth.getAuthUrl())
+}
 function refresh() {
-  var myRefresh = spotifyApi.getRefreshToken()
-  if (onlineAuth) {
-    fetch(base_url+'refresh?refresh_token='+myRefresh)
-      .then(res => res.json())
-      .then(json => {
-        spotifyApi.setAccessToken(json.access_token)
-      });
-  } else {
-    spotifyApi.refreshAccessToken().then(
-      function(data) {
-        console.log('Refreshed with new token:', data.body.access_token)
-        spotifyApi.setAccessToken(data.body.access_token)
-      },
-      function(err) {
-        console.log(err)
-      }
-    )
-  }
+  auth.refresh(spotifyApi.getRefreshToken())
 }
 
 // Initial /currently-playing request
@@ -140,6 +70,7 @@ ipcMain.on("init-playing", (event, arg) => {
       event.reply("init-playing-reply", data);
     },
     function (err) {
+      refresh();
       event.reply("init-playing-reply", err);
     }
   );
@@ -151,6 +82,7 @@ ipcMain.on("update-playing", (event, arg) => {
       event.reply("update-playing-reply", data);
     },
     function (err) {
+      refresh();
       event.reply("update-playing-reply", err);
     }
   );
@@ -162,6 +94,7 @@ ipcMain.on("toggle-play", (event, arg) => {
       event.reply("toggle-play-reply", data);
     },
     function (err) {
+      refresh()
       event.reply("toggle-play-reply", err);
     }
   );
@@ -173,6 +106,7 @@ ipcMain.on("toggle-shuffle", (event, arg) => {
       event.reply("toggle-shuffle-reply", data);
     },
     function (err) {
+      refresh()
       event.reply("toggle-shuffle-reply", err);
     }
   )
@@ -182,14 +116,23 @@ ipcMain.on("cycle-repeat", (event, arg) => {
       switch (arg) {
         case 'off':
           spotifyApi.setRepeat({state: 'context'})
+          .catch((err) => {
+            catch_error(err)
+          })
           event.reply("repeat-reply", 'context')
           break;
         case 'context':
           spotifyApi.setRepeat({state: 'track'})
+          .catch((err) => {
+            catch_error(err)
+          })
           event.reply("repeat-reply", 'track')
           break;
         case 'track':
           spotifyApi.setRepeat({state: 'off'})
+          .catch((err) => {
+            catch_error(err)
+          })
           event.reply("repeat-reply", 'off')
           break;
       };
@@ -221,7 +164,8 @@ ipcMain.on("control", (event, arg) => {
       });
       break;
     case "shuffle":
-      spotifyApi.getMyCurrentPlaybackState().then(function(data) {
+      spotifyApi.getMyCurrentPlaybackState()
+      .then(function(data) {
         if (data.body.shuffle_state == true) {
           spotifyApi.setShuffle({state: false}).then(function(data) {
           })
@@ -234,19 +178,16 @@ ipcMain.on("control", (event, arg) => {
           });
           event.reply("is_shuffle", true);
         }
+      }, function(error) {
+        console.log(error)
+        refresh()
       })
   }
 });
 // Allows for re-signin
 ipcMain.on("auth-server", (event, arg) => {
   if (arg == "sign-in") {
-    restart_express();
-    if (onlineAuth) {
-      win.loadURL(base_url+'auth');
-    } else {
-      var url = spotifyApi.createAuthorizeURL(scopes, '');
-      win.loadURL(url);
-    }
+    win.loadURL(auth.getAuthUrl());
   }
 });
 // Electron window controls (minimize, maximize, close)
@@ -336,15 +277,9 @@ ipcMain.on("search", (event, args) => {
   }).catch((err) => catch_error(err))	
 });
 
-function restart_express() {
-  server.listen(8080, "localhost");
+function catch_error(error) {
+  console.error(error)
+  refresh()
 }
-
-function close_express() {
-  if (server) {
-    server.close();
-  }
-}
-
 
 app.whenReady().then(createWindow);
