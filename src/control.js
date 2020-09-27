@@ -77,9 +77,6 @@ var track = function () {
   }, changeMs);
 };
 
-// A map to remember in
-var keysdown = {};
-
 // keydown handler
 $(document).keydown(function (e) {
   if (keysdown[e.keyCode]) {
@@ -213,5 +210,15 @@ ipcRenderer.on("mac", (event, arg) => {
     case false:
       $("#topmac").css("opacity", "");
       break;
+  }
+});
+
+ipcRenderer.on("hidepin", (event, data) => {
+  if (data == "fullscreen") {
+    $("#top").css("display", "none");
+    $("#topmac").css("display", "none");
+  } else if (data == "notfullscreen") {
+    $("#top").css("display", "inline-block", "opacity", "");
+    $("#topmac").css("display", "inline-block", "opacity", "");
   }
 });

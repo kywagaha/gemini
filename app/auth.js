@@ -16,7 +16,6 @@ const REDIRECT_URI = `http://localhost:${PORT}/callback`;
 console.log('starting express')
 var server = express.listen(PORT, 'localhost');
 
-//main.test();
 module.exports = {
   getAuthUrl: function() {
 		restart_express();
@@ -142,5 +141,3 @@ function close_express() {
     server.close();
   }
 }
-  
-// Token refresh function
