@@ -77,6 +77,9 @@ var track = function () {
   }, changeMs);
 };
 
+// A map to remember in
+var keysdown = {};
+
 // keydown handler
 $(document).keydown(function (e) {
   if (keysdown[e.keyCode]) {
