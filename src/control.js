@@ -215,3 +215,13 @@ ipcRenderer.on("mac", (event, arg) => {
       break;
   }
 });
+
+ipcRenderer.on("hidepin", (event, data) => {
+  if (data == "fullscreen") {
+    $("#top").css("display", "none");
+    $("#topmac").css("display", "none");
+  } else if (data == "notfullscreen") {
+    $("#top").css("display", "inline-block", "opacity", "");
+    $("#topmac").css("display", "inline-block", "opacity", "");
+  }
+});

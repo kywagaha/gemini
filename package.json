@@ -11,19 +11,19 @@
   "author": "Gabe Haarberg <homerunhit3@hotmail.com> and Kyle Awayan <kyle@awayan.com>",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^10.1.1",
+    "electron": "^10.1.2",
     "electron-builder": "^22.8.0"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.14.0",
-    "dotenv": "^8.2.0",
+    "crypto": "^1.0.1",
+    "electron-settings": "^4.0.2",
     "electron-updater": "^4.3.4",
     "electron-window-state": "^5.0.3",
     "express": "^4.17.1",
     "jquery": "^3.5.1",
     "node-fetch": "^2.6.1",
-    "spotify-web-api-node": "^4.0.0",
-    "update-electron-app": "^1.5.0"
+    "spotify-web-api-node": "^4.0.0"
   },
   "build": {
     "appId": "com.electron.gemini",

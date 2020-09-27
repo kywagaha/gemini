@@ -1,9 +1,3 @@
-var mySong;
-var myArtist;
-var myAlbum;
-var myBg;
-var myRepeat;
-var data;
 var init = true;
 var isSpecial = false;
 
