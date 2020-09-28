@@ -1,30 +1,8 @@
 var init = true;
 var isSpecial = false;
+var nothing_init = true;
 
 const update_ms = 1000;
-const nothing_playing_json = {
-  body: {
-    is_playing: false,
-    item: {
-      name: "Nothing playing",
-      id: null,
-      artists: {
-        0: {
-          name: "",
-          id: null,
-        },
-      },
-      album: {
-        id: null,
-        images: {
-          0: {
-            url: "",
-          },
-        },
-      },
-    },
-  },
-};
 window.playing.init();
 
 // Initial setup
@@ -111,10 +89,7 @@ ipcRenderer.on("init-playing-reply", (event, data) => {
       }
       break;
     case 204:
-      data = nothing_playing_json;
-      window.doesSong.haveVideo(data.body.item.uri);
-      setSongArtist(data.body.item.name, data.body.item.artists[0].name);
-      fadeIn();
+      set_nothing_playing();
       setInterval(update, update_ms);
       break;
     default:
@@ -130,8 +105,10 @@ function update() {
 }
 
 ipcRenderer.on("update-playing-reply", (event, data) => {
+  console.log(data.statusCode)
   switch (data.statusCode) {
     case 200:
+      nothing_init = true;
       switch (data.body.item.is_local) {
         case false:
           switch (data.body.currently_playing_type) {
@@ -149,7 +126,7 @@ ipcRenderer.on("update-playing-reply", (event, data) => {
       }
       break;
     case 204:
-      show_data(nothing_playing_json);
+      set_nothing_playing();
       break;
   }
 });
@@ -325,6 +302,19 @@ function set_podcast(data) {
   setBackground();
   fadeIn();
   set_toggle(data.body.is_playing);
+}
+
+function set_nothing_playing() {
+  if (nothing_init) {
+    fadeOutAlbum();
+    fadeOut();
+    setSongArtist('Nothing playing', '');
+    mySong = '';
+    myAlbum = '';
+    myBg = '';
+    myArtist = '';
+    nothing_init = false;
+  }
 }
 
 function setBackground() {
