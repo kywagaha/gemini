@@ -105,7 +105,6 @@ function update() {
 }
 
 ipcRenderer.on("update-playing-reply", (event, data) => {
-  console.log(data.statusCode)
   switch (data.statusCode) {
     case 200:
       nothing_init = true;
