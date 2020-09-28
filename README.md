@@ -13,11 +13,7 @@ Aesthetic now playing screen for Spotify
 # Setup
 `yarn start` or `npm start`.
 
-This uses [Gemini-Authorization](https://github.com/Gabe-H/Gemini-Authorization) for Spotify authentication by default. If you would like to use your own client ID and secret, you can do it locally by creating a file named `.env`, and set the client parameters as
-```
-CLIENT_ID=123456
-CLIENT_SECRET=abcdefg
-```
+If you would like to use your own client credentials, you can fill in your Client ID in `constants.js`. Gemini v4 ID is set by default.
 
 # Usage
 While a track is playing, Gemini will update to show the current song and artist. 
@@ -33,10 +29,6 @@ Should you need to sign in again, pressing `Ctrl+S` will take you back to that s
 
 # Building
 `yarn dist`
-
-Insert your client ID and secret in `main.js`, replacing the `process.env` variables. Delete the `.env` file as it will not work in production.
-
-Note that your client ID and secret will be exposed if someone looks in to the compiled source files, so it's best to just compile a version for yourself if you want to use your own client ID and secret.
 
 Refer to the `electron-builder` arguments for your specific operating system [here](https://www.electron.build/cli).
 
