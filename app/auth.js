@@ -128,14 +128,12 @@ function restart_express() {
 	if (!server) {
 		console.log('restarting express')
 		server.listen(PORT, 'localhost');
-	} else {
-		server.listen(PORT, 'localhost');
 	}
 }
 
 function close_express() {
   if (server) {
-		console.log('closing express')
+	console.log('closing express')
     server.close();
   }
 }
