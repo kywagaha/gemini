@@ -183,7 +183,7 @@ ipcRenderer.on("focus", (event, arg) => {
   }
 });
 
-ipcRenderer.on("not", (event, arg) => {
+ipcRenderer.on("is-top", (event, arg) => {
   switch (arg) {
     case true:
       $("#top").css("opacity", "100%");
@@ -205,7 +205,7 @@ ipcRenderer.on("is_shuffle", (event, arg) => {
   }
 });
 
-ipcRenderer.on("mac", (event, arg) => {
+ipcRenderer.on("is-top-mac", (event, arg) => {
   switch (arg) {
     case true:
       $("#topmac").css("opacity", "100%");

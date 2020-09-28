@@ -60,7 +60,6 @@ module.exports = {
 				spotifyApi.setAccessToken(json.access_token);
 				spotifyApi.setRefreshToken(json.refresh_token);
 				settings.setSync({
-					access_token: json.access_token,
 					refresh_token: json.refresh_token
 				})
 				close_express();
@@ -85,7 +84,6 @@ module.exports = {
 				spotifyApi.setAccessToken(json.access_token);
 				spotifyApi.setRefreshToken(json.refresh_token);
 				settings.setSync({
-					access_token: json.access_token,
 					refresh_token: json.refresh_token
 				})
 			}
@@ -137,7 +135,7 @@ function restart_express() {
 
 function close_express() {
   if (server) {
-		console.log('closing server')
+		console.log('closing express')
     server.close();
   }
 }

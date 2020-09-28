@@ -1,25 +1,40 @@
 const { ipcMain } = require("electron");
 const fetch = require("node-fetch");
 
-let url =
-  "https://raw.githubusercontent.com/Gabe-H/Gemini-Media/master/videos.json";
-var myJSON;
-
-let settings = { method: "Get" };
+let url = "https://raw.githubusercontent.com/Gabe-H/Gemini-Media/master/videos.json";
+songLength = 0;
 function initJSON() {
-  fetch(url, settings)
+  fetch(url)
+  .then((res) => res.json())
+  .then((json) => {
+    console.log('Got json from', url)
+    myJSON = json["ids"];
+    songLength = Object.keys(myJSON).length || 0;
+  })
+  .catch((error) => {
+    console.log(error);
+    console.log('Couldn\'t get videos JSON! Trying again... \n')
+
+    fetch(url)
     .then((res) => res.json())
     .then((json) => {
+      console.log('Got json from', url)
       myJSON = json["ids"];
+      songLength = Object.keys(myJSON).length || 0;
+    })
+    .catch((error) => {
+      console.log('Retry failed!');
+      console.log(error);
     });
-}
+  });
+};
 initJSON();
 setInterval(initJSON, 3600000);
 
 ipcMain.on("isvideo", (event, arg) => {
   console.log(arg)
   var isSpecial = false;
-  for (i = 0; i < Object.keys(myJSON).length; i++) {
+  for (i = 0; i < songLength; i++) {
     if (myJSON[i].id == arg) {
       event.reply("isvideo", myJSON[i]);
       isSpecial = true;

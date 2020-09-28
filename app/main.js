@@ -209,16 +209,12 @@ ipcMain.on("buttons", (event, arg) => {
       if (!win.isFullScreen()) {
         win.webContents.send("hidepin", "fullscreen");
         win.setFullScreen(true);
-        event.reply("pin", false);
-        event.reply("pin-mac", false);
         win.setAlwaysOnTop(false);
         event.reply("not", false);
         event.reply("mac", false);
       } else {
         win.webContents.send("hidepin", "notfullscreen");
         win.setFullScreen(false);
-        event.reply("pin", true);
-        event.reply("pin-mac", true);
       }
       break;
 
@@ -229,20 +225,20 @@ ipcMain.on("buttons", (event, arg) => {
     case "top":
       if (!win.isAlwaysOnTop()) {
         win.setAlwaysOnTop(true);
-        event.reply("not", true);
+        event.reply("is-top", true);
       } else {
         win.setAlwaysOnTop(false);
-        event.reply("not", false);
+        event.reply("is-top", false);
       }
       break;
 
     case "topmac":
       if (!win.isAlwaysOnTop()) {
         win.setAlwaysOnTop(true);
-        event.reply("mac", true);
+        event.reply("is-top-mac", true);
       } else {
         win.setAlwaysOnTop(false);
-        event.reply("mac", false);
+        event.reply("is-top-mac", false);
       }
       break;
 
