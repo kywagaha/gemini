@@ -1,7 +1,7 @@
 {
   "name": "gemini",
   "version": "4.4.0",
-  "description": "A dope, easy-on-the-eyes, currently-playing viewer for Spotify",
+  "description": "A dope, easy-on-the-eyes, currently-playing viewer for Spotify.",
   "main": "./app/main.js",
   "scripts": {
     "start": "electron .",
