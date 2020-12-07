@@ -29,7 +29,16 @@ var cycleRepeat = function () {
     hasToggled = false;
   }, 1000);
   window.controls.cycleRepeat(myRepeat);
-}
+};
+
+function setVolume(val) {
+  hasToggled = true;
+  clearInterval(resetTime);
+  var resetTime = setTimeout(() => {
+    hasToggled = false;
+  }, 1000);
+  window.controls.setVolume(val);
+};
 
 ipcRenderer.on("toggle-play-reply", (event, data) => {
   var isPlaying = data.body.is_playing;
@@ -174,6 +183,15 @@ $("#topmac").click(() => {
   if (firing) return;
   window.actions.topmac();
 });
+
+// $("#volume-knob").on('input', function () {
+//   var newVol = $(this).val()
+//   setVolume(newVol)
+// });
+document.getElementById("volume-knob").addEventListener("input", () => {
+  setVolume($("#volume-knob").val())
+})
+
 
 ipcRenderer.on("focus", (event, arg) => {
   if (arg == "yes") {

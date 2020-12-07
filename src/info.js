@@ -1,6 +1,8 @@
 var init = true;
 var isSpecial = false;
 var nothing_init = true;
+var oldProgress = 0;
+var isPlaying = true;
 
 const update_ms = 1000;
 window.playing.init();
@@ -28,7 +30,8 @@ ipcRenderer.on("init-playing-reply", (event, data) => {
                   "song"
                 ).innerHTML = data.body.item.name.split(/[\[(-]/)[0];
               }; // Special title cases
-
+              var progress = `${(data.body.progress_ms / data.body.item.duration_ms) * -100 + 100}`;
+              $("#progressbar").animate({'right': `${progress}%`}, 400, 'linear');
               // Initialize background var
               myBg = `<img src="${data.body.item.album.images[0].url}">`;
               // Check if song uri has a video (defined in gemini-media repo)
@@ -49,6 +52,7 @@ ipcRenderer.on("init-playing-reply", (event, data) => {
               set_toggle(data.body.is_playing);
               set_shuffle(data.body.shuffle_state);
               set_repeat(data.body.repeat_state);
+              set_volume(data.body.device.volume_percent);
                 // Start sending 1s updates to main.js
               setInterval(update, update_ms);
               break;
@@ -67,7 +71,10 @@ ipcRenderer.on("init-playing-reply", (event, data) => {
           var args = song;
           console.log(mySong); // Log song uri since it's not obtainable from Spotify app. For use with a special case
           window.doesSong.haveVideo(mySong); // Check for special
-          
+
+          var progress = `${(data.body.progress_ms / data.body.item.duration_ms) * -100 + 100}`
+          $("#progressbar").animate({'right': `${progress}%`}, 400, 'linear');     
+               
           if (artist != '') {
             args = song+' '+artist;
           };
@@ -85,6 +92,7 @@ ipcRenderer.on("init-playing-reply", (event, data) => {
           set_toggle(data.body.is_playing);
           set_shuffle(data.body.shuffle_state);
           set_repeat(data.body.repeat_state);
+          set_volume(data.body.device.volume_percent);
           break;
       }
       break;
@@ -159,6 +167,14 @@ ipcRenderer.on("isvideo", (event, arg) => {
 });
 
 function show_data(data) {
+  isPlaying = true;
+  var progress = data.body.progress_ms / data.body.item.duration_ms * -100 + 100;
+  var difference = data.body.progress_ms - oldProgress;
+  if (difference > 1200 || difference < 800) {
+    $("#progressbar").animate({'right': `${progress}%`}, 175, 'linear');
+  } else {
+    $("#progressbar").animate({'right': `${progress}%`}, update_ms, 'linear');
+  }
   switch(data.body.item.is_local) {
     case false:
       if (myAlbum != data.body.item.album.id) {
@@ -175,7 +191,7 @@ function show_data(data) {
         for (i = 1; i < data.body.item.artists.length; i++) {
           showArtist += ", " + thisArtist[i].name;
         }
-        // i just learned truth tables in discrete mathematics. although there's no proposition (with my knowledge at least, we just started this topic lol), making the table and copying it to the code really helped me out and simplified things. thanks profressor stefano carpin
+
         if (isSpecial == false && sameAlbum == false) {
           fadeOutAlbum();
           window.doesSong.haveVideo(data.body.item.uri);
@@ -215,12 +231,6 @@ function show_data(data) {
         }, fadeTime);
         wasSpecial = isSpecial;
       }
-      if (!hasToggled) {
-        set_toggle(data.body.is_playing);
-        set_shuffle(data.body.shuffle_state);
-        set_repeat(data.body.repeat_state);
-        myRepeat = data.body.repeat_state;
-      }
       mySong = data.body.item.id;
       myArtist = data.body.item.artists[0].id;
       myAlbum = data.body.item.album.id;
@@ -249,50 +259,55 @@ function show_data(data) {
           fadeIn();
         }, fadeTime)
       }
-      set_toggle(data.body.is_playing);
-      set_shuffle(data.body.shuffle_state);
-      set_repeat(data.body.repeat_state);
-      myRepeat = data.body.repeat_state;
       break;
   }
-  
+  if (!hasToggled) {
+    set_toggle(data.body.is_playing);
+    set_shuffle(data.body.shuffle_state);
+    set_repeat(data.body.repeat_state);
+    set_volume(data.body.device.volume_percent);
+    myRepeat = data.body.repeat_state;
+  }
+  oldProgress = data.body.progress_ms
 }
 
 function set_toggle(data) {
   if (data) {
-    $("#toggle").removeClass().addClass("fa fa-pause");
+    if (!$("#toggle").hasClass("fa fa-pause"))
+      $("#toggle").removeClass().addClass("fa fa-pause");
   } else {
+    if (!$("#toggle").hasClass("fa fa-play"))
     $("#toggle").removeClass().addClass("fa fa-play");
   }
 }
 
 function set_shuffle(data) {
-  if (data) {
-    $("#shuffle").css("opacity", "100%");
-  } else {
+  if (data)
+    $("#shuffle").css("opacity", "100%")
+  else
     $("#shuffle").css("opacity", "");
-  }
 }
 
 function set_repeat(data) {
   myRepeat = data;
   switch(data) {
     case 'off':
-      $("#repeat").removeClass().addClass("fas fa-sync-alt");
       $("#repeat").css("opacity", "");
       $("#repeat").html("");
       break;
     case 'context':
-      $("#repeat").removeClass().addClass("fas fa-sync-alt");
       $("#repeat").css("opacity", "100%");
       $("#repeat").html("");
       break;
     case 'track':
-      $("#repeat").removeClass().addClass("fas fa-sync-alt");
       $("#repeat").css("opacity", "100%");
       $("#repeat").html(`<span class="repeat">1</span>`);
       break;
   };
+}
+
+function set_volume(data) {
+  $("#volume-knob").val(data)
 }
 
 function set_podcast(data) {
@@ -312,6 +327,7 @@ function set_nothing_playing() {
     myAlbum = '';
     myBg = '';
     myArtist = '';
+    isPlaying = false;
     nothing_init = false;
   }
 }

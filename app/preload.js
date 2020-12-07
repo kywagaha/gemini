@@ -20,7 +20,8 @@ contextBridge.exposeInMainWorld("actions", {
 contextBridge.exposeInMainWorld("controls", {
   togglePlay: () => ipcRenderer.send("toggle-play", ""),
   toggleShuffle: () => ipcRenderer.send("toggle-shuffle", ""),
-  cycleRepeat: (status) => ipcRenderer.send("cycle-repeat", status)
+  cycleRepeat: (status) => ipcRenderer.send("cycle-repeat", status),
+  setVolume: (val) => ipcRenderer.send("set-volume", val)
 });
 
 contextBridge.exposeInMainWorld("check", {

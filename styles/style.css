@@ -57,17 +57,46 @@ header {
   left: 40px;
 }
 
-i {
+#media-controls i {
   opacity: 50%;
   transition: 0.1s;
 }
 
-i:hover {
+#media-controls i:hover {
   opacity: 77%;
 }
 
-i:active {
+#media-controls i:active {
   font-size: 95%;
+}
+
+header i {
+  opacity: 50%;
+  transition: 0.1s;
+}
+
+header i:hover {
+  opacity: 77%;
+}
+
+header i:active {
+  font-size: 95%;
+}
+
+#volume-knob {
+  opacity: 50%;
+}
+
+#volume-knob:hover {
+  opacity: 70%;
+}
+
+#volume-knob:active {
+  opacity: 85%;
+}
+
+#volume-knob:focus {
+  outline-width: 0;
 }
 
 footer {
@@ -179,14 +208,15 @@ h2 {
   height: 100%;
 }
 
-.slider {
-  position: relative;
-  -webkit-appearance: slider-vertical;
-  width: 3px;
-  height: 100px;
-  bottom: 115px;
-  right: 10px;
-  z-index: 1;
+#progressbar {
+  background-color: white;
+  border-radius: 2px 0 0 0;
+  opacity: 75%;
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  bottom: 0px;
+  right: 100%;
 }
 
 .repeat {

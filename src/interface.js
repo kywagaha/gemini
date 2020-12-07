@@ -51,19 +51,30 @@ function fadeInAlbum() {
   }, 150);
 }
 
+function toggleProgress() {
+  if ($("#progressbar").css('display') == 'none') {
+    $("#progressbar").show();
+  } else {
+    $("#progressbar").hide();
+  }
+}
+
 function hideHeader() {
   $("header").fadeOut(fadeTime / 2);
   $("footer").fadeOut(fadeTime / 2);
 }
 function showHeader() {
   $("header").fadeIn(fadeTime / 2);
-  $("footer").fadeIn(fadeTime / 2);
+  if (isPlaying)
+    $("footer").fadeIn(fadeTime / 2);
 }
 // Ctrl+s function for re-signin
 function doc_keyUp(e) {
   if (e.ctrlKey && e.keyCode == 83) {
     window.reset.signin();
-  } else if (e.ctrlKey && e.keyCode == 68) {
+  } else if (e.ctrlKey && e.keyCode == 65)
+      toggleProgress()
+    else if (e.ctrlKey && e.keyCode == 68) {
     window.actions.square()
   } else {
     switch (e.keyCode) {

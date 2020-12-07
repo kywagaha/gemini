@@ -20,8 +20,8 @@ function createWindow() {
     'y': mainWindowState.y,
     'width': mainWindowState.width,
     'height': mainWindowState.height,
-    minWidth: 200,
-    minHeight: 200,
+    minWidth: 250,
+    minHeight: 250,
     title: "Gemini",
     backgroundColor: "#000000",
     webPreferences: {
@@ -30,7 +30,8 @@ function createWindow() {
       contextIsolation: true,
       preload: (__dirname + "/preload.js"),
     },
-    frame: false
+    frame: false,
+    show: false
   });
 
   win.on("blur", () => {
@@ -40,6 +41,10 @@ function createWindow() {
   win.on("focus", () => {
     win.webContents.send("focus", "yes");
   });
+
+  win.once('ready-to-show', () => {
+    win.show()
+  })
 
   // and load the index.html of the app.
   win.menuBarVisible = false;
@@ -136,7 +141,20 @@ ipcMain.on("cycle-repeat", (event, arg) => {
           event.reply("repeat-reply", 'off')
           break;
       };
-})
+});
+
+// Send new volume percent to API
+ipcMain.on("set-volume", (event, arg) => {
+  spotifyApi.setVolume(arg)
+  .then(function() {}, function (err) {
+    if (err.statusCode == 403) {
+      console.log('device does not allow volume change')
+    } else {
+      catch_error(err)
+    }
+  })
+});
+
 // Handles controlling requests (play, pause, skip, previous)
 ipcMain.on("control", (event, arg) => {
   switch (arg) {
