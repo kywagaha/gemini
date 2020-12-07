@@ -323,6 +323,7 @@ function set_nothing_playing() {
     fadeOutAlbum();
     fadeOut();
     setSongArtist('Nothing playing', '');
+    $("#progressbar").animate({'right': `100%`}, 175, 'linear');
     mySong = '';
     myAlbum = '';
     myBg = '';

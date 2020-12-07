@@ -18,7 +18,7 @@ var server = express.listen(PORT, 'localhost');
 
 module.exports = {
   getAuthUrl: function() {
-		restart_express();
+	server.listen(PORT, 'localhost');
     codeVerifier = base64URLEncode(crypto.randomBytes(32));
     codeState = base64URLEncode(crypto.randomBytes(32));
     codeChallenge = base64URLEncode(sha256(codeVerifier));
@@ -59,9 +59,7 @@ module.exports = {
 				console.log('using previous refresh token')
 				spotifyApi.setAccessToken(json.access_token);
 				spotifyApi.setRefreshToken(json.refresh_token);
-				settings.setSync({
-					refresh_token: json.refresh_token
-				})
+				constants.saveRToken(json.refresh_token);
 				close_express();
 				main.startApp()
 			}
@@ -83,9 +81,7 @@ module.exports = {
 				console.log('refreshed tokens!')
 				spotifyApi.setAccessToken(json.access_token);
 				spotifyApi.setRefreshToken(json.refresh_token);
-				settings.setSync({
-					refresh_token: json.refresh_token
-				})
+				constants.saveRToken(json.refresh_token);
 			}
 		})
 	},
@@ -112,10 +108,7 @@ express.get("/callback", function (req, res) {
 			} else {
 				spotifyApi.setAccessToken(json.access_token);
 				spotifyApi.setRefreshToken(json.refresh_token);
-				settings.setSync({
-					access_token: json.access_token,
-					refresh_token: json.refresh_token
-				})
+				constants.saveRToken(json.refresh_token);
 				main.startApp();
 			}
 		})
@@ -124,16 +117,7 @@ express.get("/callback", function (req, res) {
 	}
 });
 
-function restart_express() {
-	if (!server) {
-		console.log('restarting express')
-		server.listen(PORT, 'localhost');
-	}
-}
-
 function close_express() {
-  if (server) {
 	console.log('closing express')
     server.close();
-  }
 }

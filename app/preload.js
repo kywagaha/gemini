@@ -12,6 +12,7 @@ contextBridge.exposeInMainWorld("actions", {
   top: () => ipcRenderer.send("buttons", "top"),
   topmac: () => ipcRenderer.send("buttons", "topmac"),
   topmac: () => ipcRenderer.send("buttons", "topmac"),
+  initTop: () => ipcRenderer.send('init-pin', ''),
   
   square: () => ipcRenderer.send("set-square", ""),
   search: (args) => ipcRenderer.send("search", args)

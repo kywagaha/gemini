@@ -20,8 +20,8 @@ function createWindow() {
     'y': mainWindowState.y,
     'width': mainWindowState.width,
     'height': mainWindowState.height,
-    minWidth: 250,
-    minHeight: 250,
+    minWidth: 200,
+    minHeight: 200,
     title: "Gemini",
     backgroundColor: "#000000",
     webPreferences: {
@@ -30,8 +30,7 @@ function createWindow() {
       contextIsolation: true,
       preload: (__dirname + "/preload.js"),
     },
-    frame: false,
-    show: false
+    frame: false
   });
 
   win.on("blur", () => {
@@ -42,11 +41,6 @@ function createWindow() {
     win.webContents.send("focus", "yes");
   });
 
-  win.once('ready-to-show', () => {
-    win.show()
-  })
-
-  // and load the index.html of the app.
   win.menuBarVisible = false;
   mainWindowState.manage(win);
 
@@ -54,6 +48,13 @@ function createWindow() {
     auth.tryRefresh(settings.getSync('refresh_token'))
   } else {
     startAuth()
+  }
+
+  if (settings.hasSync('on_top')) {
+    var topState = settings.getSync('on_top');
+    win.setAlwaysOnTop(topState);
+  } else {
+    constants.saveIsTop(false);
   }
 }
 
@@ -67,6 +68,11 @@ function startAuth() {
 function refresh() {
   auth.refresh(spotifyApi.getRefreshToken())
 }
+// Initial pinstate
+ipcMain.on('init-pin', (event, arg) => {
+  event.reply('is-top', win.isAlwaysOnTop())
+  event.reply('is-top-mac', win.isAlwaysOnTop())
+})
 
 // Initial /currently-playing request
 ipcMain.on("init-playing", (event, arg) => {
@@ -75,7 +81,7 @@ ipcMain.on("init-playing", (event, arg) => {
       event.reply("init-playing-reply", data);
     },
     function (err) {
-      refresh();
+      catch_error(err);
       event.reply("init-playing-reply", err);
     }
   );
@@ -87,7 +93,7 @@ ipcMain.on("update-playing", (event, arg) => {
       event.reply("update-playing-reply", data);
     },
     function (err) {
-      refresh();
+      catch_error(err);
       event.reply("update-playing-reply", err);
     }
   );
@@ -99,7 +105,7 @@ ipcMain.on("toggle-play", (event, arg) => {
       event.reply("toggle-play-reply", data);
     },
     function (err) {
-      refresh()
+      catch_error(err);
       event.reply("toggle-play-reply", err);
     }
   );
@@ -111,7 +117,7 @@ ipcMain.on("toggle-shuffle", (event, arg) => {
       event.reply("toggle-shuffle-reply", data);
     },
     function (err) {
-      refresh()
+      catch_error(err);
       event.reply("toggle-shuffle-reply", err);
     }
   )
@@ -121,28 +127,27 @@ ipcMain.on("cycle-repeat", (event, arg) => {
       switch (arg) {
         case 'off':
           spotifyApi.setRepeat({state: 'context'})
-          .catch((err) => {
+          .then(()=>{},(err) => {
             catch_error(err)
           })
           event.reply("repeat-reply", 'context')
           break;
         case 'context':
           spotifyApi.setRepeat({state: 'track'})
-          .catch((err) => {
+          .then(()=>{},(err) => {
             catch_error(err)
           })
           event.reply("repeat-reply", 'track')
           break;
         case 'track':
           spotifyApi.setRepeat({state: 'off'})
-          .catch((err) => {
+          .then(()=>{},(err) => {
             catch_error(err)
           })
           event.reply("repeat-reply", 'off')
           break;
       };
-});
-
+})
 // Send new volume percent to API
 ipcMain.on("set-volume", (event, arg) => {
   spotifyApi.setVolume(arg)
@@ -153,33 +158,39 @@ ipcMain.on("set-volume", (event, arg) => {
       catch_error(err)
     }
   })
-});
-
+})
 // Handles controlling requests (play, pause, skip, previous)
 ipcMain.on("control", (event, arg) => {
   switch (arg) {
     case "play":
-      spotifyApi.play().catch((err) => {
-        catch_error(err);
-      });
+      spotifyApi.play()
+      .then(()=>{},(err) => {
+        catch_error(err)
+      })
       break;
     case "pause":
-      spotifyApi.pause().catch((err) => {
-        catch_error(err);
-      });
+      spotifyApi.pause()
+      .then(()=>{},(err) => {
+        catch_error(err)
+      })
       break;
     case "forward":
-      spotifyApi.skipToNext().catch((err) => {
-        catch_error(err);
-      });
+      spotifyApi.skipToNext()
+      .then(()=>{},(err) => {
+        catch_error(err)
+      })
       break;
     case "backward":
-      spotifyApi.seek(0).catch((err) => {
-        catch_error(err);
-      });
-      spotifyApi.skipToPrevious().catch((err) => {
-        catch_error(err);
-      });
+      spotifyApi.seek(0)
+      .then(()=>{},(err) => {
+        catch_error(err)
+      })
+      spotifyApi.skipToPrevious()
+      .then(()=>{},(err) => {
+        if (err.statusCode != 403) {
+          catch_error(err)
+        }
+      })
       break;
     case "shuffle":
       spotifyApi.getMyCurrentPlaybackState()
@@ -243,9 +254,11 @@ ipcMain.on("buttons", (event, arg) => {
     case "top":
       if (!win.isAlwaysOnTop()) {
         win.setAlwaysOnTop(true);
+        constants.saveIsTop(true);
         event.reply("is-top", true);
       } else {
         win.setAlwaysOnTop(false);
+        constants.saveIsTop(false);
         event.reply("is-top", false);
       }
       break;
@@ -253,9 +266,11 @@ ipcMain.on("buttons", (event, arg) => {
     case "topmac":
       if (!win.isAlwaysOnTop()) {
         win.setAlwaysOnTop(true);
+        constants.saveIsTop(true);
         event.reply("is-top-mac", true);
       } else {
         win.setAlwaysOnTop(false);
+        constants.saveIsTop(false);
         event.reply("is-top-mac", false);
       }
       break;
@@ -287,13 +302,14 @@ ipcMain.on("search", (event, args) => {
       event.reply("local-reply", '')	
     }	
   }, function (err) {	
-    console.log(err)	
-  }).catch((err) => catch_error(err))	
+    catch_error(err)	
+  })
 });
 
 function catch_error(error) {
-  console.error(error)
-  refresh()
+  console.error(error);
+  if (error.statusCode == 429)
+    auth.tryRefresh();
 }
 
 app.whenReady().then(createWindow);

@@ -1,4 +1,5 @@
 var changeMs = 200;
+window.actions.initTop();
 
 function control(type) {
   window.check.type(type);
