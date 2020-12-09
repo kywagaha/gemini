@@ -11,11 +11,11 @@ contextBridge.exposeInMainWorld("actions", {
   maximize: () => ipcRenderer.send("buttons", "maximize"),
   top: () => ipcRenderer.send("buttons", "top"),
   topmac: () => ipcRenderer.send("buttons", "topmac"),
-  topmac: () => ipcRenderer.send("buttons", "topmac"),
-  initTop: () => ipcRenderer.send('init-pin', ''),
   
   square: () => ipcRenderer.send("set-square", ""),
-  search: (args) => ipcRenderer.send("search", args)
+  search: (args) => ipcRenderer.send("search", args),
+  options: (arg) => ipcRenderer.send("options", arg),
+  getDevices: () => ipcRenderer.send("devices", "")
 });
 
 contextBridge.exposeInMainWorld("controls", {

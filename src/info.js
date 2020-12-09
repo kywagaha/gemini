@@ -5,7 +5,6 @@ var oldProgress = 0;
 var isPlaying = true;
 
 const update_ms = 1000;
-window.playing.init();
 
 // Initial setup
 ipcRenderer.on("init-playing-reply", (event, data) => {
@@ -360,3 +359,5 @@ window.addEventListener(
   },
   true
 );
+
+window.playing.init();

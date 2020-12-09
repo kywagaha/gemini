@@ -46,6 +46,10 @@ header {
   letter-spacing: normal;
 }
 
+i:hover {
+  cursor: pointer;
+}
+
 .titlebar-drag-region {
   display: block;
   position: absolute;
@@ -57,16 +61,29 @@ header {
   left: 40px;
 }
 
+i {
+  font-style: normal;
+}
+
 #media-controls i {
   opacity: 50%;
   transition: 0.1s;
 }
-
 #media-controls i:hover {
   opacity: 77%;
 }
-
 #media-controls i:active {
+  font-size: 95%;
+}
+
+#option-button {
+  opacity: 50%;
+  transition: 0.1s;
+}
+#option-button:hover {
+  opacity: 77%;
+}
+#option-button:active {
   font-size: 95%;
 }
 
@@ -74,11 +91,9 @@ header i {
   opacity: 50%;
   transition: 0.1s;
 }
-
 header i:hover {
   opacity: 77%;
 }
-
 header i:active {
   font-size: 95%;
 }
@@ -86,17 +101,45 @@ header i:active {
 #volume-knob {
   opacity: 50%;
 }
-
 #volume-knob:hover {
   opacity: 70%;
 }
-
 #volume-knob:active {
   opacity: 85%;
 }
-
 #volume-knob:focus {
   outline-width: 0;
+}
+
+#options {
+  position: absolute;
+  width: 140px;
+  background-color: rgba(0,0,0, 0.75);
+  bottom: 25px;
+  text-align: left;
+  margin: 15px;
+  border-radius: 5px;
+  font-family: "FormaDJRDisplay";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  letter-spacing: 0px;
+  display: none;
+}
+#options ul {
+  margin-left: 10px;
+  padding: 5px;
+  visibility: hidden;
+  line-height: 25px;
+}
+#options i {
+  visibility: visible;
+}
+#options i:hover {
+  opacity: 80%;
+}
+#options i:active {
+  opacity: 70%;
 }
 
 footer {

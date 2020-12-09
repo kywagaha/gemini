@@ -20,8 +20,8 @@ function createWindow() {
     'y': mainWindowState.y,
     'width': mainWindowState.width,
     'height': mainWindowState.height,
-    minWidth: 200,
-    minHeight: 200,
+    minWidth: 250,
+    minHeight: 250,
     title: "Gemini",
     backgroundColor: "#000000",
     webPreferences: {
@@ -43,6 +43,7 @@ function createWindow() {
 
   win.menuBarVisible = false;
   mainWindowState.manage(win);
+  win.webContents.openDevTools({ mode: 'undocked' })
 
   if (settings.hasSync('refresh_token')) {
     auth.tryRefresh(settings.getSync('refresh_token'))
@@ -70,12 +71,12 @@ function refresh() {
 }
 // Initial pinstate
 ipcMain.on('init-pin', (event, arg) => {
-  event.reply('is-top', win.isAlwaysOnTop())
-  event.reply('is-top-mac', win.isAlwaysOnTop())
 })
 
 // Initial /currently-playing request
 ipcMain.on("init-playing", (event, arg) => {
+  event.reply('is-top', win.isAlwaysOnTop())
+  event.reply('is-top-mac', win.isAlwaysOnTop())
   spotifyApi.getMyCurrentPlaybackState().then(
     function (data) {
       event.reply("init-playing-reply", data);
@@ -150,15 +151,23 @@ ipcMain.on("cycle-repeat", (event, arg) => {
 })
 // Send new volume percent to API
 ipcMain.on("set-volume", (event, arg) => {
-  spotifyApi.setVolume(arg)
+    setVol(event, arg);
+});
+
+function setVol(event, volume) {
+  console.log(`volume ${volume}`)
+  spotifyApi.setVolume(volume)
   .then(function() {}, function (err) {
     if (err.statusCode == 403) {
       console.log('device does not allow volume change')
+    } else if (err.statusCode == 429) {
+      event.reply("volume-reply", true)
     } else {
       catch_error(err)
     }
   })
-})
+}
+
 // Handles controlling requests (play, pause, skip, previous)
 ipcMain.on("control", (event, arg) => {
   switch (arg) {
@@ -306,9 +315,19 @@ ipcMain.on("search", (event, args) => {
   })
 });
 
+ipcMain.on("devices", (event, args) => {
+  spotifyApi.getMyDevices().then(
+    function(data) {
+      event.reply("devices-reply", data);
+    }, function (err) {
+      catch_error(err)
+    }
+  )
+});
+
 function catch_error(error) {
   console.error(error);
-  if (error.statusCode == 429)
+  if (error.statusCode != 429 || error.statusCode != 502)
     auth.tryRefresh();
 }
 

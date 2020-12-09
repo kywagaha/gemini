@@ -1,5 +1,4 @@
 var changeMs = 200;
-window.actions.initTop();
 
 function control(type) {
   window.check.type(type);
@@ -68,6 +67,14 @@ ipcRenderer.on("repeat-reply", (event, arg)  => {
   myRepeat = arg;
   console.log(myRepeat)
   set_repeat(myRepeat);
+})
+
+ipcRenderer.on("volume-reply", (event, arg) => {
+  console.warn("slow down!")
+})
+
+ipcRenderer.on("devices-reply", (event, arg) => {
+  console.log(arg)
 })
 
 // Skip to next song in queue
@@ -185,14 +192,10 @@ $("#topmac").click(() => {
   window.actions.topmac();
 });
 
-// $("#volume-knob").on('input', function () {
-//   var newVol = $(this).val()
-//   setVolume(newVol)
-// });
+
 document.getElementById("volume-knob").addEventListener("input", () => {
   setVolume($("#volume-knob").val())
 })
-
 
 ipcRenderer.on("focus", (event, arg) => {
   if (arg == "yes") {
