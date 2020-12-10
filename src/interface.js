@@ -51,18 +51,6 @@ function fadeInAlbum() {
   }, 150);
 }
 
-function fadeInOptions() {
-  $("#options").show();
-}
-
-function fadeOutOptions() {
-  $("#options").addClass("hideAnimation");
-  setTimeout(() => {
-    $("#options").hide();
-    $("#options").removeClass("hideAnimation");
-  }, 500);
-}
-
 function toggleProgress() {
   if ($("#progressbar").css('display') == 'none') {
     $("#progressbar").show();

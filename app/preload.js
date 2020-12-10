@@ -15,7 +15,8 @@ contextBridge.exposeInMainWorld("actions", {
   square: () => ipcRenderer.send("set-square", ""),
   search: (args) => ipcRenderer.send("search", args),
   options: (arg) => ipcRenderer.send("options", arg),
-  getDevices: () => ipcRenderer.send("devices", "")
+  getDevices: () => ipcRenderer.send("devices", ""),
+  transferPlayback: (id) => ipcRenderer.send("transfer", id)
 });
 
 contextBridge.exposeInMainWorld("controls", {

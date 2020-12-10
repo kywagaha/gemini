@@ -73,10 +73,6 @@ ipcRenderer.on("volume-reply", (event, arg) => {
   console.warn("slow down!")
 })
 
-ipcRenderer.on("devices-reply", (event, arg) => {
-  console.log(arg)
-})
-
 // Skip to next song in queue
 var seek = function () {
   console.log("Skipping forward");

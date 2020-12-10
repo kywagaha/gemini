@@ -324,10 +324,39 @@ ipcMain.on("devices", (event, args) => {
   )
 });
 
+ipcMain.on("transfer", (event, arg) => {
+  console.log(`transferring playback to device with id: "${arg}"`)
+  spotifyApi.transferMyPlayback({
+    deviceIds:[arg],
+    play: true
+  }).then(function (data) {},
+    function (err) {
+    catch_error(err);
+  })
+})
+
+
 function catch_error(error) {
   console.error(error);
-  if (error.statusCode != 429 || error.statusCode != 502)
-    auth.tryRefresh();
+  switch (error.statusCode) {
+    case 400:
+      break;
+    case 403:
+      break;
+    case 404:
+      break;
+    case 429:
+      break;
+    case 500:
+      break;
+    case 502:
+      break;
+    case 503:
+      break;
+    default:
+      auth.tryRefresh();
+      break;
+  }
 }
 
 app.whenReady().then(createWindow);
