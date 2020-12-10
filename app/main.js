@@ -43,7 +43,7 @@ function createWindow() {
 
   win.menuBarVisible = false;
   mainWindowState.manage(win);
-  win.webContents.openDevTools({ mode: 'undocked' })
+  // win.webContents.openDevTools({ mode: 'undocked' })
 
   if (settings.hasSync('refresh_token')) {
     auth.tryRefresh(settings.getSync('refresh_token'))
@@ -155,7 +155,6 @@ ipcMain.on("set-volume", (event, arg) => {
 });
 
 function setVol(event, volume) {
-  console.log(`volume ${volume}`)
   spotifyApi.setVolume(volume)
   .then(function() {}, function (err) {
     if (err.statusCode == 403) {

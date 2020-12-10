@@ -103,6 +103,7 @@ header i:active {
 }
 #volume-knob:hover {
   opacity: 70%;
+  cursor: pointer;
 }
 #volume-knob:active {
   opacity: 85%;
