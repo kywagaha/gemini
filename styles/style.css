@@ -18,6 +18,16 @@
   font-weight: normal;
 }
 
+@font-face {
+  src: url('fonts/FormaDJRText-Regular.eot'); /* IE < 9 */
+  src: url('fonts/FormaDJRText-Regular.eot?#') format("embedded-opentype"), /* IE 9 */
+       url('fonts/FormaDJRText-Regular.woff2') format("woff2"),
+       url('fonts/FormaDJRText-Regular.woff') format("woff");
+  font-family: 'FormaDJRText';
+  font-style: normal;
+  font-weight: normal;
+  }
+
 body {
   background-color: black;
   -webkit-user-select: none;
@@ -114,23 +124,27 @@ header i:active {
 #options {
   position: absolute;
   width: 140px;
-  background-color: rgba(0,0,0, 0.75);
-  bottom: 25px;
+  background-color: rgba(0,0,0, 0.5);
+  bottom: 0px;
   text-align: left;
-  margin: 15px;
-  border-radius: 5px;
-  font-family: "FormaDJRDisplay";
+  font-family: "FormaDJRText";
   font-style: normal;
   font-weight: normal;
   font-size: 18px;
   letter-spacing: 0px;
   display: none;
+  z-index: -1;
+  padding-bottom: 20px;
+  height: 120px;
+  animation: slideInOptions 0.5s cubic-bezier(.01,.71,.22,.99);
+  backdrop-filter: blur(10px) saturate(125%);
 }
 #options ul {
   margin-left: 10px;
   padding: 5px;
   visibility: hidden;
   line-height: 25px;
+  font-size: 15px;
 }
 #options i {
   visibility: visible;
@@ -141,6 +155,21 @@ header i:active {
 #options i:active {
   opacity: 70%;
 }
+
+@keyframes slideInOptions {
+  0% {bottom: -140px}
+  100% {bottom: 0px}
+}
+
+.hideAnimation {
+  animation: slideOutOptions 0.5s cubic-bezier(.01,.71,.22,.99) !important
+}
+
+@keyframes slideOutOptions {
+  0% {bottom: 0px}
+  100% {bottom: -140px}
+}
+
 
 footer {
   position: fixed;

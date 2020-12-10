@@ -1,5 +1,5 @@
 var fadeTime = 500;
-var timer = 2500;
+var timer = 99999999; //2500
 
 if (navigator.appVersion.indexOf("Mac") > -1) {
   $(".mac").show();
@@ -52,11 +52,15 @@ function fadeInAlbum() {
 }
 
 function fadeInOptions() {
-  $('#options').fadeIn();
+  $("#options").show();
 }
 
 function fadeOutOptions() {
-  $('#options').fadeOut();
+  $("#options").addClass("hideAnimation");
+  setTimeout(() => {
+    $("#options").hide();
+    $("#options").removeClass("hideAnimation");
+  }, 500);
 }
 
 function toggleProgress() {
