@@ -34,11 +34,11 @@ function createWindow() {
   });
 
   win.on("blur", () => {
-    win.webContents.send("focus", "no");
+    win.webContents.send("focus", false);
   });
 
   win.on("focus", () => {
-    win.webContents.send("focus", "yes");
+    win.webContents.send("focus", true);
   });
 
   win.menuBarVisible = false;

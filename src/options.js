@@ -1,5 +1,7 @@
 var isOptionsVisible = false;
 var myDevices = null;
+var originalOptionHeight = parseInt($("#options").css("height"));
+var newOptionHeight = originalOptionHeight;
 
 $("#option-button").click(() => {
   if (isOptionsVisible == false) {
@@ -19,7 +21,13 @@ $("#opt-prog").click(() => {
 })
 
 $("#opt-device").click(() => {
-  $("#devices-wrapper").toggle()
+  if ($("#devices-wrapper").css("display") == "none") {
+    $("#devices-wrapper").show();
+    $("#options").css("height", `${newOptionHeight}px`);
+  } else {
+    $("#devices-wrapper").hide();
+    $("#options").css("height", `${originalOptionHeight}px`);
+  }
 })
 
 $("body").click(() => {
@@ -35,6 +43,7 @@ function fadeInOptions() {
 }
 
 function fadeOutOptions() {
+  $("#options").css("height", `${originalOptionHeight}px`);
   $("#options").addClass("hideAnimation");
   setTimeout(() => {
     $("#options").hide();
@@ -47,7 +56,9 @@ function fadeOutOptions() {
 ipcRenderer.on("devices-reply", (event, data) => {
   myDevices = data.body.devices;
   $("#devices").empty();
+  newOptionHeight = originalOptionHeight;
   for (var d=0; d < myDevices.length; d++) {
+    newOptionHeight += 25;
     dev = myDevices[d]
     if (dev.is_active) {
       console.log(`${dev.name} is active`)
@@ -55,6 +66,12 @@ ipcRenderer.on("devices-reply", (event, data) => {
     $("#devices").append(`<li><i>${dev.name}</i></li>`);
   }
 })
+
+ipcRenderer.on("focus", (event, arg) => {
+  if (!arg) {
+    fadeOutOptions();
+  }
+});
 
 $("#devices").on("click", "i", function (event) {
   for (var i=0; i< myDevices.length; i++) {

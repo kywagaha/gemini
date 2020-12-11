@@ -1,5 +1,5 @@
 var fadeTime = 500;
-var timer = 99999999; //2500
+var timer = 2500; //2500
 
 if (navigator.appVersion.indexOf("Mac") > -1) {
   $(".mac").show();
@@ -62,6 +62,7 @@ function toggleProgress() {
 function hideHeader() {
   $("header").fadeOut(fadeTime / 2);
   $("footer").fadeOut(fadeTime / 2);
+  fadeOutOptions();
 }
 function showHeader() {
   $("header").fadeIn(fadeTime / 2);

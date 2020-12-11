@@ -194,7 +194,7 @@ document.getElementById("volume-knob").addEventListener("input", () => {
 })
 
 ipcRenderer.on("focus", (event, arg) => {
-  if (arg == "yes") {
+  if (arg) {
     $("#mac").addClass("focus");
   } else {
     $("#mac").removeClass("focus");
