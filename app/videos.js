@@ -1,3 +1,9 @@
+/**
+ * 
+ * Download and use JSON file for specific songs with an uploaded video
+ * 
+ */
+
 const { ipcMain } = require("electron");
 const fetch = require("node-fetch");
 
@@ -32,7 +38,7 @@ initJSON();
 setInterval(initJSON, 3600* 1000);
 
 ipcMain.on("isvideo", (event, arg) => {
-  console.log(arg)
+  console.log('Playing song with id:' + arg);
   var isSpecial = false;
   for (i = 0; i < songLength; i++) {
     if (myJSON[i].id == arg) {

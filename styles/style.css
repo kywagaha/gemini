@@ -28,25 +28,6 @@
   font-weight: normal;
 }
 
-@media screen and (min-width: 1200px) {
-  h1 {
-    font-size: 150px;
-  }
-  h2 {
-    font-size: 62.5px;
-  }
-}
-
-@media screen and (max-width: 500px) {
-  h1 {
-    text-shadow: 5px 5px 30px rgba(0, 0, 0, 50);
-  }
-  h2 {
-    font-size: 15px;
-    text-shadow: 5px 5px 30px rgba(0, 0, 0, 50);
-  }
-}
-
 @keyframes slideOutOptions {
   0% {bottom: 0px}
   100% {bottom: -160px}
@@ -300,4 +281,23 @@ header i:active {
   font-family: "FormaDJRDisplay";
   position: fixed;
   font-size: 12px;
+}
+
+@media screen and (min-width: 1200px) {
+  h1 {
+    font-size: 150px;
+  }
+  h2 {
+    font-size: 62.5px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  h1 {
+    text-shadow: 5px 5px 30px rgba(0, 0, 0, 50);
+  }
+  h2 {
+    font-size: 15px;
+    text-shadow: 5px 5px 30px rgba(0, 0, 0, 50);
+  }
 }

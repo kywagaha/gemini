@@ -1,5 +1,11 @@
+/**
+ * 
+ * All visual functions (fadeIn, fadeOut) and idle mouse
+ * 
+ */
+
 var fadeTime = 500;
-var timer = 2500; //2500
+var timer = 92500; //2500
 
 if (navigator.appVersion.indexOf("Mac") > -1) {
   $(".mac").show();
@@ -7,35 +13,10 @@ if (navigator.appVersion.indexOf("Mac") > -1) {
   $(".notmac").show();
 };
 
-// Hide mouse function
-/*
-$(document).ready(function () {
-  var idleMouseTimer;
-  var forceMouseHide = false;
-  $("body").css("cursor", "none");
-  hideHeader();
-  $("body").mousemove(function () {
-    if (!forceMouseHide) {
-      $("body").css("cursor", "");
-      showHeader();
-      clearTimeout(idleMouseTimer);
-      idleMouseTimer = setTimeout(function () {
-        $("body").css("cursor", "none");
-        hideHeader();
-        forceMouseHide = true;
-        setTimeout(function () {
-          forceMouseHide = false;
-        }, 200);
-      }, timer);
-    }
-  });
-});
-*/
-
 var hider = setTimeout(function () {
     hideHeader();
     if (isFullscreen)
-      $("body").css("cursor", "none")
+      $("body").css("cursor", "none");
 }, timer);
 
 $("body").mousemove(function() {
@@ -51,7 +32,7 @@ $("body").mousemove(function() {
   };
 });
 
-// Fading functions
+// Fading functions for each significant group
 function fadeIn() {
   $("h1").fadeIn(fadeTime - 200);
   $("h2").fadeIn(fadeTime - 200);
@@ -78,6 +59,22 @@ function fadeOutMedia() {
 
 function fadeInMedia() {
   $("#media-controls").fadeIn(fadeTime);
+};
+
+function fadeInOptions() {
+  isOptionsVisible = true;
+  $("#options").show();
+};
+
+function fadeOutOptions() {
+  $("#options").css("height", `${originalOptionHeight}px`);
+  $("#options").addClass("hideAnimation");
+  setTimeout(() => {
+    $("#options").hide();
+    isOptionsVisible = false;
+    $("#options").removeClass("hideAnimation");
+    $("#devices-wrapper").hide();
+  }, 500);
 };
 
 function toggleProgress() {

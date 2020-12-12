@@ -1,10 +1,13 @@
-var init = true;
-var isSpecial = false;
-var nothing_init = true;
-var oldProgress = 0;
-var progress_ms = 0;
-var isPlaying = true;
-var mySong=null, myAlbum=null, myArtist=null, myBg=null, myRepeat=null;
+/**
+ * 
+ * 'main' javascript, handles API data, set labels and buttons
+ * 
+ */
+
+var init = true, isSpecial = false, nothing_init = true,
+oldProgress = 0, progress_ms = 0, isPlaying = true,
+mySong=null, myAlbum=null, myArtist=null, myBg=null,
+myRepeat=null, progress_timer = null;
 
 const update_ms = 1000;
 
@@ -76,7 +79,7 @@ ipcRenderer.on("init-playing-reply", (event, data) => {
                
           if (artist != '')
             args = song+' '+artist;
-          window.actions.search([args]);
+          window.controls.search([args]);
           if (data.body.item.artists[0].name == ''){
             document.getElementById('artist').innerHTML = '';
           } else {
@@ -100,6 +103,8 @@ ipcRenderer.on("init-playing-reply", (event, data) => {
     default:
       document.getElementById("song").innerHTML = "Error";
       document.getElementById("artist").innerHTML = "Check error logs";
+      $("#song").show()
+      $("#artist").show()
       console.log(data);
       break;
   };
@@ -163,6 +168,12 @@ ipcRenderer.on("isvideo", (event, arg) => {
   setBackground();
 });
 
+/**
+ * Determines what functions to call based on
+ *  what's changed in the Spotify Object
+ * 
+ * @param {Object} data Spotify API response object
+ */
 function show_data(data) {
   isPlaying = true;
   var progress = data.body.progress_ms / data.body.item.duration_ms * -100 + 100;
@@ -236,7 +247,7 @@ function show_data(data) {
         if (artist != '') {
           args = song+' '+artist;
         };
-        window.actions.search([	
+        window.controls.search([	
           args
         ]);
         mySong = data.body.item.uri;
@@ -264,7 +275,11 @@ function show_data(data) {
   oldProgress = data.body.progress_ms;
   set_progress(data.body.progress_ms);
 };
-
+/**
+ * Set toggle button to FA pause icon while a song
+ *  is playing, and FA play while a song is paused
+ * @param {boolean} data true = playing, false = paused
+ */
 function set_toggle(data) {
   if (data) {
     if (!$("#toggle").hasClass("fa fa-pause"));
@@ -275,6 +290,10 @@ function set_toggle(data) {
   };
 };
 
+/**
+ * Set FA shuffle icon
+ * @param {boolean} data true = shuffle, false = non-shuffle
+ */
 function set_shuffle(data) {
   if (data)
     $("#shuffle").css("opacity", "100%");
@@ -282,6 +301,10 @@ function set_shuffle(data) {
     $("#shuffle").css("opacity", "");
 };
 
+/**
+ * Set FA repeat icon
+ * @param {string} data String as it appears in the Spotify API
+ */
 function set_repeat(data) {
   myRepeat = data;
   switch(data) {
@@ -300,10 +323,18 @@ function set_repeat(data) {
   };
 };
 
+/**
+ * Set input knob value to volume value
+ * @param {number} data integer from 0 to 100
+ */
 function set_volume(data) {
   $("#volume-knob").val(data);
 };
 
+/**
+ * Set app to playing a podcast; not much data contained in response
+ * @param {Object} data Podcast object response (very little available data)
+ */
 function set_podcast(data) {
   setSongArtist("Playing podcast", "No podcast data available yet");
   myBg = "";
@@ -316,7 +347,11 @@ function set_nothing_playing() {
   if (nothing_init) {
     fadeOutAlbum();
     fadeOut();
-    setSongArtist('Nothing playing', '');
+    setTimeout(() => {
+      document.getElementById("song").innerHTML = 'Nothing playing';
+      document.getElementById("artist").innerHTML = '';
+      fadeIn();
+    }, fadeTime);
     $("#progressbar").animate({'right': `100%`}, 175, 'linear');
     fadeOutMedia();
     mySong = '';
@@ -328,7 +363,10 @@ function set_nothing_playing() {
   };
 };
 
-var progress_timer = null;
+/**
+ * Estimates current song's progress in ms
+ * @param {number} ms progress_ms
+ */
 function set_progress(ms) {
   progress_ms = ms;
   clearInterval(progress_timer);
@@ -344,14 +382,6 @@ function setBackground() {
   }, fadeTime);
 };
 
-function setSongArtist(song, artist) {
-  setTimeout(() => {
-    document.getElementById("song").innerHTML = song;
-    document.getElementById("artist").innerHTML = artist;
-    fadeIn();
-  }, fadeTime);
-};
-
 window.addEventListener(
   "error",
   function (e) {
@@ -360,7 +390,7 @@ window.addEventListener(
       console.log("closed");
       window.turnOff.video();
       location.reload(true);
-    }
+    };
   },
   true
 );

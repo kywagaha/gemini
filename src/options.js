@@ -1,13 +1,22 @@
-var isOptionsVisible = false;
-var myDevices = null;
-var originalOptionHeight = parseInt($("#options").css("height"));
-var newOptionHeight = originalOptionHeight;
+/**
+ * 
+ * Specific to option menu on the bottom left
+ * 
+ */
 
+var isOptionsVisible = false,
+myDevices = null,
+originalOptionHeight = parseInt($("#options").css("height")),
+newOptionHeight = originalOptionHeight;
+
+/**
+ * All option menu button handling
+ */
 $("#option-button").click(() => {
   if (isOptionsVisible == false) {
     fadeInOptions();
     clearTimeout(hider);
-    window.actions.getDevices();
+    window.controls.getDevices();
   } else {
     fadeOutOptions();
   };
@@ -32,7 +41,7 @@ $("#opt-device").click(() => {
 });
 
 $("#opt-signin").click(() => {
-  window.reset.signin();
+  window.actions.signin();
 });
 
 $("body").click(() => {
@@ -41,22 +50,6 @@ $("body").click(() => {
       fadeOutOptions();
   };
 });
-
-function fadeInOptions() {
-  isOptionsVisible = true;
-  $("#options").show();
-};
-
-function fadeOutOptions() {
-  $("#options").css("height", `${originalOptionHeight}px`);
-  $("#options").addClass("hideAnimation");
-  setTimeout(() => {
-    $("#options").hide();
-    isOptionsVisible = false;
-    $("#options").removeClass("hideAnimation");
-    $("#devices-wrapper").hide();
-  }, 500);
-};
 
 ipcRenderer.on("devices-reply", (event, data) => {
   myDevices = data.body.devices;
@@ -76,12 +69,12 @@ ipcRenderer.on("focus", (event, arg) => {
   if (!arg) {
     fadeOutOptions();
     hideHeader();
-  }
+  };
 });
 
 $("#devices").on("click", "i", function (event) {
   for (var i=0; i< myDevices.length; i++) {
     if (myDevices[i].name == event.target.innerHTML)
-      window.actions.transferPlayback(myDevices[i].id);    
+      window.controls.transferPlayback(myDevices[i].id);    
   };
 });

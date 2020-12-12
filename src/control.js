@@ -1,12 +1,18 @@
-var changeMs = 200;
-var isFullscreen = null;
+/**
+ * 
+ * Handle all button and key presses. Contains all ipcRenderer functions regarding playback
+ * 
+ */
+
+var changeMs = 200,
+isFullscreen = null,
+firing = false;
 
 function control(type) {
-  window.check.type(type);
-}
+  window.controls.control(type);
+};
 
-// Toggle playback
-var togglePlay = function () {
+function togglePlay() {
   hasToggled = true;
   clearInterval(resetTime);
   var resetTime = setTimeout(() => {
@@ -14,7 +20,8 @@ var togglePlay = function () {
   }, 1000);
   window.controls.togglePlay();
 };
-var toggleShuffle = function () {
+
+function toggleShuffle() {
   hasToggled = true;
   clearInterval(resetTime);
   var resetTime = setTimeout(() => {
@@ -23,7 +30,8 @@ var toggleShuffle = function () {
   control('shuffle')
   window.controls.toggleShuffle();
 };
-var cycleRepeat = function () {
+
+function cycleRepeat() {
   hasToggled = true;
   clearInterval(resetTime);
   var resetTime = setTimeout(() => {
@@ -41,39 +49,6 @@ function setVolume(val) {
   window.controls.setVolume(val);
 };
 
-ipcRenderer.on("toggle-play-reply", (event, data) => {
-  var isPlaying = data.body.is_playing;
-  // Play if paused; pause if playing
-  if (isPlaying == true) {
-    $("#toggle").removeClass().addClass("fa fa-play");
-    control("pause");
-    console.log("Pausing music");
-  } else if (isPlaying == false) {
-    $("#toggle").removeClass().addClass("fa fa-pause");
-    control("play");
-    console.log("Playing music");
-  } else {
-    console.log("Nothing playing");
-  }
-});
-
-ipcRenderer.on("toggle-shuffle-reply", (event, data) => {
-  var isShuffle = data.body.shuffle_state;
-  if (isShuffle == true) {
-    $("#shuffle").removeClass().addClass("fa fa-random");
-  }
-})
-
-ipcRenderer.on("repeat-reply", (event, arg)  => {
-  myRepeat = arg;
-  console.log(myRepeat)
-  set_repeat(myRepeat);
-})
-
-ipcRenderer.on("volume-reply", (event, arg) => {
-  console.warn("slow down!")
-})
-
 // Skip to next song in queue
 function seek() {
   console.log("Skipping forward");
@@ -82,6 +57,7 @@ function seek() {
     update(false);
   }, changeMs);
 };
+
 // Skip back to previous song
 function track() {
   console.log(progress_ms)
@@ -118,7 +94,9 @@ $(document).keyup(function (e) {
   delete keysdown[e.keyCode];
 });
 
-var firing = false;
+/**
+ * All button.click listeners
+ */
 $("#toggle").click(() => {
   if (firing) return;
   togglePlay();
@@ -167,7 +145,7 @@ $("#maximize").click(() => {
   if (keysdown[18] == true) {
     window.actions.maximize();
     return;
-  }
+  };
   window.actions.fullscreen();
 });
 
@@ -196,17 +174,49 @@ $("#topmac").click(() => {
   window.actions.topmac();
 });
 
-
 document.getElementById("volume-knob").addEventListener("input", () => {
-  setVolume($("#volume-knob").val())
-})
+  setVolume($("#volume-knob").val());
+});
+
+ipcRenderer.on("toggle-play-reply", (event, data) => {
+  var isPlaying = data.body.is_playing;
+  // Play if paused; pause if playing
+  if (isPlaying == true) {
+    $("#toggle").removeClass().addClass("fa fa-play");
+    control("pause");
+    console.log("Pausing music");
+  } else if (isPlaying == false) {
+    $("#toggle").removeClass().addClass("fa fa-pause");
+    control("play");
+    console.log("Playing music");
+  } else {
+    console.log("Nothing playing");
+  };
+});
+
+ipcRenderer.on("toggle-shuffle-reply", (event, data) => {
+  var isShuffle = data.body.shuffle_state;
+  if (isShuffle == true) {
+    $("#shuffle").removeClass().addClass("fa fa-random");
+  };
+});
+
+ipcRenderer.on("repeat-reply", (event, arg)  => {
+  myRepeat = arg;
+  console.log(myRepeat);
+  set_repeat(myRepeat);
+});
+
+ipcRenderer.on("volume-reply", (event, arg) => {
+  console.warn("slow down!");
+});
 
 ipcRenderer.on("focus", (event, arg) => {
   if (arg) {
     $("#mac").addClass("focus");
   } else {
     $("#mac").removeClass("focus");
-  }
+  };
 });
 
 ipcRenderer.on("is-top", (event, arg) => {
@@ -217,7 +227,7 @@ ipcRenderer.on("is-top", (event, arg) => {
     case false:
       $("#top").css("opacity", "");
       break;
-  }
+  };
 });
 
 ipcRenderer.on("is_shuffle", (event, arg) => {
@@ -228,7 +238,7 @@ ipcRenderer.on("is_shuffle", (event, arg) => {
     case false:
       $("#shuffle").css("opacity", "");
       break;
-  }
+  };
 });
 
 ipcRenderer.on("is-top-mac", (event, arg) => {
@@ -239,7 +249,7 @@ ipcRenderer.on("is-top-mac", (event, arg) => {
     case false:
       $("#topmac").css("opacity", "");
       break;
-  }
+  };
 });
 
 ipcRenderer.on("hidepin", (event, isFull) => {
@@ -250,7 +260,7 @@ ipcRenderer.on("hidepin", (event, isFull) => {
   } else if (data == "notfullscreen") {
     $("#top").css("display", "inline-block", "opacity", "");
     $("#topmac").css("display", "inline-block", "opacity", "");
-  }
+  };
 });
 
 // Shortcuts
@@ -264,8 +274,8 @@ function doc_keyUp(e) {
   } else {
     switch (e.keyCode) {
       case 27:
-
-        window.actions.fullscreen();
+        if (isFullscreen)
+          window.actions.fullscreen();
         break;
       case 70:
         window.actions.fullscreen();
@@ -288,7 +298,8 @@ function doc_keyUp(e) {
       case 39:
         control("forward");
         break;
-    }
-  }
-}
+    };
+  };
+};
+
 document.addEventListener("keyup", doc_keyUp, false);

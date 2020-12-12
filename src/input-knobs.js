@@ -1,4 +1,7 @@
 /**
+ * 
+ * Input Knob library
+ * 
  * From https://g200kg.github.io/input-knobs/
  * https://github.com/g200kg/input-knobs
  * 

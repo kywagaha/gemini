@@ -1,3 +1,9 @@
+/**
+ * 
+ * Global objects and variables for node
+ * 
+ */
+
 const SpotifyWebApi = require("spotify-web-api-node");
 const spotifyApi = new SpotifyWebApi();
 const settings = require("electron-settings");

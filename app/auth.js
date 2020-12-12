@@ -1,38 +1,48 @@
-var crypto = require("crypto");
-var constants = require("./constants");
-var fetch = require('node-fetch');
-var express = require("express");
-const main = require('./main');
-express = express();
-var spotifyApi = constants.spotifyApi;
-var settings = constants.settings;
+/**
+ * 
+ * Module exports functions for signing in with Spotify API
+ * 
+ */
 
-const scopes = ["user-modify-playback-state", "user-read-playback-state"];
-const AUTH_URL = 'https://accounts.spotify.com/authorize';
-const CLIENT_ID = constants.CLIENT_ID;
-const PORT = constants.PORT;
-const REDIRECT_URI = `http://localhost:${PORT}/callback`;
+var crypto = require("crypto"),
+constants = require("./constants"),
+fetch = require('node-fetch'),
+express = require("express"),
+main = require('./main'),
+express = express(),
+spotifyApi = constants.spotifyApi;
 
-console.log('starting express')
+const scopes = ["user-modify-playback-state", "user-read-playback-state"],
+AUTH_URL = 'https://accounts.spotify.com/authorize',
+CLIENT_ID = constants.CLIENT_ID,
+PORT = constants.PORT,
+REDIRECT_URI = `http://localhost:${PORT}/callback`;
+
+console.log('Starting express');
 var server = express.listen(PORT, 'localhost');
+var isSigningIn = true;
 
 module.exports = {
+  /**
+   * Create url for Spotify API oauth2
+   * @return {string}
+   */ 
   getAuthUrl: function() {
-	server.listen(PORT, 'localhost');
+    server.listen(PORT, 'localhost');
     codeVerifier = base64URLEncode(crypto.randomBytes(32));
     codeState = base64URLEncode(crypto.randomBytes(32));
     codeChallenge = base64URLEncode(sha256(codeVerifier));
-  
+
     const authUrl = AUTH_URL +
     `?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&` +
     `scope=${scopes}&state=${codeState}&code_challenge=${codeChallenge}&code_challenge_method=S256`;
-  
+
     function sha256(str) {
       return crypto.createHash('sha256')
       .update(str)
       .digest();
     };
-  
+
     function base64URLEncode(str) {
       return new Buffer.from(str)
       .toString('base64')
@@ -43,29 +53,48 @@ module.exports = {
     console.log(authUrl)
     return authUrl;
 	},
-	
-	tryRefresh: function(token) {
-		fetch('https://accounts.spotify.com/api/token', {
-			method: 'POST',
-			headers: {'Content-Type':'application/x-www-form-urlencoded'},
-			body: `grant_type=refresh_token&refresh_token=${token}&client_id=${CLIENT_ID}`
-		})
-		.then(res => res.json())
-		.then(json => {
-			if (json.error) {
-				console.log('error', json)
-				main.startAuth();
-			} else {
-				console.log('using previous refresh token')
-				spotifyApi.setAccessToken(json.access_token);
-				spotifyApi.setRefreshToken(json.refresh_token);
-				constants.saveRToken(json.refresh_token);
-				close_express();
-				main.startApp()
-			}
-		})
+  
+  /**
+   * Attempt refresh from the saved refresh token in constants and electron-settings.
+   * If error, start normal sign-in authorization method
+   * @param {string} code Token returned after signing in with the correct auth-url.
+   * @return {}
+   * 
+   */
+	tryRefresh: function(code) {
+		if (isSigningIn) {
+			isSigningIn = false;
+			fetch('https://accounts.spotify.com/api/token', {
+				method: 'POST',
+				headers: {'Content-Type':'application/x-www-form-urlencoded'},
+				body: `grant_type=refresh_token&refresh_token=${code}&client_id=${CLIENT_ID}`
+			})
+			.then(res => res.json())
+			.then(json => {
+				if (json.error) {
+					console.log('error', json)
+					main.startAuth();
+				} else {
+					isSigningIn = true;
+					console.log('Using previous refresh token');
+					spotifyApi.setAccessToken(json.access_token);
+					spotifyApi.setRefreshToken(json.refresh_token);
+					constants.saveRToken(json.refresh_token);
+					close_express();
+					main.startApp();
+				};
+			});
+		} else {
+			console.log('Already a signin request');
+    };
+    return;
 	},
 
+  /**
+   * Refreshes access token and refresh token in constants
+   * @param {string} token 
+   * @return {}
+   */
 	refresh: function(token) {
 		fetch('https://accounts.spotify.com/api/token', {
 			method: 'POST',
@@ -78,7 +107,7 @@ module.exports = {
 				main.startAuth();
 				console.log('error', json)
 			} else {
-				console.log('refreshed tokens!')
+				console.log('Refreshed tokens!');
 				spotifyApi.setAccessToken(json.access_token);
 				spotifyApi.setRefreshToken(json.refresh_token);
 				constants.saveRToken(json.refresh_token);
@@ -88,12 +117,15 @@ module.exports = {
 
 }
 
+/**
+ * Handle response from Spotify API authorization
+ */
 express.get("/callback", function (req, res) {
 	var myCode = req.query.code;
 	res.send();
 	var data = `client_id=${CLIENT_ID}&grant_type=authorization_code&code=${myCode}&redirect_uri=${REDIRECT_URI}&code_verifier=${codeVerifier}`;
 	if (req.query.state != codeState) {
-		console.log('bad state, trying again')
+		console.log('bad state, trying again');
 		main.startAuth();
 	} else {
 		fetch('https://accounts.spotify.com/api/token/', {
@@ -104,20 +136,20 @@ express.get("/callback", function (req, res) {
 		.then(res => res.json())
 		.then(json => {
 			if (json.error) {
-				main.startAuth()
+				main.startAuth();
 			} else {
 				spotifyApi.setAccessToken(json.access_token);
 				spotifyApi.setRefreshToken(json.refresh_token);
 				constants.saveRToken(json.refresh_token);
 				main.startApp();
-			}
-		})
+			};
+		});
 		
 		close_express();
-	}
+	};
 });
 
 function close_express() {
-	console.log('closing express')
+	console.log('Closing express');
     server.close();
 }
