@@ -26,7 +26,40 @@
   font-family: 'FormaDJRText';
   font-style: normal;
   font-weight: normal;
+}
+
+@media screen and (min-width: 1200px) {
+  h1 {
+    font-size: 150px;
   }
+  h2 {
+    font-size: 62.5px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  h1 {
+    text-shadow: 5px 5px 30px rgba(0, 0, 0, 50);
+  }
+  h2 {
+    font-size: 15px;
+    text-shadow: 5px 5px 30px rgba(0, 0, 0, 50);
+  }
+}
+
+@keyframes slideOutOptions {
+  0% {bottom: 0px}
+  100% {bottom: -160px}
+}
+
+@keyframes slideInOptions {
+  0% {bottom: -160px}
+  100% {bottom: 0px}
+}
+
+.hideAnimation {
+  animation: slideOutOptions 0.5s cubic-bezier(.01,.71,.22,.99) !important
+}
 
 body {
   background-color: black;
@@ -52,12 +85,16 @@ header {
   z-index: 1;
 }
 
-.mac {
-  letter-spacing: normal;
-}
-
-i:hover {
-  cursor: pointer;
+footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  color: white;
+  text-align: center;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
+  height: 25%;
+  letter-spacing: 5px;
 }
 
 .titlebar-drag-region {
@@ -69,6 +106,92 @@ i:hover {
   -webkit-app-region: drag;
   top: 40px;
   left: 40px;
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
+  text-align: left;
+  min-height: 98vh;
+  color: white;
+}
+
+h1 {
+  font-family: "FormaDJRBanner";
+  font-style: italic;
+  font-weight: bold;
+  font-size: 12vw;
+  margin-left: 10%;
+  margin-right: 10%;
+  line-height: 1.2em;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  color: white;
+  text-shadow: 5px 5px 80px rgba(0, 0, 0, 50);
+  display: none;
+  z-index: -1;
+}
+
+h2 {
+  font-family: "FormaDJRDisplay";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 5vw;
+  margin-left: 10%;
+  margin-right: 10%;
+  line-height: 1.2em;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  color: white;
+  text-shadow: 5px 5px 50px rgba(0, 0, 0, 50);
+  display: none;
+  z-index: -1;
+}
+
+#bg {
+  position: fixed;
+  top: 0%;
+  left: -50%;
+  width: 200%;
+  height: 100%;
+  z-index: -2;
+  display: none;
+}
+
+#bg img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  min-width: 50%;
+  min-height: 100%;
+  object-fit: cover;
+  height: 100%;
+}
+
+#bg video {
+  position: absolute;
+  top: 0%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  min-width: 50%;
+  min-height: 100%;
+  object-fit: cover;
+  height: 100%;
+}
+
+.mac {
+  letter-spacing: normal;
+}
+
+i:hover {
+  cursor: pointer;
 }
 
 i {
@@ -161,129 +284,6 @@ header i:active {
   display: none;
 }
 
-@keyframes slideInOptions {
-  0% {bottom: -160px}
-  100% {bottom: 0px}
-}
-
-.hideAnimation {
-  animation: slideOutOptions 0.5s cubic-bezier(.01,.71,.22,.99) !important
-}
-
-@keyframes slideOutOptions {
-  0% {bottom: 0px}
-  100% {bottom: -160px}
-}
-
-
-footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  color: white;
-  text-align: center;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
-  height: 25%;
-  letter-spacing: 5px;
-}
-
-h1 {
-  font-family: "FormaDJRBanner";
-  font-style: italic;
-  font-weight: bold;
-  font-size: 12vw;
-  margin-left: 10%;
-  margin-right: 10%;
-  line-height: 1.2em;
-  margin-bottom: 0px;
-  margin-top: 0px;
-  color: white;
-  text-shadow: 5px 5px 80px rgba(0, 0, 0, 50);
-  display: none;
-  z-index: -1;
-}
-
-h2 {
-  font-family: "FormaDJRDisplay";
-  font-style: normal;
-  font-weight: normal;
-  font-size: 5vw;
-  margin-left: 10%;
-  margin-right: 10%;
-  line-height: 1.2em;
-  margin-bottom: 0px;
-  margin-top: 0px;
-  color: white;
-  text-shadow: 5px 5px 50px rgba(0, 0, 0, 50);
-  display: none;
-  z-index: -1;
-}
-
-@media screen and (min-width: 1200px) {
-  h1 {
-    font-size: 150px;
-  }
-  h2 {
-    font-size: 62.5px;
-  }
-}
-
-@media screen and (max-width: 500px) {
-  h1 {
-    text-shadow: 5px 5px 30px rgba(0, 0, 0, 50);
-  }
-  h2 {
-    font-size: 15px;
-    text-shadow: 5px 5px 30px rgba(0, 0, 0, 50);
-  }
-}
-
-.center {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: left;
-  text-align: left;
-  min-height: 98vh;
-  color: white;
-}
-
-#bg {
-  position: fixed;
-  top: 0%;
-  left: -50%;
-  width: 200%;
-  height: 100%;
-  z-index: -2;
-  display: none;
-}
-
-#bg img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  min-width: 50%;
-  min-height: 100%;
-  object-fit: cover;
-  height: 100%;
-}
-
-#bg video {
-  position: absolute;
-  top: 0%;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  min-width: 50%;
-  min-height: 100%;
-  object-fit: cover;
-  height: 100%;
-}
 
 #progressbar {
   background-color: white;
@@ -296,7 +296,7 @@ h2 {
   right: 100%;
 }
 
-.repeat {
+.repeat-1 {
   font-family: "FormaDJRDisplay";
   position: fixed;
   font-size: 12px;

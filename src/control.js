@@ -1,4 +1,5 @@
 var changeMs = 200;
+var isFullscreen = null;
 
 function control(type) {
   window.check.type(type);
@@ -241,8 +242,9 @@ ipcRenderer.on("is-top-mac", (event, arg) => {
   }
 });
 
-ipcRenderer.on("hidepin", (event, data) => {
-  if (data == "fullscreen") {
+ipcRenderer.on("hidepin", (event, isFull) => {
+  isFullscreen = isFull;
+  if (isFull) {
     $("#top").css("display", "none");
     $("#topmac").css("display", "none");
   } else if (data == "notfullscreen") {
@@ -262,6 +264,7 @@ function doc_keyUp(e) {
   } else {
     switch (e.keyCode) {
       case 27:
+
         window.actions.fullscreen();
         break;
       case 70:

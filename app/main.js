@@ -247,13 +247,13 @@ ipcMain.on("buttons", (event, arg) => {
 
     case "full":
       if (!win.isFullScreen()) {
-        win.webContents.send("hidepin", "fullscreen");
+        win.webContents.send("hidepin", true);
         win.setFullScreen(true);
         win.setAlwaysOnTop(false);
         event.reply("not", false);
         event.reply("mac", false);
       } else {
-        win.webContents.send("hidepin", "notfullscreen");
+        win.webContents.send("hidepin", false);
         win.setFullScreen(false);
       }
       break;
