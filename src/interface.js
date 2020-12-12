@@ -8,6 +8,7 @@ if (navigator.appVersion.indexOf("Mac") > -1) {
 }
 
 // Hide mouse function
+/*
 $(document).ready(function () {
   var idleMouseTimer;
   var forceMouseHide = false;
@@ -29,6 +30,18 @@ $(document).ready(function () {
     }
   });
 });
+*/
+
+var hider = null;
+$("body").mousemove(function() {
+  if (!isOptionsVisible) {
+    clearTimeout(hider);
+    showHeader();
+    hider = setTimeout(function () {
+        hideHeader();
+    }, timer);
+  }
+})
 
 // Fading functions
 function fadeIn() {
@@ -51,6 +64,15 @@ function fadeInAlbum() {
   }, 150);
 }
 
+function fadeOutMedia() {
+  $("#media-controls").fadeOut(fadeTime);
+}
+
+function fadeInMedia() {
+  $("#media-controls").fadeIn(fadeTime);
+
+}
+
 function toggleProgress() {
   if ($("#progressbar").css('display') == 'none') {
     $("#progressbar").show();
@@ -67,43 +89,6 @@ function hideHeader() {
 function showHeader() {
   $("header").fadeIn(fadeTime / 2);
   if (isPlaying)
+    $("#media-controls").fadeIn(fadeTime);
     $("footer").fadeIn(fadeTime / 2);
 }
-// Ctrl+s function for re-signin
-function doc_keyUp(e) {
-  if (e.ctrlKey && e.keyCode == 83) {
-    window.reset.signin();
-  } else if (e.ctrlKey && e.keyCode == 65)
-      toggleProgress()
-    else if (e.ctrlKey && e.keyCode == 68) {
-    window.actions.square()
-  } else {
-    switch (e.keyCode) {
-      case 27:
-        window.actions.fullscreen();
-        break;
-      case 70:
-        window.actions.fullscreen();
-        break;
-      case 74:
-        control("backward");
-        break;
-      case 75:
-        togglePlay();
-        break;
-      case 76:
-        control("forward");
-        break;
-      case 32:
-        togglePlay();
-        break;
-      case 37:
-        control("backward");
-        break;
-      case 39:
-        control("forward");
-        break;
-    }
-  }
-}
-document.addEventListener("keyup", doc_keyUp, false);

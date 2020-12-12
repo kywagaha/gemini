@@ -2,6 +2,7 @@ var init = true;
 var isSpecial = false;
 var nothing_init = true;
 var oldProgress = 0;
+var progress_ms = 0;
 var isPlaying = true;
 
 const update_ms = 1000;
@@ -47,7 +48,8 @@ ipcRenderer.on("init-playing-reply", (event, data) => {
 
                 // Set album placeholder
               myAlbum = data.body.item.album.id;
-                // Trigger functions 
+                // Trigger functions
+              set_progress(data.body.progress_ms);
               set_toggle(data.body.is_playing);
               set_shuffle(data.body.shuffle_state);
               set_repeat(data.body.repeat_state);
@@ -91,6 +93,7 @@ ipcRenderer.on("init-playing-reply", (event, data) => {
           set_toggle(data.body.is_playing);
           set_shuffle(data.body.shuffle_state);
           set_repeat(data.body.repeat_state);
+          set_progress(data.body.progress_ms);
           set_volume(data.body.device.volume_percent);
           break;
       }
@@ -268,6 +271,7 @@ function show_data(data) {
     myRepeat = data.body.repeat_state;
   }
   oldProgress = data.body.progress_ms
+  set_progress(data.body.progress_ms);
 }
 
 function set_toggle(data) {
@@ -323,7 +327,7 @@ function set_nothing_playing() {
     fadeOut();
     setSongArtist('Nothing playing', '');
     $("#progressbar").animate({'right': `100%`}, 175, 'linear');
-    $("footer").fadeOut(fadeTime / 2);
+    fadeOutMedia();
     mySong = '';
     myAlbum = '';
     myBg = '';
@@ -331,6 +335,15 @@ function set_nothing_playing() {
     isPlaying = false;
     nothing_init = false;
   }
+}
+
+var progress_timer = null;
+function set_progress(ms) {
+  progress_ms = ms;
+  clearInterval(progress_timer);
+  progress_timer = setInterval(() => {
+    progress_ms += 1;
+  }, 1);
 }
 
 function setBackground() {

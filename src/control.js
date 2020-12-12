@@ -74,7 +74,7 @@ ipcRenderer.on("volume-reply", (event, arg) => {
 })
 
 // Skip to next song in queue
-var seek = function () {
+function seek() {
   console.log("Skipping forward");
   control("forward");
   setTimeout(() => {
@@ -82,9 +82,16 @@ var seek = function () {
   }, changeMs);
 };
 // Skip back to previous song
-var track = function () {
-  console.log("Skipping backward");
-  control("backward");
+function track() {
+  console.log(progress_ms)
+  if (progress_ms > 3000) {
+    console.log("resetting to 0 sec");
+    control("reset")
+    progress_ms = 0;
+  } else {
+    console.log("attemping skip to previous");
+    control("previous")
+  }
   setTimeout(() => {
     update(false);
   }, changeMs);
@@ -243,3 +250,42 @@ ipcRenderer.on("hidepin", (event, data) => {
     $("#topmac").css("display", "inline-block", "opacity", "");
   }
 });
+
+// Shortcuts
+function doc_keyUp(e) {
+  if (e.ctrlKey && e.keyCode == 83) {
+    window.reset.signin();
+  } else if (e.ctrlKey && e.keyCode == 65)
+      toggleProgress()
+    else if (e.ctrlKey && e.keyCode == 68) {
+    window.actions.square()
+  } else {
+    switch (e.keyCode) {
+      case 27:
+        window.actions.fullscreen();
+        break;
+      case 70:
+        window.actions.fullscreen();
+        break;
+      case 74:
+        control("backward");
+        break;
+      case 75:
+        togglePlay();
+        break;
+      case 76:
+        control("forward");
+        break;
+      case 32:
+        togglePlay();
+        break;
+      case 37:
+        control("backward");
+        break;
+      case 39:
+        control("forward");
+        break;
+    }
+  }
+}
+document.addEventListener("keyup", doc_keyUp, false);

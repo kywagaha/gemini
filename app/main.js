@@ -72,7 +72,6 @@ function refresh() {
 // Initial pinstate
 ipcMain.on('init-pin', (event, arg) => {
 })
-
 // Initial /currently-playing request
 ipcMain.on("init-playing", (event, arg) => {
   event.reply('is-top', win.isAlwaysOnTop())
@@ -188,17 +187,21 @@ ipcMain.on("control", (event, arg) => {
         catch_error(err)
       })
       break;
-    case "backward":
+    case "reset":
       spotifyApi.seek(0)
       .then(()=>{},(err) => {
         catch_error(err)
-      })
+      });
+      break;
+    case "previous":
+      spotifyApi.seek(0)
+      .then(()=>{},(err) => {
+        catch_error(err)
+      });
       spotifyApi.skipToPrevious()
       .then(()=>{},(err) => {
-        if (err.statusCode != 403) {
-          catch_error(err)
-        }
-      })
+        catch_error(err)
+      });
       break;
     case "shuffle":
       spotifyApi.getMyCurrentPlaybackState()

@@ -6,6 +6,7 @@ var newOptionHeight = originalOptionHeight;
 $("#option-button").click(() => {
   if (isOptionsVisible == false) {
     fadeInOptions();
+    clearTimeout(hider);
     window.actions.getDevices();
   } else {
     fadeOutOptions();
@@ -28,6 +29,10 @@ $("#opt-device").click(() => {
     $("#devices-wrapper").hide();
     $("#options").css("height", `${originalOptionHeight}px`);
   }
+})
+
+$("#opt-signin").click(() => {
+  window.reset.signin();
 })
 
 $("body").click(() => {
@@ -70,6 +75,7 @@ ipcRenderer.on("devices-reply", (event, data) => {
 ipcRenderer.on("focus", (event, arg) => {
   if (!arg) {
     fadeOutOptions();
+    hideHeader();
   }
 });
 
@@ -79,4 +85,3 @@ $("#devices").on("click", "i", function (event) {
       window.actions.transferPlayback(myDevices[i].id);    
   }
 })
-

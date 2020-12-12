@@ -136,7 +136,7 @@ header i:active {
   display: none;
   z-index: -1;
   padding-bottom: 20px;
-  height: 120px;
+  height: 140px;
   animation: slideInOptions 0.5s cubic-bezier(.01,.71,.22,.99);
   backdrop-filter: blur(10px) saturate(125%);
 }
@@ -162,7 +162,7 @@ header i:active {
 }
 
 @keyframes slideInOptions {
-  0% {bottom: -140px}
+  0% {bottom: -160px}
   100% {bottom: 0px}
 }
 
@@ -172,7 +172,7 @@ header i:active {
 
 @keyframes slideOutOptions {
   0% {bottom: 0px}
-  100% {bottom: -140px}
+  100% {bottom: -160px}
 }
 
 
