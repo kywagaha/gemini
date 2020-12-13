@@ -6,95 +6,98 @@
     <meta http-equiv="Content-Security-Policy" content="script-src 'self'" />
     <link rel="stylesheet" href="../styles/style.css" />
     <link rel="stylesheet" href="../styles/macos.css" />
-    <script
-      type="text/javascript"
-      src="../node_modules/jquery/dist/jquery.min.js"
-    ></script>
-    <link
-      rel="stylesheet"
-      href="../node_modules/@fortawesome/fontawesome-free/css/all.css"
-    />
+    <script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="input-knobs.js"></script>
+    <link rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.css"/>
   </head>
-  <header>
-    <div class="header">
-      <div class="titlebar-drag-region"></div>
-      <div class="notmac" style="display: none">
-        <div style="float: left">
-          <i
-            id="full"
-            class="fa fa-expand"
-            style="-webkit-app-region: no-drag"
-          ></i>
-          <i
-            id="top"
-            class="fas fa-thumbtack"
-            style="-webkit-app-region: no-drag"
-          ></i>
-        </div>
-        <div style="float: right">
-          <i
-            id="minimize"
-            class="far fa-window-minimize"
-            style="-webkit-app-region: no-drag"
-          ></i>
-          <i
-            id="square"
-            class="far fa-window-maximize"
-            style="-webkit-app-region: no-drag"
-          ></i>
-          <i
-            id="x"
-            class="far fa-window-close"
-            style="-webkit-app-region: no-drag"
-          ></i>
-        </div>
-      </div>
-      <div class="mac focus" id="mac" style="display: none">
-        <div style="float: left">
-          <div class="traffic-lights">
-            <button
-              class="traffic-light traffic-light-close"
-              id="close"
-            ></button>
-            <button
-              class="traffic-light traffic-light-minimize"
-              id="mini"
-            ></button>
-            <button
-              class="traffic-light traffic-light-maximize"
-              id="maximize"
-            ></button>
+  <body>
+    <header>
+      <div class="header">
+        <div class="titlebar-drag-region"></div>
+        <div class="notmac" style="display: none">
+          <div style="float: left">
+            <i id="full" class="fa fa-expand" style="-webkit-app-region: no-drag"></i>
+            <i id="top" class="fas fa-thumbtack" style="-webkit-app-region: no-drag"></i>
+          </div>
+          <div style="float: right">
+            <i id="minimize" class="far fa-window-minimize" style="-webkit-app-region: no-drag"></i>
+            <i id="square" class="far fa-window-maximize" style="-webkit-app-region: no-drag"></i>
+            <i id="x" class="far fa-window-close" style="-webkit-app-region: no-drag"></i>
           </div>
         </div>
-        <div style="float: right">
-          <i
-            id="topmac"
-            class="fas fa-thumbtack"
-            style="-webkit-app-region: no-drag"
-          ></i>
+        <div class="mac focus" id="mac" style="display: none">
+          <div style="float: left">
+            <div class="traffic-lights">
+              <button
+                class="traffic-light traffic-light-close"
+                id="close"
+              ></button>
+              <button
+                class="traffic-light traffic-light-minimize"
+                id="mini"
+              ></button>
+              <button
+                class="traffic-light traffic-light-maximize"
+                id="maximize"
+              ></button>
+            </div>
+          </div>
+          <div style="float: right">
+            <i
+              id="topmac"
+              class="fas fa-thumbtack"
+              style="-webkit-app-region: no-drag"
+            ></i>
+          </div>
         </div>
       </div>
-    </div>
-  </header>
-  <body>
+    </header>
     <div class="center" id="overlay">
       <h1 id="song"></h1>
       <h2 id="artist"></h2>
     </div>
     <div class="album" id="bg"></div>
+    <footer>
+      <div id="media-controls" style="position: absolute; bottom: 15px; text-align: center; width: 100%">
+        <span>
+          <i id="shuffle" class="fas fa-random"></i>
+          <i id="previous" class="fa fa-fast-backward"></i>
+          <i id="toggle" class="fas fa-play"></i>
+          <i id="seek" class="fa fa-fast-forward"></i>
+          <i id="repeat" class="fas fa-sync-alt"></i>
+        </span>
+      <div style="position: absolute; float: right; top: -3px; right: 10px;">
+        <input type="range" id="volume-knob" class="input-knob" data-diameter="20" data-fgcolor="#555555" data-bgcolor="#FFFFFF" data-src="./images/circle-notch-white.svg" step="2"/>
+      </div>
+      </div>
+      <div style="position: absolute; float: left; left: 15px; bottom: 15px;">
+        <i id="option-button" class="fas fa-bars"></i>
+      </div>
+      <div id="options">
+        <ul>
+          <li id="opt-square">
+            <i>Square</i>
+          </li>
+          <li id="opt-prog">
+            <i>Progress Bar</i>
+          </li>
+          <li id="opt-signin">
+            <i>Sign In</i>
+          </li>
+          <li id="opt-device">
+            <i>Device</i>
+          </li>
+          <div id="devices-wrapper">
+            <ul id="devices">
+            </ul>
+          </div>
+        </ul>
+      </div>
+    </footer>
+    <div id="progressbar"></div>
   </body>
-  <footer>
-    <div
-      style="position: absolute; bottom: 15px; text-align: center; width: 100%"
-    >
-      <i id="shuffle" class="fas fa-random"></i>
-      <i id="previous" class="fa fa-fast-backward"></i>
-      <i id="toggle" class="fas fa-play"></i>
-      <i id="seek" class="fa fa-fast-forward"></i>
-      <i id="repeat" class="fas fa-sync-alt"></i>
-    </div>
-  </footer>
   <script type="text/javascript" src="control.js"></script>
   <script type="text/javascript" src="info.js"></script>
   <script type="text/javascript" src="interface.js"></script>
+  <script type="text/javascript" src="options.js"></script>
 </html>
