@@ -33,7 +33,7 @@ $("#opt-prog").click(() => {
 $("#opt-device").click(() => {
   if ($("#devices-wrapper").css("display") == "none") {
     $("#devices-wrapper").show();
-    $("#options").css("height", `${newOptionHeight}px`);
+    $("#options").css("height", `${parseInt($("#devices").css('height')) + originalOptionHeight}px`);
   } else {
     $("#devices-wrapper").hide();
     $("#options").css("height", `${originalOptionHeight}px`);
@@ -54,13 +54,11 @@ $("body").click(() => {
 ipcRenderer.on("devices-reply", (event, data) => {
   myDevices = data.body.devices;
   $("#devices").empty();
-  newOptionHeight = originalOptionHeight;
   for (var d=0; d < myDevices.length; d++) {
-    newOptionHeight += 25;
     dev = myDevices[d];
-    if (dev.is_active) {
-      console.log(`${dev.name} is active`);
-    };
+    // if (dev.is_active) {
+    //   console.log(`${dev.name} is active`);
+    // };
     $("#devices").append(`<li><i>${dev.name}</i></li>`);
   };
 });
