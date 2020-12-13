@@ -1,6 +1,6 @@
 {
   "name": "gemini",
-  "version": "4.4.1",
+  "version": "4.5.2",
   "description": "A dope, easy-on-the-eyes, currently-playing viewer for Spotify.",
   "main": "./app/main.js",
   "scripts": {
@@ -35,7 +35,10 @@
       "output": "build/builds"
     }
   },
-  "repository": "git+https://github.com/Gabe-H/Gemini.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gabe-H/Gemini.git"
+  },
   "bugs": {
     "url": "https://github.com/Gabe-H/Gemini/issues"
   },
