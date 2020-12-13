@@ -5,7 +5,7 @@
  */
 
 var fadeTime = 500;
-var timer = 92500; //2500
+var timer = 2500; //2500
 
 if (navigator.appVersion.indexOf("Mac") > -1) {
   $(".mac").show();

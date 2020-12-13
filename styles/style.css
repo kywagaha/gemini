@@ -240,7 +240,7 @@ header i:active {
   display: none;
   z-index: -1;
   padding-bottom: 20px;
-  height: 140px;
+  height: 145px;
   animation: slideInOptions 0.5s cubic-bezier(.01,.71,.22,.99);
   backdrop-filter: blur(10px) saturate(125%);
 }
