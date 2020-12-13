@@ -257,7 +257,7 @@ ipcRenderer.on("hidepin", (event, isFull) => {
   if (isFull) {
     $("#top").css("display", "none");
     $("#topmac").css("display", "none");
-  } else if (data == "notfullscreen") {
+  } else {
     $("#top").css("display", "inline-block", "opacity", "");
     $("#topmac").css("display", "inline-block", "opacity", "");
   };
