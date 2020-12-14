@@ -20,18 +20,7 @@ ipcRenderer.on("init-playing-reply", (event, data) => {
           switch (data.body.currently_playing_type) {
             case "track": // For track (not podcast)
               var thisName = data.body.item.name;
-              if (
-                thisName.includes("Remix") ||
-                thisName.includes("Mix") ||
-                thisName.includes("Version") ||
-                thisName.includes("Live") ||
-                thisName.includes("Ver.") ||
-                thisName.includes("ver.")
-              ) {
-                document.getElementById("song").innerHTML = data.body.item.name.split(/\[/)[0];
-              } else {
-                document.getElementById("song").innerHTML = data.body.item.name.split(/[\[(-]/)[0];
-              }; // Special title cases
+              document.getElementById("song").innerHTML = thisName;
               var progress = `${(data.body.progress_ms / data.body.item.duration_ms) * -100 + 100}`;
               $("#progressbar").animate({'right': `${progress}%`}, 400, 'linear');
               myBg = `<img src="${data.body.item.album.images[0].url}">`;
