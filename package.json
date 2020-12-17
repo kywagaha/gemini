@@ -8,7 +8,7 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder"
   },
-  "author": "Gabe Haarberg <gabe.haarberg@gmail.com>",
+  "author": "Gabe Haarberg <gabe.haarberg@gmail.com>, Kyle Awayan <kyle@awayan.com",
   "license": "ISC",
   "devDependencies": {
     "electron": "^10.1.2",
