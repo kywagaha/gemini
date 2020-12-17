@@ -207,19 +207,8 @@ function show_data(data) {
           };
         };
         setTimeout(() => {
-          document.getElementById("artist").innerHTML = showArtist;
-          if (
-            data.body.item.name.includes("Remix") ||
-            data.body.item.name.includes("Mix") ||
-            data.body.item.name.includes("Version") ||
-            data.body.item.name.includes("Live") ||
-            data.body.item.name.includes("Ver.") ||
-            data.body.item.name.includes("ver.")
-          ) {
-            document.getElementById("song").innerHTML = data.body.item.name.split(/\[/)[0];
-          } else {
-            document.getElementById("song").innerHTML = data.body.item.name.split(/[\[(-]/)[0];
-          };
+          var thisName = data.body.item.name;
+          document.getElementById("song").innerHTML = thisName;
           fadeIn();
         }, fadeTime);
         wasSpecial = isSpecial;
