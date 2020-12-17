@@ -1,6 +1,6 @@
 {
   "name": "gemini",
-  "version": "4.5.1",
+  "version": "4.5.2",
   "description": "A dope, easy-on-the-eyes, currently-playing viewer for Spotify.",
   "main": "./app/main.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder"
   },
-  "author": "Gabe Haarberg <gabe.haarberg@gmail.com> and Kyle Awayan <kyle@awayan.com>",
+  "author": "Gabe Haarberg <gabe.haarberg@gmail.com>",
   "license": "ISC",
   "devDependencies": {
     "electron": "^10.1.2",
