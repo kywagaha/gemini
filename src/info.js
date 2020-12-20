@@ -209,6 +209,7 @@ function show_data(data) {
         setTimeout(() => {
           var thisName = data.body.item.name;
           document.getElementById("song").innerHTML = thisName;
+          document.getElementById("artist").innerHTML = showArtist;
           fadeIn();
         }, fadeTime);
         wasSpecial = isSpecial;
