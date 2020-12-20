@@ -16,7 +16,6 @@ require("./ipcSupport");
 require("./videos");
 
 autoUpdater.checkForUpdatesAndNotify();
-
 /**
  * Create Electron window using electron-window-state.
  * Web Preferences set to contextIsolation for security.
