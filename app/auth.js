@@ -19,7 +19,10 @@ PORT = constants.PORT,
 REDIRECT_URI = `http://localhost:${PORT}/callback`;
 
 console.log('Starting express');
-var server = express.listen(PORT, 'localhost');
+var serverRunning = false;
+var server = express.listen(PORT, 'localhost', () => {
+	serverRunning = true;
+});
 var isSigningIn = true;
 
 module.exports = {
@@ -28,7 +31,10 @@ module.exports = {
    * @return {string}
    */ 
   getAuthUrl: function() {
-    server.listen(PORT, 'localhost');
+	if (!serverRunning) {
+		server.listen(PORT, 'localhost');
+	}
+
     codeVerifier = base64URLEncode(crypto.randomBytes(32));
     codeState = base64URLEncode(crypto.randomBytes(32));
     codeChallenge = base64URLEncode(sha256(codeVerifier));
@@ -151,5 +157,8 @@ express.get("/callback", function (req, res) {
 
 function close_express() {
 	console.log('Closing express');
-    server.close();
+    server.close(() => {
+		serverRunning = false;
+		console.log("Express is now closed. You may now re-sign in if you need to.")
+	});
 }
