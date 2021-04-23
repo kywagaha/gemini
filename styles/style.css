@@ -19,32 +19,41 @@
 }
 
 @font-face {
-  src: url('fonts/FormaDJRText-Regular.eot'); /* IE < 9 */
-  src: url('fonts/FormaDJRText-Regular.eot?#') format("embedded-opentype"), /* IE 9 */
-       url('fonts/FormaDJRText-Regular.woff2') format("woff2"),
-       url('fonts/FormaDJRText-Regular.woff') format("woff");
-  font-family: 'FormaDJRText';
+  src: url("fonts/FormaDJRText-Regular.eot"); /* IE < 9 */
+  src: url("fonts/FormaDJRText-Regular.eot?#") format("embedded-opentype"),
+    /* IE 9 */ url("fonts/FormaDJRText-Regular.woff2") format("woff2"),
+    url("fonts/FormaDJRText-Regular.woff") format("woff");
+  font-family: "FormaDJRText";
   font-style: normal;
   font-weight: normal;
 }
 
 @keyframes slideOutOptions {
-  0% {bottom: 0px}
-  100% {bottom: -165px}
+  0% {
+    bottom: 0px;
+  }
+  100% {
+    bottom: -165px;
+  }
 }
 
 @keyframes slideInOptions {
-  0% {bottom: -165px}
-  100% {bottom: 0px}
+  0% {
+    bottom: -165px;
+  }
+  100% {
+    bottom: 0px;
+  }
 }
 
 .hideAnimation {
-  animation: slideOutOptions 0.5s cubic-bezier(.01,.71,.22,.99) !important
+  animation: slideOutOptions 0.5s cubic-bezier(0.01, 0.71, 0.22, 0.99) !important;
 }
 
 body {
   background-color: black;
   -webkit-user-select: none;
+  user-select: none;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -229,7 +238,7 @@ header i:active {
 #options {
   position: absolute;
   width: 140px;
-  background-color: rgba(0,0,0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   bottom: 0px;
   text-align: left;
   font-family: "FormaDJRText";
@@ -241,7 +250,7 @@ header i:active {
   z-index: -1;
   padding-bottom: 20px;
   height: 145px;
-  animation: slideInOptions 0.5s cubic-bezier(.01,.71,.22,.99);
+  animation: slideInOptions 0.5s cubic-bezier(0.01, 0.71, 0.22, 0.99);
   backdrop-filter: blur(10px) saturate(125%);
 }
 #options ul {
@@ -264,7 +273,6 @@ header i:active {
 #devices-wrapper {
   display: none;
 }
-
 
 #progressbar {
   background-color: white;
