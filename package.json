@@ -19,10 +19,10 @@
     "electron-settings": "^4.0.2",
     "electron-updater": "^4.3.4",
     "electron-window-state": "^5.0.3",
-    "express": "^4.17.1",
-    "jquery": "^3.5.1",
-    "node-fetch": "^2.6.1",
-    "spotify-web-api-node": "^4.0.0"
+    "express": "^4.17.2",
+    "jquery": "^3.6.0",
+    "node-fetch": "2.6.7",
+    "spotify-web-api-node": "^5.0.2"
   },
   "build": {
     "appId": "com.electron.gemini",
