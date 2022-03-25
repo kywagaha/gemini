@@ -11,7 +11,7 @@
   "author": "Gabe Haarberg <gabe@knightlightshow.com>, Kyle Awayan <kyle@awayan.com",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^11.5.0",
+    "electron": "^13.6.6",
     "electron-builder": "^22.8.0"
   },
   "dependencies": {
