@@ -6,13 +6,15 @@
   "scripts": {
     "start": "electron .",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "dev": "nodemon --delay 1 --watch app --exec electron ."
   },
   "author": "Gabe Haarberg <gabe@knightlightshow.com>, Kyle Awayan <kyle@awayan.com",
   "license": "MIT",
   "devDependencies": {
     "electron": "^18.0.3",
     "electron-builder": "^23.0.3",
+    "nodemon": "^2.0.15",
     "prettier": "2.6.2"
   },
   "dependencies": {
