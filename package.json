@@ -27,7 +27,6 @@
   "build": {
     "appId": "com.electron.gemini",
     "productName": "Gemini",
-    "copyright": "Copyright © 2020 Gabe and Kyle",
     "files": [
       "!.env"
     ],
