@@ -13,7 +13,7 @@ var constants = require("./constants"),
   settings = constants.settings,
   auth = require("./auth");
 require("./ipcSupport");
-require("./videos");
+require("./canvas/videos");
 
 autoUpdater.checkForUpdatesAndNotify();
 /**
