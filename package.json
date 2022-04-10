@@ -25,6 +25,7 @@
     "express": "^4.17.2",
     "jquery": "^3.6.0",
     "node-fetch": "2.6.7",
+    "protobufjs": "^6.11.2",
     "spotify-web-api-node": "^5.0.2"
   },
   "build": {
