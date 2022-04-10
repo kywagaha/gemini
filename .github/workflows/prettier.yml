@@ -1,0 +1,23 @@
+name: Prettier Format Check
+
+on: [push, pull_request]
+
+jobs:
+  prettier:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v1
+
+      - name: Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      - name: Check Formatting
+        run: npx prettier --check .
