@@ -100,6 +100,7 @@ ipcMain.on("isvideo", async (event, arg) => {
   const decodedRes = EntityCanvazResponse.decode(resBuffer);
   const canvases = decodedRes.canvases;
 
+  // TO DO: Implement custom Canvases (not on Spotify) on kywagaha/spotify-canvases
   if (canvases.length == 0) {
     console.log("Not special");
     event.reply("isvideo", null);
