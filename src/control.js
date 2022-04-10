@@ -1,16 +1,16 @@
 /**
- * 
+ *
  * Handle all button and key presses. Contains all ipcRenderer functions regarding playback
- * 
+ *
  */
 
 var changeMs = 200,
-isFullscreen = null,
-firing = false;
+  isFullscreen = null,
+  firing = false;
 
 function control(type) {
   window.controls.control(type);
-};
+}
 
 function togglePlay() {
   hasToggled = true;
@@ -19,7 +19,7 @@ function togglePlay() {
     hasToggled = false;
   }, 1000);
   window.controls.togglePlay();
-};
+}
 
 function toggleShuffle() {
   hasToggled = true;
@@ -27,9 +27,9 @@ function toggleShuffle() {
   var resetTime = setTimeout(() => {
     hasToggled = false;
   }, 1000);
-  control('shuffle')
+  control("shuffle");
   window.controls.toggleShuffle();
-};
+}
 
 function cycleRepeat() {
   hasToggled = true;
@@ -38,7 +38,7 @@ function cycleRepeat() {
     hasToggled = false;
   }, 1000);
   window.controls.cycleRepeat(myRepeat);
-};
+}
 
 function setVolume(val) {
   hasToggled = true;
@@ -47,7 +47,7 @@ function setVolume(val) {
     hasToggled = false;
   }, 1000);
   window.controls.setVolume(val);
-};
+}
 
 // Skip to next song in queue
 function seek() {
@@ -56,23 +56,23 @@ function seek() {
   setTimeout(() => {
     update(false);
   }, changeMs);
-};
+}
 
 // Skip back to previous song
 function track() {
-  console.log(progress_ms)
+  console.log(progress_ms);
   if (progress_ms > 3000) {
     console.log("resetting to 0 sec");
-    control("reset")
+    control("reset");
     progress_ms = 0;
   } else {
     console.log("attemping skip to previous");
-    control("previous")
+    control("previous");
   }
   setTimeout(() => {
     update(false);
   }, changeMs);
-};
+}
 
 // A map to remember in
 var keysdown = {};
@@ -145,7 +145,7 @@ $("#maximize").click(() => {
   if (keysdown[18] == true) {
     window.actions.maximize();
     return;
-  };
+  }
   window.actions.fullscreen();
 });
 
@@ -191,17 +191,17 @@ ipcRenderer.on("toggle-play-reply", (event, data) => {
     console.log("Playing music");
   } else {
     console.log("Nothing playing");
-  };
+  }
 });
 
 ipcRenderer.on("toggle-shuffle-reply", (event, data) => {
   var isShuffle = data.body.shuffle_state;
   if (isShuffle == true) {
     $("#shuffle").removeClass().addClass("fa fa-random");
-  };
+  }
 });
 
-ipcRenderer.on("repeat-reply", (event, arg)  => {
+ipcRenderer.on("repeat-reply", (event, arg) => {
   myRepeat = arg;
   console.log(myRepeat);
   set_repeat(myRepeat);
@@ -216,7 +216,7 @@ ipcRenderer.on("focus", (event, arg) => {
     $("#mac").addClass("focus");
   } else {
     $("#mac").removeClass("focus");
-  };
+  }
 });
 
 ipcRenderer.on("is-top", (event, arg) => {
@@ -227,7 +227,7 @@ ipcRenderer.on("is-top", (event, arg) => {
     case false:
       $("#top").css("opacity", "");
       break;
-  };
+  }
 });
 
 ipcRenderer.on("is_shuffle", (event, arg) => {
@@ -238,7 +238,7 @@ ipcRenderer.on("is_shuffle", (event, arg) => {
     case false:
       $("#shuffle").css("opacity", "");
       break;
-  };
+  }
 });
 
 ipcRenderer.on("is-top-mac", (event, arg) => {
@@ -249,7 +249,7 @@ ipcRenderer.on("is-top-mac", (event, arg) => {
     case false:
       $("#topmac").css("opacity", "");
       break;
-  };
+  }
 });
 
 ipcRenderer.on("hidepin", (event, isFull) => {
@@ -260,22 +260,20 @@ ipcRenderer.on("hidepin", (event, isFull) => {
   } else {
     $("#top").css("display", "inline-block", "opacity", "");
     $("#topmac").css("display", "inline-block", "opacity", "");
-  };
+  }
 });
 
 // Shortcuts
 function doc_keyUp(e) {
   if (e.ctrlKey && e.keyCode == 83) {
     window.reset.signin();
-  } else if (e.ctrlKey && e.keyCode == 65)
-      toggleProgress()
-    else if (e.ctrlKey && e.keyCode == 68) {
-    window.actions.square()
+  } else if (e.ctrlKey && e.keyCode == 65) toggleProgress();
+  else if (e.ctrlKey && e.keyCode == 68) {
+    window.actions.square();
   } else {
     switch (e.keyCode) {
       case 27:
-        if (isFullscreen)
-          window.actions.fullscreen();
+        if (isFullscreen) window.actions.fullscreen();
         break;
       case 70:
         window.actions.fullscreen();
@@ -298,8 +296,8 @@ function doc_keyUp(e) {
       case 39:
         control("forward");
         break;
-    };
-  };
-};
+    }
+  }
+}
 
 document.addEventListener("keyup", doc_keyUp, false);

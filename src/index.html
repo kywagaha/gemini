@@ -6,9 +6,15 @@
     <meta http-equiv="Content-Security-Policy" content="script-src 'self'" />
     <link rel="stylesheet" href="../styles/style.css" />
     <link rel="stylesheet" href="../styles/macos.css" />
-    <script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <script
+      type="text/javascript"
+      src="../node_modules/jquery/dist/jquery.min.js"
+    ></script>
     <script src="input-knobs.js"></script>
-    <link rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.css"/>
+    <link
+      rel="stylesheet"
+      href="../node_modules/@fortawesome/fontawesome-free/css/all.css"
+    />
   </head>
   <body>
     <header>
@@ -16,13 +22,33 @@
         <div class="titlebar-drag-region"></div>
         <div class="notmac" style="display: none">
           <div style="float: left">
-            <i id="full" class="fa fa-expand" style="-webkit-app-region: no-drag"></i>
-            <i id="top" class="fas fa-thumbtack" style="-webkit-app-region: no-drag"></i>
+            <i
+              id="full"
+              class="fa fa-expand"
+              style="-webkit-app-region: no-drag"
+            ></i>
+            <i
+              id="top"
+              class="fas fa-thumbtack"
+              style="-webkit-app-region: no-drag"
+            ></i>
           </div>
           <div style="float: right">
-            <i id="minimize" class="far fa-window-minimize" style="-webkit-app-region: no-drag"></i>
-            <i id="square" class="far fa-window-maximize" style="-webkit-app-region: no-drag"></i>
-            <i id="x" class="far fa-window-close" style="-webkit-app-region: no-drag"></i>
+            <i
+              id="minimize"
+              class="far fa-window-minimize"
+              style="-webkit-app-region: no-drag"
+            ></i>
+            <i
+              id="square"
+              class="far fa-window-maximize"
+              style="-webkit-app-region: no-drag"
+            ></i>
+            <i
+              id="x"
+              class="far fa-window-close"
+              style="-webkit-app-region: no-drag"
+            ></i>
           </div>
         </div>
         <div class="mac focus" id="mac" style="display: none">
@@ -58,7 +84,15 @@
     </div>
     <div class="album" id="bg"></div>
     <footer>
-      <div id="media-controls" style="position: absolute; bottom: 15px; text-align: center; width: 100%">
+      <div
+        id="media-controls"
+        style="
+          position: absolute;
+          bottom: 15px;
+          text-align: center;
+          width: 100%;
+        "
+      >
         <span>
           <i id="shuffle" class="fas fa-random"></i>
           <i id="previous" class="fa fa-fast-backward"></i>
@@ -66,11 +100,20 @@
           <i id="seek" class="fa fa-fast-forward"></i>
           <i id="repeat" class="fas fa-sync-alt"></i>
         </span>
-      <div style="position: absolute; float: right; top: -3px; right: 10px;">
-        <input type="range" id="volume-knob" class="input-knob" data-diameter="20" data-fgcolor="#555555" data-bgcolor="#FFFFFF" data-src="./images/circle-notch-white.svg" step="2"/>
+        <div style="position: absolute; float: right; top: -3px; right: 10px">
+          <input
+            type="range"
+            id="volume-knob"
+            class="input-knob"
+            data-diameter="20"
+            data-fgcolor="#555555"
+            data-bgcolor="#FFFFFF"
+            data-src="./images/circle-notch-white.svg"
+            step="2"
+          />
+        </div>
       </div>
-      </div>
-      <div style="position: absolute; float: left; left: 15px; bottom: 15px;">
+      <div style="position: absolute; float: left; left: 15px; bottom: 15px">
         <i id="option-button" class="fas fa-bars"></i>
       </div>
       <div id="options">
@@ -88,8 +131,7 @@
             <i>Device</i>
           </li>
           <div id="devices-wrapper">
-            <ul id="devices" style="margin-top: -5px;">
-            </ul>
+            <ul id="devices" style="margin-top: -5px"></ul>
           </div>
         </ul>
       </div>

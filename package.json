@@ -12,7 +12,8 @@
   "license": "MIT",
   "devDependencies": {
     "electron": "^18.0.3",
-    "electron-builder": "^23.0.3"
+    "electron-builder": "^23.0.3",
+    "prettier": "2.6.2"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.14.0",

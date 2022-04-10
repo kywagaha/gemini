@@ -1,26 +1,35 @@
 # Gemini
+
 Aesthetic now playing screen for Spotify
 
 ![screenshot](https://i.imgur.com/HOda3vb.png)
+
 ## Use it as a mini-player!
+
 ![screenshot](https://i.imgur.com/SrHmQDl.png)
+
 ## or as a full-screen display!
+
 ![screenshot](https://i.imgur.com/rBw86rZ.jpg)
 
 # Installation
+
 `yarn install` or `npm install`, but yarn is recommended for building the app.
 
 # Setup
+
 `yarn start` or `npm start`.
 
 If you would like to use your own client credentials, you can fill in your Client ID in `constants.js`. Gemini v4 ID is set by default.
 
 # Usage
-While a track is playing, Gemini will update to show the current song and artist. 
+
+While a track is playing, Gemini will update to show the current song and artist.
 
 Should you need to sign in again, pressing `Ctrl+S` will take you back to that screen.
 
 ## Keyboard Controls
+
 - `Space` or `K`: Play/Pause
 - `Left arrow key` or `J`: Previous track
 - `Right arrow key` or `L`: Next track
@@ -28,17 +37,21 @@ Should you need to sign in again, pressing `Ctrl+S` will take you back to that s
 - `Ctrl + D`: Reset window to square aspect ratio
 
 # Building
+
 `yarn dist`
 
 Refer to the `electron-builder` arguments for your specific operating system [here](https://www.electron.build/cli).
 
 # To Do
+
 Please check out our [projects page](https://github.com/Gabe-H/Gemini/projects/2)! Please open an issue if you have any suggestions!
 
 # Font License
+
 We have explicit permission from the creator of the Forma DJR Font, David Jonathan Ross, to use in Gemini. If you want to develop and fork Gemini, please do not install the fonts on your system and use it for your own use. It is against the license and you should buy the [font](https://djr.com/forma/) for your own personal use.
 
 # [Our favorite songs and albums!](https://open.spotify.com/playlist/6ILAg2eGBzvN3loVQLI9O5?si=oXj4PnPgSZyLLTBJU1fQpg)
+
 - [Lose - NIKI](https://open.spotify.com/track/7rgjkzZBhBjObaYsvq8Ej0?si=c2DyCWX_QDyRHToxpOzV5A)
 - [Djesse Vol. 3 - Jacob Collier](https://open.spotify.com/album/33cj3kzLqVOg9zvy69Wrc8?si=pCUxII-9Q_mYzyDzvVY3rA)
 - [Switchblade - NIKI](https://open.spotify.com/track/6Ve2gwTaMxTgKMuAcHbwcH?si=YcSJi59cQL-aCBRLJw4wfg)
