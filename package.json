@@ -27,7 +27,7 @@
   "build": {
     "appId": "io.kylan.gemini",
     "productName": "Gemini",
-    "copyright": "Copyright © 2020 Gabe and Kyle",
+    "copyright": "Copyright © 2022 Gabe and Kyle",
     "files": [
       "!.env"
     ],
