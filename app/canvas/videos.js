@@ -78,9 +78,13 @@ ipcMain.on("isvideo", async (event, arg) => {
 
   const serverUrls = await getServerURLs();
 
-  // Get Canvas token from here temporarily
-  // https://open.spotify.com/get_access_token?reason=transport&productType=web_player
-  const canvasToken = "";
+  // TO DO: need to refresh this token
+  const canvasTokenRes = await fetch(
+    "https://open.spotify.com/get_access_token?reason=transport&productType=web_player"
+  );
+  const canvasTokenResJson = await canvasTokenRes.json();
+
+  const canvasToken = canvasTokenResJson.accessToken;
 
   // TO DO: pick random server url
   const res = await fetch(
