@@ -1,6 +1,6 @@
 {
   "name": "gemini",
-  "version": "4.5.62",
+  "version": "4.6.0-alpha",
   "description": "A dope, easy-on-the-eyes, currently-playing viewer for Spotify.",
   "main": "./app/main.js",
   "scripts": {
