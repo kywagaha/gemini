@@ -33,7 +33,7 @@ Should you need to sign in again, pressing `Ctrl+S` will take you back to that s
 Refer to the `electron-builder` arguments for your specific operating system [here](https://www.electron.build/cli).
 
 # To Do
-Please check out our [projects page](https://github.com/Gabe-H/Gemini/projects/2)! Please open an issue if you have any suggestions!
+Please check out our [projects page](https://github.com/Gabe-H/Gemini/projects)! Please open an issue if you have any suggestions!
 
 # Font License
 We have explicit permission from the creator of the Forma DJR Font, David Jonathan Ross, to use in Gemini. If you want to develop and fork Gemini, please do not install the fonts on your system and use it for your own use. It is against the license and you should buy the [font](https://djr.com/forma/) for your own personal use.
