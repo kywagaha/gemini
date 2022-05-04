@@ -24,9 +24,7 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Device (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+ - OS: [e.g. macOS 12.3.1 (21E258), Windows 11 Pro 21H2 22000.318]
 
 **Additional context**
 Add any other context about the problem here.
